@@ -10,6 +10,7 @@ public class Image {
     List<List<Integer>> data2;
     List<List<Integer>> data3;
     //todo Farbraum?? z.B. RGB, ...
+    ColorSpace colorSpace;
 
     public Image(int height, int width, List<List<Integer>> data1, List<List<Integer>> data2, List<List<Integer>> data3) {
         this.height = height;

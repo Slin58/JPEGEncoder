@@ -1,3 +1,5 @@
+import org.ejml.simple.SimpleMatrix;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +57,35 @@ public class Utils {
     }
 
     public static Image rgbToYCbCr (Image image) {
-        //todo
+
+        //todo: Test
+
+        SimpleMatrix transformMatrix = new SimpleMatrix(new double[][] {
+                {0.299, 0.587, 0.114},
+                {-0.1687, -0.3312, 0.5},
+                {0.5, -0.4186, -0.0813}
+        });
+        SimpleMatrix vector = new SimpleMatrix(new double[][] { //todo: better name
+                {0.0},
+                {0.5},
+                {0.5}
+        });
+
+        for(int i = 0; i < image.height; i++) {     //wouldnt it be smarter to just use the colour channel length? but then width would be kinda pointless
+            for(int j = 0; j < image.width; j++) {
+                SimpleMatrix rgbVector = new SimpleMatrix(new double[][] {
+                        {image.data1.get(i).get(j)},
+                        {image.data2.get(i).get(j)},
+                        {image.data2.get(i).get(j)},
+                });
+                rgbVector = vector.plus(transformMatrix.mult(rgbVector));
+                image.data1.get(i).set(j, (int) Math.round(rgbVector.get(0, 0)));
+                image.data2.get(i).set(j, (int) Math.round(rgbVector.get(1, 0)));
+                image.data3.get(i).set(j, (int) Math.round(rgbVector.get(2, 0)));
+            }
+        }
+        image.colorSpace = ColorSpace.YCbCr;
+
         return image;
     }
 }

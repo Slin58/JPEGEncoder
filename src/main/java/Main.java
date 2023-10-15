@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Main {
 
-
     public static void main(String[] args) {
         int[][] a = {{3, 1, 2}, {4}};
         List<List<Integer>> inputData = new ArrayList<>();
@@ -21,5 +20,6 @@ public class Main {
 
 
         Image i2 = Utils.readImageFromPPM("test.ppm");
+        i2 = Utils.rgbToYCbCr(i2);
     }
 }
