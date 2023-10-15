@@ -18,5 +18,8 @@ public class Main {
         Image i = new Image(2, 3, inputData, null, null);
 
         System.out.println(i.getData1(0, 20));
+
+
+        Image i2 = Utils.readImageFromPPM("test.ppm");
     }
 }
