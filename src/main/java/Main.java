@@ -21,5 +21,10 @@ public class Main {
 
         Image i2 = Utils.readImageFromPPM("test2.ppm");
         i2 = Utils.rgbToYCbCr(i2);
+
+        String outputPath = "YCbCrImage.ppm";
+
+        // Write the image data to the PPM file
+        Utils.writePPMFile(outputPath, i2);
     }
 }

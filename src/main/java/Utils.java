@@ -1,5 +1,7 @@
 import org.ejml.simple.SimpleMatrix;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -76,11 +78,23 @@ public class Utils {
                // System.out.println("i;j: " + i + ";" + j);
                // System.out.println("data1: " + image.data1);
                 SimpleMatrix rgbVector = new SimpleMatrix(new double[][] {
-                        {image.data1.get(i).get(j)},
+                       /* {image.data1.get(i).get(j)},
                         {image.data2.get(i).get(j)},
-                        {image.data2.get(i).get(j)},
+                        {image.data2.get(i).get(j)},    */
+                        {image.getData1(i,j)},
+                        {image.getData2(i,j)},
+                        {image.getData3(i,j)},
                 });
+
+                System.out.println("rgbVectOld: " + rgbVector);
+
                 rgbVector = vector.plus(transformMatrix.mult(rgbVector));
+
+                System.out.println("transformMatrix: " + transformMatrix);
+                System.out.println("vector: " + vector);
+
+
+                System.out.println("rgbVectNew: " + rgbVector);
                 image.data1.get(i).set(j, (int) Math.round(rgbVector.get(0, 0)));
                 image.data2.get(i).set(j, (int) Math.round(rgbVector.get(1, 0)));
                 image.data3.get(i).set(j, (int) Math.round(rgbVector.get(2, 0)));
@@ -88,6 +102,44 @@ public class Utils {
         }
         image.colorSpace = ColorSpace.YCbCr;
 
+
+        System.out.println("data1: " + image.data1);
+        System.out.println("data2: " + image.data2);
+        System.out.println("data3: " + image.data3);
+
         return image;
     }
+
+    public static void writePPMFile(String outputPath, Image image) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
+            // Write PPM header
+            writer.write("P3\n");
+            writer.write(image.width + " " + image.height + "\n");
+            writer.write("255\n"); // Maximum color value
+
+            // Write image data
+            for (int i = 0; i < image.data1.size(); i++) {
+                for (int j = 0; j < image.data1.get(i).size(); j++) {
+                  /*  int r = image.getData1(i, j);
+                    int g = image.getData2(i, j);
+                    int b = image.getData3(i, j);
+                        */
+
+                    int r = image.data1.get(i).get(j);
+                    int g = image.data2.get(i).get(j);
+                    int b = image.data3.get(i).get(j);
+
+
+
+                  //  System.out.println("r,g,b: " + r + "," + g + "," + b );
+
+                    writer.write(r + " " + g + " " + b + " ");
+                }
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
