@@ -71,8 +71,10 @@ public class Utils {
                 {0.5}
         });
 
-        for(int i = 0; i < image.height; i++) {     //wouldnt it be smarter to just use the colour channel length? but then width would be kinda pointless
-            for(int j = 0; j < image.width; j++) {
+        for(int i = 0; i < image.data1.size(); i++) {
+            for(int j = 0; j < image.data1.get(i).size(); j++) {
+               // System.out.println("i;j: " + i + ";" + j);
+               // System.out.println("data1: " + image.data1);
                 SimpleMatrix rgbVector = new SimpleMatrix(new double[][] {
                         {image.data1.get(i).get(j)},
                         {image.data2.get(i).get(j)},

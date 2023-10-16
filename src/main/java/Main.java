@@ -19,7 +19,7 @@ public class Main {
         System.out.println(i.getData1(0, 20));
 
 
-        Image i2 = Utils.readImageFromPPM("test.ppm");
+        Image i2 = Utils.readImageFromPPM("test2.ppm");
         i2 = Utils.rgbToYCbCr(i2);
     }
 }
