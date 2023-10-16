@@ -8,8 +8,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 
 public class Utils {
+
+    public static double checkForValidRange(double number) {
+        return min(max(number, 0.0), 1.0);
+    }
+
     public static Image readImageFromPPM(String path) {
 
         List<String> allLines = null;
@@ -29,33 +37,65 @@ public class Utils {
         }
 
         Image result = null;
-        System.out.println(allLines);
+
         if (allLines.get(0).equals("P3")) {
             String[] imageSize = allLines.get(1).split("\\s+");
             int maxColor = Integer.parseInt(allLines.get(2));
-            List<List<Integer>> data1 = new ArrayList<>();
-            List<List<Integer>> data2 = new ArrayList<>();
-            List<List<Integer>> data3 = new ArrayList<>();
+            List<List<Double>> data1 = new ArrayList<>();
+            List<List<Double>> data2 = new ArrayList<>();
+            List<List<Double>> data3 = new ArrayList<>();
 
             for (int i = 3; i <= allLines.size() - 1; i++) {
                 String[] row = allLines.get(i).trim().split("\\s+");
-                List<Integer> row1 = new ArrayList<>();
-                List<Integer> row2 = new ArrayList<>();
-                List<Integer> row3 = new ArrayList<>();
+                List<Double> row1 = new ArrayList<>();
+                List<Double> row2 = new ArrayList<>();
+                List<Double> row3 = new ArrayList<>();
 
                 for (int j = 0; j <= row.length - 1; j += 3) {
-                    row1.add(Integer.parseInt(row[j])); // /maxColor);
-                    row2.add(Integer.parseInt(row[j + 1])); // /maxColor);
-                    row3.add(Integer.parseInt(row[j + 2])); ///maxColor);
+                    row1.add(checkForValidRange(Double.parseDouble(row[j]) / maxColor));
+                    row2.add(checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
+                    row3.add(checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
                 }
                 data1.add(row1);
                 data2.add(row2);
                 data3.add(row3);
             }
-            result = new Image(Integer.parseInt(imageSize[0]), Integer.parseInt(imageSize[1]), data1, data2, data3);
+            result = new Image(Integer.parseInt(imageSize[0]), Integer.parseInt(imageSize[1]), data1, data2, data3, ColorSpace.RGB);
         }
-        //todo refactoring in methoden auslagern
         return result;
+    }
+
+
+    public static void writePPMFile(String outputPath, Image image) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
+            // Write PPM header
+            writer.write("P3\n");
+            writer.write(image.height + " " + image.width + "\n");
+            writer.write("255\n"); // Maximum color value
+
+            // Write image data
+            for (int i = 0; i < image.data1.size(); i++) {
+                for (int j = 0; j < image.data1.get(i).size(); j++) {
+                  /*  int r = image.getData1(i, j);
+                    int g = image.getData2(i, j);
+                    int b = image.getData3(i, j);
+                        */
+
+                    int r = (int) Math.round(image.data1.get(i).get(j) * 255);
+                    int g = (int) Math.round(image.data2.get(i).get(j) * 255);
+                    int b = (int) Math.round(image.data3.get(i).get(j) * 255);
+
+
+
+                    //  System.out.println("r,g,b: " + r + "," + g + "," + b );
+
+                    writer.write(r + " " + g + " " + b + " ");
+                }
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Image rgbToYCbCr (Image image) {
@@ -95,9 +135,9 @@ public class Utils {
 
 
                 System.out.println("rgbVectNew: " + rgbVector);
-                image.data1.get(i).set(j, (int) Math.round(rgbVector.get(0, 0)));
-                image.data2.get(i).set(j, (int) Math.round(rgbVector.get(1, 0)));
-                image.data3.get(i).set(j, (int) Math.round(rgbVector.get(2, 0)));
+                image.data1.get(i).set(j, rgbVector.get(0, 0));
+                image.data2.get(i).set(j, rgbVector.get(1, 0));
+                image.data3.get(i).set(j, rgbVector.get(2, 0));
             }
         }
         image.colorSpace = ColorSpace.YCbCr;
@@ -110,36 +150,5 @@ public class Utils {
         return image;
     }
 
-    public static void writePPMFile(String outputPath, Image image) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
-            // Write PPM header
-            writer.write("P3\n");
-            writer.write(image.width + " " + image.height + "\n");
-            writer.write("255\n"); // Maximum color value
-
-            // Write image data
-            for (int i = 0; i < image.data1.size(); i++) {
-                for (int j = 0; j < image.data1.get(i).size(); j++) {
-                  /*  int r = image.getData1(i, j);
-                    int g = image.getData2(i, j);
-                    int b = image.getData3(i, j);
-                        */
-
-                    int r = image.data1.get(i).get(j);
-                    int g = image.data2.get(i).get(j);
-                    int b = image.data3.get(i).get(j);
-
-
-
-                  //  System.out.println("r,g,b: " + r + "," + g + "," + b );
-
-                    writer.write(r + " " + g + " " + b + " ");
-                }
-                writer.write("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
 

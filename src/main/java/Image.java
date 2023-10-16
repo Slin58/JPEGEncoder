@@ -6,18 +6,18 @@ import static java.lang.Math.min;
 public class Image {
     int height;
     int width;
-    List<List<Integer>> data1;
-    List<List<Integer>> data2;
-    List<List<Integer>> data3;
-    //todo Farbraum?? z.B. RGB, ...
+    List<List<Double>> data1;   //Farbwerte zwischen 0 und 1
+    List<List<Double>> data2;
+    List<List<Double>> data3;
     ColorSpace colorSpace;
 
-    public Image(int height, int width, List<List<Integer>> data1, List<List<Integer>> data2, List<List<Integer>> data3) {
+    public Image(int height, int width, List<List<Double>> data1, List<List<Double>> data2, List<List<Double>> data3, ColorSpace colorSpace) {
         this.height = height;
         this.width = width;
         this.data1 = data1;
         this.data2 = data2;
         this.data3 = data3;
+        this.colorSpace = colorSpace;
     }
 
 
@@ -26,7 +26,7 @@ public class Image {
     }
 
 
-    public int getData1(int x, int y) {
+    public double getData1(int x, int y) {
         x = min(data1.size()-1, x);
         x = max(0, x);
 
@@ -37,7 +37,7 @@ public class Image {
     }
 
 
-    public int getData2(int x, int y) {
+    public double getData2(int x, int y) {
         x = min(data2.size()-1, x);
         x = max(0, x);
 
@@ -48,7 +48,7 @@ public class Image {
     }
 
 
-    public int getData3(int x, int y) {
+    public double getData3(int x, int y) {
         x = min(data3.size()-1, x);
         x = max(0, x);
 
