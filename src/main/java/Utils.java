@@ -44,9 +44,9 @@ public class Utils {
                 List<Integer> row3 = new ArrayList<>();
 
                 for (int j = 0; j <= row.length - 1; j += 3) {
-                    row1.add(Integer.parseInt(row[j])/maxColor);
-                    row2.add(Integer.parseInt(row[j + 1])/maxColor);
-                    row3.add(Integer.parseInt(row[j + 2])/maxColor);
+                    row1.add(Integer.parseInt(row[j])); // /maxColor);
+                    row2.add(Integer.parseInt(row[j + 1])); // /maxColor);
+                    row3.add(Integer.parseInt(row[j + 2])); ///maxColor);
                 }
                 data1.add(row1);
                 data2.add(row2);
