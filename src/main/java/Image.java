@@ -1,5 +1,3 @@
-import jdk.jshell.spi.ExecutionControl;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +35,68 @@ public class Image {
         this.data3 = data3;
     }
 
+    public List<List<Double>> halveResolutionHorizontal(List<List<Double>> data) {
+        List<List<Double>> dataNew = new ArrayList<>();
+
+        for (int i = 0; i <= data.size() - 1; i++) {
+            List<Double> row = new ArrayList<>();
+
+            for (int j = 0; j <= data.get(i).size() - 1; j+=2) {
+                if (j + 1 <= data.get(i).size() - 1) {
+                    double d2 = (data.get(i).get(j) + data.get(i).get(j + 1)) / 2;
+                    row.add(d2);
+                }
+                else {
+                    row.add(data.get(i).get(j));
+                }
+            }
+            dataNew.add(row);
+        }
+        return dataNew;
+    }
+
+    public List<List<Double>> quarterResolutionHorizontal(List<List<Double>> data) {
+        List<List<Double>> dataNew = new ArrayList<>();
+
+        for (int i = 0; i <= data.size() - 1; i++) {
+            List<Double> row = new ArrayList<>();
+
+            for (int j = 0; j <= data.get(i).size() - 1; j+=2) {
+                if (j + 1 <= data.get(i).size() - 1) {
+                    double d2 = (data.get(i).get(j) + data.get(i).get(j + 1)) / 2;
+                    row.add(d2);
+                }
+                else {
+                    row.add(data.get(i).get(j));
+                }
+            }
+            dataNew.add(row);
+        }
+        return dataNew;
+    }
+
+    public List<List<Double>> halveResolutionVertical(List<List<Double>> data) {
+        List<List<Double>> dataNew = new ArrayList<>();
+
+        for (int i = 0; i <= data.size() - 1; i+=2) {
+            List<Double> row = new ArrayList<>();
+
+            for (int j = 0; j <= data.get(i).size() - 1; j++) {
+                if (i + 1 <= data.size() - 1) {
+                    double d2 = (data.get(i).get(j) + data.get(i + 1).get(j)) / 2;
+                    row.add(d2);
+                }
+                else {
+                    row.add(data.get(i).get(j));
+                }
+            }
+            dataNew.add(row);
+        }
+        return dataNew;
+    }
+
     public void changeResolution(int a, int b, int c) {
-        //todo
+
         if (!colorSpace.equals(ColorSpace.YCbCr)) {
             throw new RuntimeException("ColorSpace " + colorSpace + " not valid for change Resolution");
         }
@@ -50,68 +108,25 @@ public class Image {
                 }
             }
             else if (b == 2) {
-                List<List<Double>> data2New = new ArrayList<>();
-                List<List<Double>> data3New = new ArrayList<>();
-
-                for (int i = 0; i <= data2.size() - 1; i++) {
-                    List<Double> row2 = new ArrayList<>();
-                    List<Double> row3 = new ArrayList<>();
-
-                    for (int j = 0; j <= data2.get(i).size() - 1; j+=2) {
-                        if (j + 1 <= data2.get(i).size() - 1) {
-                            double d2 = (data2.get(i).get(j) + data2.get(i).get(j + 1)) / 2;
-                            row2.add(d2);
-
-                            double d3 = (data3.get(i).get(j) + data3.get(i).get(j + 1)) / 2;
-                            row3.add(d3);
-                        }
-                        else {
-                            row2.add(data2.get(i).get(j));
-                            row3.add(data3.get(i).get(j));
-                        }
-                    }
-                    data2New.add(row2);
-                    data3New.add(row3);
-                }
-                data2 = data2New;
-                data3 = data3New;
+                data2 = halveResolutionHorizontal(data2);
+                data3 = halveResolutionHorizontal(data3);
 
                 if (c == 2) {
                     return;
                 }
                 else if (c == 0) {
+                    data2 = halveResolutionVertical(data2);
+                    data3 = halveResolutionVertical(data3);
 
-                    List<List<Double>> data2New2 = new ArrayList<>();
-                    List<List<Double>> data3New2 = new ArrayList<>();
-
-                    for (int i = 0; i <= data2.size() - 1; i+=2) {
-                        List<Double> row2 = new ArrayList<>();
-                        List<Double> row3 = new ArrayList<>();
-
-                        for (int j = 0; j <= data2.get(i).size() - 1; j++) {
-                            if (i + 1 <= data2.size() - 1) {
-                                double d2 = (data2.get(i).get(j) + data2.get(i + 1).get(j)) / 2;
-                                row2.add(d2);
-
-                                double d3 = (data3.get(i).get(j) + data3.get(i + 1).get(j)) / 2;
-                                row3.add(d3);
-                            }
-                            else {
-                                row2.add(data2.get(i).get(j));
-                                row3.add(data3.get(i).get(j));
-                            }
-                        }
-                        data2New2.add(row2);
-                        data3New2.add(row3);
-                    }
-                    data2 = data2New2;
-                    data3 = data3New2;
                     return;
                 }
             }
             else if (b == 1) {
                 if (c == 1) {
                     //todo
+
+
+                    return;
                 }
             }
         }
