@@ -4,6 +4,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.testng.Assert.fail;
+
 
 public class ImageTest {
     private Image getImage(){
@@ -63,5 +65,50 @@ public class ImageTest {
         Image image2 = getImage();
         image1.colorSpace = ColorSpace.YCbCr;
         Assert.assertNotEquals(image2, image1);
+    }
+
+    @Test
+    public void testChangeResolutionAWrong () {
+        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
+        try {
+            image1.changeResolution(5, 2, 2);
+            fail("should have thrown an exception");
+        }
+        catch (RuntimeException e) {
+            if(!e.getMessage().equals("No implementation for: 5, 2, 2")) {
+                fail("wrong exception was thrown");
+            }
+        }
+
+    }
+
+    @Test
+    public void testChangeResolutionBWrong () {
+        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
+        try {
+            image1.changeResolution(4, 3, 0);
+            fail("should have thrown an exception");
+        }
+        catch (RuntimeException e) {
+            if(!e.getMessage().equals("No implementation for: 4, 3, 0")) {
+                fail("wrong exception was thrown");
+            }
+        }
+
+    }
+
+    @Test
+    public void testChangeResolutionCWrong () {
+        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
+        try {
+            image1.changeResolution(4, 2, 1);
+            fail("should have thrown an exception");
+        }
+        catch (RuntimeException e) {
+            if(!e.getMessage().equals("No implementation for: 4, 2, 1")) {
+                fail("wrong exception was thrown");
+            }
+        }
+
     }
 }

@@ -1,3 +1,5 @@
+import jdk.jshell.spi.ExecutionControl;
+
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -14,6 +16,17 @@ public class Image {
 
 
     public Image(int height, int width, ColorSpace colorSpace, List<List<Double>> data1, List<List<Double>> data2, List<List<Double>> data3) {
+        if (data2.size() != data3.size()) {
+            throw new RuntimeException("Image data is broken please destroy the image!!!");
+        }
+        for (int i = 0; i <= data2.get(0).size() - 1; i++) {
+            if (data2.get(i).size() != data3.get(i).size()) {
+                System.out.println(data2.get(i).size());
+                System.out.println(data3.get(i).size());
+                throw new RuntimeException("Image data is broken please destroy the image!!!");
+            }
+        }
+
         this.height = height;
         this.width = width;
         this.colorSpace = colorSpace;
@@ -24,6 +37,39 @@ public class Image {
 
     public void changeResolution(int a, int b, int c) {
         //todo
+
+        if (a == 4)  {
+            if (b == 4) {
+                if (c == 4) {
+                    return;
+                }
+            }
+            else if (b == 2) {
+                //todo fasse horizontal zwei werte zu einem zusammen
+                List<List<Double>> data2New;
+                List<List<Double>> data3New;
+                for (int i = 0; i <= data2.size(); i++) {
+
+                }
+
+
+                if (c == 2) {
+                    //todo
+                    return;
+                }
+                else if (c == 0) {
+                    //todo fasse vertikal zwei zu einem Wert zusammen
+                    return;
+                }
+            }
+            else if (b == 1) {
+                if (c == 1) {
+
+                }
+            }
+        }
+
+        throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
     }
 
 

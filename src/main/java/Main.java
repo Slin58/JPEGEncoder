@@ -7,6 +7,7 @@ public class Main {
 
         Image i2 = Utils.readImageFromPPM("ppm\\test2.ppm");
         i2 = Utils.rgbToYCbCr(i2);
+        i2.changeResolution(5, 3, 2);
 
         String outputPath = "ppm\\YCbCrImage.ppm";
 
