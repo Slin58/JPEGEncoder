@@ -1,5 +1,6 @@
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -8,6 +9,7 @@ import static java.lang.Math.min;
 public class Image {
     int height; //brauchen wir?
     int width;  //brauchen wir?
+
     ColorSpace colorSpace;
     //evtl. max. und min. Value für data1-3
     List<List<Double>> data1;   //Farbwerte zwischen 0 und 1
@@ -19,7 +21,7 @@ public class Image {
         if (data2.size() != data3.size()) {
             throw new RuntimeException("Image data is broken please destroy the image!!!");
         }
-        for (int i = 0; i <= data2.get(0).size() - 1; i++) {
+        for (int i = 0; i <= data2.size() - 1; i++) {
             if (data2.get(i).size() != data3.get(i).size()) {
                 System.out.println(data2.get(i).size());
                 System.out.println(data3.get(i).size());
@@ -37,6 +39,9 @@ public class Image {
 
     public void changeResolution(int a, int b, int c) {
         //todo
+        if (!colorSpace.equals(ColorSpace.YCbCr)) {
+            throw new RuntimeException("ColorSpace " + colorSpace + " not valid for change Resolution");
+        }
 
         if (a == 4)  {
             if (b == 4) {
@@ -45,26 +50,68 @@ public class Image {
                 }
             }
             else if (b == 2) {
-                //todo fasse horizontal zwei werte zu einem zusammen
-                List<List<Double>> data2New;
-                List<List<Double>> data3New;
-                for (int i = 0; i <= data2.size(); i++) {
+                List<List<Double>> data2New = new ArrayList<>();
+                List<List<Double>> data3New = new ArrayList<>();
 
+                for (int i = 0; i <= data2.size() - 1; i++) {
+                    List<Double> row2 = new ArrayList<>();
+                    List<Double> row3 = new ArrayList<>();
+
+                    for (int j = 0; j <= data2.get(i).size() - 1; j+=2) {
+                        if (j + 1 <= data2.get(i).size() - 1) {
+                            double d2 = (data2.get(i).get(j) + data2.get(i).get(j + 1)) / 2;
+                            row2.add(d2);
+
+                            double d3 = (data3.get(i).get(j) + data3.get(i).get(j + 1)) / 2;
+                            row3.add(d3);
+                        }
+                        else {
+                            row2.add(data2.get(i).get(j));
+                            row3.add(data3.get(i).get(j));
+                        }
+                    }
+                    data2New.add(row2);
+                    data3New.add(row3);
                 }
-
+                data2 = data2New;
+                data3 = data3New;
 
                 if (c == 2) {
-                    //todo
                     return;
                 }
                 else if (c == 0) {
-                    //todo fasse vertikal zwei zu einem Wert zusammen
+
+                    List<List<Double>> data2New2 = new ArrayList<>();
+                    List<List<Double>> data3New2 = new ArrayList<>();
+
+                    for (int i = 0; i <= data2.size() - 1; i+=2) {
+                        List<Double> row2 = new ArrayList<>();
+                        List<Double> row3 = new ArrayList<>();
+
+                        for (int j = 0; j <= data2.get(i).size() - 1; j++) {
+                            if (i + 1 <= data2.size() - 1) {
+                                double d2 = (data2.get(i).get(j) + data2.get(i + 1).get(j)) / 2;
+                                row2.add(d2);
+
+                                double d3 = (data3.get(i).get(j) + data3.get(i + 1).get(j)) / 2;
+                                row3.add(d3);
+                            }
+                            else {
+                                row2.add(data2.get(i).get(j));
+                                row3.add(data3.get(i).get(j));
+                            }
+                        }
+                        data2New2.add(row2);
+                        data3New2.add(row3);
+                    }
+                    data2 = data2New2;
+                    data3 = data3New2;
                     return;
                 }
             }
             else if (b == 1) {
                 if (c == 1) {
-
+                    //todo
                 }
             }
         }
