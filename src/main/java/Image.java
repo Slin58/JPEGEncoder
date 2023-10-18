@@ -35,40 +35,23 @@ public class Image {
         this.data3 = data3;
     }
 
-    public List<List<Double>> halveResolutionHorizontal(List<List<Double>> data) {
+    public List<List<Double>> changeResolutionHorizontal(List<List<Double>> data, int amount) {
         List<List<Double>> dataNew = new ArrayList<>();
 
         for (int i = 0; i <= data.size() - 1; i++) {
             List<Double> row = new ArrayList<>();
 
-            for (int j = 0; j <= data.get(i).size() - 1; j+=2) {
-                if (j + 1 <= data.get(i).size() - 1) {
-                    double d2 = (data.get(i).get(j) + data.get(i).get(j + 1)) / 2;
-                    row.add(d2);
+            for (int j = 0; j <= data.get(i).size() - 1; j+=amount) {
+                int remainingInRange = data.get(i).size() - j;
+                if (remainingInRange > amount) {
+                    remainingInRange = amount;
                 }
-                else {
-                    row.add(data.get(i).get(j));
-                }
-            }
-            dataNew.add(row);
-        }
-        return dataNew;
-    }
 
-    public List<List<Double>> quarterResolutionHorizontal(List<List<Double>> data) {
-        List<List<Double>> dataNew = new ArrayList<>();
-
-        for (int i = 0; i <= data.size() - 1; i++) {
-            List<Double> row = new ArrayList<>();
-
-            for (int j = 0; j <= data.get(i).size() - 1; j+=2) {
-                if (j + 1 <= data.get(i).size() - 1) {
-                    double d2 = (data.get(i).get(j) + data.get(i).get(j + 1)) / 2;
-                    row.add(d2);
+                double d2 = 0;
+                for (int k = 0; k < remainingInRange; k++) {
+                    d2 += data.get(i).get(j+k);
                 }
-                else {
-                    row.add(data.get(i).get(j));
-                }
+                row.add(d2 / remainingInRange);
             }
             dataNew.add(row);
         }
@@ -95,37 +78,81 @@ public class Image {
         return dataNew;
     }
 
-    public void changeResolution(int a, int b, int c) {
+    public void changeResolution(int a, int b, int c, List<Integer> channel) {
 
-        if (!colorSpace.equals(ColorSpace.YCbCr)) {
-            throw new RuntimeException("ColorSpace " + colorSpace + " not valid for change Resolution");
+        if (a == 4)  {
+            if (b == 4) {
+            }
+            else if (b == 2) {
+                data1 = (channel.contains(1)) ? changeResolutionHorizontal(data1, 2) : data1;
+                data2 = (channel.contains(2)) ? changeResolutionHorizontal(data2, 2) : data2;
+                data3 = (channel.contains(3)) ? changeResolutionHorizontal(data3, 2) : data3;
+            }
+            else if (b == 1) {
+                data1 = (channel.contains(1)) ? changeResolutionHorizontal(data1, 4) : data1;
+                data2 = (channel.contains(2)) ? changeResolutionHorizontal(data2, 4) : data2;
+                data3 = (channel.contains(3)) ? changeResolutionHorizontal(data3, 4) : data3;
+            }
+            else {
+                throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
+            }
+
+            if (c == b) {
+            }
+            else if(c == 0) {
+                data1 = (channel.contains(1)) ? halveResolutionVertical(data1) : data1;
+                data2 = (channel.contains(2)) ? halveResolutionVertical(data2) : data2;
+                data3 = (channel.contains(3)) ? halveResolutionVertical(data3) : data3;
+            }
+            else {
+                throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
+            }
         }
+        else {
+            throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
+        }
+
+    }
+
+    /*
+    public void changeResolutionOld(int a, int b, int c) {
 
         if (a == 4)  {
             if (b == 4) {
                 if (c == 4) {
                     return;
                 }
+                else if (c == 0) {
+                    data2 = halveResolutionVertical(data2);
+                    data3 = halveResolutionVertical(data3);
+                    return;
+                }
             }
             else if (b == 2) {
-                data2 = halveResolutionHorizontal(data2);
-                data3 = halveResolutionHorizontal(data3);
+                data2 = changeResolutionHorizontal(data2, 2);
+                data3 = changeResolutionHorizontal(data3, 2);
 
                 if (c == 2) {
                     return;
                 }
+                else if (c == 1) {
+
+                }
                 else if (c == 0) {
                     data2 = halveResolutionVertical(data2);
                     data3 = halveResolutionVertical(data3);
-
                     return;
                 }
             }
             else if (b == 1) {
+                data2 = changeResolutionHorizontal(data2, 4);
+                data3 = changeResolutionHorizontal(data3, 4);
                 if (c == 1) {
-                    //todo
-
-
+                    return;
+                }
+                else if(c == 0) {
+                    data2 = halveResolutionVertical(data2);
+                    data3 = halveResolutionVertical(data3);
                     return;
                 }
             }
@@ -133,6 +160,7 @@ public class Image {
 
         throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
     }
+     */
 
 
     public double getData1(int x, int y) {

@@ -86,7 +86,7 @@ public class ImageTest {
     public void testChangeResolutionAWrong () {
         Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
         try {
-            image1.changeResolution(5, 2, 2);
+            image1.changeResolution(5, 2, 2, Arrays.asList(1,2,3));
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {
@@ -101,7 +101,7 @@ public class ImageTest {
     public void testChangeResolutionBWrong () {
         Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
         try {
-            image1.changeResolution(4, 3, 0);
+            image1.changeResolution(4, 3, 0, Arrays.asList(1,2,3));
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {
@@ -116,7 +116,7 @@ public class ImageTest {
     public void testChangeResolutionCWrong () {
         Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
         try {
-            image1.changeResolution(4, 2, 1);
+            image1.changeResolution(4, 2, 1, Arrays.asList(1,2,3));
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {

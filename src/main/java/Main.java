@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -6,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         Image image = Utils.readImageFromPPM("ppm\\test.ppm");
         Image iycbcr = Utils.rgbToYCbCr(image);
-        iycbcr.changeResolution(4, 2, 0);
+        iycbcr.changeResolution(4, 1, 0, Arrays.asList(1,2,3));
         System.out.println(iycbcr.data1);
         System.out.println(iycbcr.data2);
         System.out.println(iycbcr.data3);
