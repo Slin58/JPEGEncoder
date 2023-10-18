@@ -15,7 +15,11 @@ import static java.lang.Math.min;
 public class Utils {
 
     public static double checkForValidRange(double number) {
-        return min(max(number, 0.0), 1.0);
+        double newNumber = min(max(number, 0.0), 1.0);
+        if (number != newNumber) {
+            System.out.println("One of the values wasn't in range between 0 and 1 and has therefore been adjusted.");
+        }
+        return newNumber;
     }
 
     public static Image readImageFromPPM(String path) {
@@ -60,7 +64,7 @@ public class Utils {
                 data2.add(row2);
                 data3.add(row3);
             }
-            result = new Image(Integer.parseInt(imageSize[0]), Integer.parseInt(imageSize[1]), data1, data2, data3, ColorSpace.RGB);
+            result = new Image(Integer.parseInt(imageSize[0]), Integer.parseInt(imageSize[1]), ColorSpace.RGB, data1, data2, data3);
         }
         return result;
     }
