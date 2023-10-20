@@ -25,7 +25,5 @@ public class Main {
 
 
         System.out.println(Bitstream.getDataOfBitstream("001100000001", root));
-
-        //todo data to bitstream
     }
 }
