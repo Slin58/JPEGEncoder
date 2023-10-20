@@ -35,6 +35,13 @@ public class Image {
         this.data3 = data3;
     }
 
+    public boolean isPowerOfTwo(int number) {
+        if ((number & (number - 1)) != 0) {
+            return false;
+        }
+        return true;
+    }
+
     public List<List<Double>> changeResolutionHorizontal(List<List<Double>> data, int amount) {
         List<List<Double>> dataNew = new ArrayList<>();
 
@@ -42,16 +49,11 @@ public class Image {
             List<Double> row = new ArrayList<>();
 
             for (int j = 0; j <= data.get(i).size() - 1; j+=amount) {
-                int remainingInRange = data.get(i).size() - j;
-                if (remainingInRange > amount) {
-                    remainingInRange = amount;
-                }
-
                 double d2 = 0;
-                for (int k = 0; k < remainingInRange; k++) {
+                for (int k = 0; k < amount; k++) {
                     d2 += data.get(i).get(j+k);
                 }
-                row.add(d2 / remainingInRange);
+                row.add(d2 / amount);
             }
             dataNew.add(row);
         }
@@ -65,13 +67,8 @@ public class Image {
             List<Double> row = new ArrayList<>();
 
             for (int j = 0; j <= data.get(i).size() - 1; j++) {
-                if (i + 1 <= data.size() - 1) {
-                    double d2 = (data.get(i).get(j) + data.get(i + 1).get(j)) / 2;
-                    row.add(d2);
-                }
-                else {
-                    row.add(data.get(i).get(j));
-                }
+                double d2 = (data.get(i).get(j) + data.get(i + 1).get(j)) / 2;
+                row.add(d2);
             }
             dataNew.add(row);
         }
@@ -79,6 +76,9 @@ public class Image {
     }
 
     public void changeResolution(int a, int b, int c, List<Integer> channel) {
+        if (!isPowerOfTwo(a) || !isPowerOfTwo(b) || !isPowerOfTwo(c)) {
+            throw new RuntimeException("Not power of two");
+        }
 
         if (a == 4)  {
             if (b == 4) {
@@ -113,54 +113,6 @@ public class Image {
         }
 
     }
-
-    /*
-    public void changeResolutionOld(int a, int b, int c) {
-
-        if (a == 4)  {
-            if (b == 4) {
-                if (c == 4) {
-                    return;
-                }
-                else if (c == 0) {
-                    data2 = halveResolutionVertical(data2);
-                    data3 = halveResolutionVertical(data3);
-                    return;
-                }
-            }
-            else if (b == 2) {
-                data2 = changeResolutionHorizontal(data2, 2);
-                data3 = changeResolutionHorizontal(data3, 2);
-
-                if (c == 2) {
-                    return;
-                }
-                else if (c == 1) {
-
-                }
-                else if (c == 0) {
-                    data2 = halveResolutionVertical(data2);
-                    data3 = halveResolutionVertical(data3);
-                    return;
-                }
-            }
-            else if (b == 1) {
-                data2 = changeResolutionHorizontal(data2, 4);
-                data3 = changeResolutionHorizontal(data3, 4);
-                if (c == 1) {
-                    return;
-                }
-                else if(c == 0) {
-                    data2 = halveResolutionVertical(data2);
-                    data3 = halveResolutionVertical(data3);
-                    return;
-                }
-            }
-        }
-
-        throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
-    }
-     */
 
 
     public double getData1(int x, int y) {
@@ -254,5 +206,11 @@ public class Image {
             }
         }
         return true;
+    }
+
+    @Override
+    public String toString () {
+        return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace +
+                "\ndata1 = " + data1 + "\ndata2 = " + data2 + "\ndata3 = " + data3;
     }
 }
