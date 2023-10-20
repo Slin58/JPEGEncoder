@@ -1,29 +1,31 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import Bitstream.Bitstream;
+import Bitstream.Node;
 
 public class Main {
 
     public static void main(String[] args) {
-        Image image = Utils.readImageFromPPM("ppm\\test.ppm");
-        Image iycbcr = Utils.rgbToYCbCr(image);
-        iycbcr.changeResolution(4, 1, 0, Arrays.asList(1,2,3));
-        System.out.println(iycbcr.data1);
-        System.out.println(iycbcr.data2);
-        System.out.println(iycbcr.data3);
-
-
 
         /*
-        Image i2 = Utils.readImageFromPPM("ppm\\test2.ppm");
-        i2 = Utils.rgbToYCbCr(i2);
-        i2.changeResolution(5, 3, 2);
+        Node <String> test = new Node<>();
 
-        String outputPath = "ppm\\YCbCrImage.ppm";
+        test.addToTree("0101", "abc");
+        test.addToTree("1111", "abcd");
 
-        // Write the image data to the PPM file
-        Utils.writePPMFile(outputPath, i2);
-
+        System.out.println(test.left.right.left.right.t);
          */
+        Node <String> root = new Node<String>();
+
+        Bitstream.addObjectWithIdentifier("0000", "a", root);
+        Bitstream.addObjectWithIdentifier("0001", "b", root);
+        Bitstream.addObjectWithIdentifier("0010", "c", root);
+        Bitstream.addObjectWithIdentifier("0011", "d", root);
+        Bitstream.addObjectWithIdentifier("0100", "e", root);
+        Bitstream.addObjectWithIdentifier("0110", "f", root);
+        Bitstream.addObjectWithIdentifier("0111", "g", root);
+
+
+        System.out.println(Bitstream.getDataOfBitstream("001100000001", root));
+
+        //todo data to bitstream
     }
 }
