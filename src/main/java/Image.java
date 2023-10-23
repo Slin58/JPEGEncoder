@@ -5,28 +5,26 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Image {
-    int height; //brauchen wir?
-    int width;  //brauchen wir?
-
+    int height;
+    int width;
     ColorSpace colorSpace;
-    //evtl. max. und min. Value für data1-3
-    List<List<Double>> data1;   //Farbwerte zwischen 0 und 1
+
+    //Farbwerte zwischen 0 und 1
+    List<List<Double>> data1;
     List<List<Double>> data2;
     List<List<Double>> data3;
 
-
     public Image(int height, int width, ColorSpace colorSpace, List<List<Double>> data1, List<List<Double>> data2, List<List<Double>> data3) {
         if (data2.size() != data3.size()) {
-            throw new RuntimeException("Image data is broken please destroy the image!!!");
+            throw new RuntimeException("Unequal channel size. Something may be wrong with the image");
         }
         for (int i = 0; i <= data2.size() - 1; i++) {
             if (data2.get(i).size() != data3.get(i).size()) {
                 System.out.println(data2.get(i).size());
                 System.out.println(data3.get(i).size());
-                throw new RuntimeException("Image data is broken please destroy the image!!!");
+                throw new RuntimeException("Unequal channel size. Something may be wrong with the image");
             }
         }
-
         this.height = height;
         this.width = width;
         this.colorSpace = colorSpace;
@@ -41,9 +39,8 @@ public class Image {
         }
         return true;
     }
-
     public List<List<Double>> changeResolutionHorizontal(List<List<Double>> data, int amount) {
-        List<List<Double>> dataNew = new ArrayList<>();
+        List<List<Double>> newImageData = new ArrayList<>();
 
         for (int i = 0; i <= data.size() - 1; i++) {
             List<Double> row = new ArrayList<>();
@@ -55,13 +52,13 @@ public class Image {
                 }
                 row.add(d2 / amount);
             }
-            dataNew.add(row);
+            newImageData.add(row);
         }
-        return dataNew;
+        return newImageData;
     }
 
     public List<List<Double>> halveResolutionVertical(List<List<Double>> data) {
-        List<List<Double>> dataNew = new ArrayList<>();
+        List<List<Double>> newImageData = new ArrayList<>();
 
         for (int i = 0; i <= data.size() - 1; i+=2) {
             List<Double> row = new ArrayList<>();
@@ -70,9 +67,9 @@ public class Image {
                 double d2 = (data.get(i).get(j) + data.get(i + 1).get(j)) / 2;
                 row.add(d2);
             }
-            dataNew.add(row);
+            newImageData.add(row);
         }
-        return dataNew;
+        return newImageData;
     }
 
     public void changeResolution(int a, int b, int c, List<Integer> channel) {
@@ -80,7 +77,7 @@ public class Image {
             throw new RuntimeException("Not power of two");
         }
 
-        if (a == 4)  {
+        if (a == 4) {
             if (b == 4) {
             }
             else if (b == 2) {
@@ -96,10 +93,9 @@ public class Image {
             else {
                 throw new RuntimeException("No implementation for: " + a + ", " + b + ", " + c);
             }
-
             if (c == b) {
             }
-            else if(c == 0) {
+            else if (c == 0) {
                 data1 = (channel.contains(1)) ? halveResolutionVertical(data1) : data1;
                 data2 = (channel.contains(2)) ? halveResolutionVertical(data2) : data2;
                 data3 = (channel.contains(3)) ? halveResolutionVertical(data3) : data3;
@@ -114,33 +110,27 @@ public class Image {
 
     }
 
-
     public double getData1(int x, int y) {
         x = min(data1.size()-1, x);
         x = max(0, x);
-
         y = min(data1.get(x).size()-1, y);
         y = max(0, y);
 
         return this.data1.get(x).get(y);
     }
 
-
     public double getData2(int x, int y) {
         x = min(data2.size()-1, x);
         x = max(0, x);
-
         y = min(data2.get(x).size()-1, y);
         y = max(0, y);
 
         return this.data2.get(x).get(y);
     }
 
-
     public double getData3(int x, int y) {
         x = min(data3.size()-1, x);
         x = max(0, x);
-
         y = min(data3.get(x).size()-1, y);
         y = max(0, y);
 
