@@ -55,31 +55,39 @@ public class Utils {
             System.out.println("image height: " + imageSize[0]);
             System.out.println("image width: " + imageSize[1]);
 
-            for (int i = 0; i <= allLines.size() - 1; i++) {
-                String[] row = allLines.get(i).trim().split("\\s+");
+            int lineCount = 0;
+            double[] row1 = new double[imageSize[1]];
+            double[] row2 = new double[imageSize[1]];
+            double[] row3 = new double[imageSize[1]];
+            int k = 0;
 
-                for(int k = 0; k <= imageSize[1] - 1; k++) {
-                    double[] row1 = new double[imageSize[1]];
-                    double[] row2 = new double[imageSize[1]];
-                    double[] row3 = new double[imageSize[1]];
+                for (int i = 0; i <= allLines.size() - 1; i++) {
+                    String[] row = allLines.get(i).trim().split("\\s+");
 
                     for (int j = 0; j <= row.length - 1; j += 3) {
-                        k++;
-                        System.out.println("row length: " + row.length);
+                       /* System.out.println("row length: " + row.length);
                         System.out.println("row: " + row);
                         System.out.println("row1.length: " + row1.length);
-                        System.out.println("width: " + imageSize[1]);
+                        System.out.println("width: " + imageSize[1]);   */
 
                         row1[k] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
                         row2[k] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
                         row3[k] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
-                    }
-                    data1[i] = row1;
-                    data2[i] = row2;
-                    data3[i] = row3;
+                        k++;
+                        if(k >= imageSize[1]) {
+                            data1[lineCount] = row1;
+                            data2[lineCount] = row2;
+                            data3[lineCount] = row3;
+                            lineCount++;
 
+                            //System.out.println(lineCount);
+                            row1 = new double[imageSize[1]];
+                            row2 = new double[imageSize[1]];
+                            row3 = new double[imageSize[1]];
+                            k = 0;
+                        }
+                    }
                 }
-            }
             result = new Image(imageSize[0], imageSize[1], ColorSpace.RGB, data1, data2, data3);
         }
         return result;

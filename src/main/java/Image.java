@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.List;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -48,7 +46,7 @@ public class Image {
 
     //todo: test fuer GROSSES bild
     public double[][] changeResolutionHorizontal(double[][] data, int amount) {
-        double[][] newImageData = new double[this.height][this.width / amount];    //hier dann irgendwie neue laenge definieren; am besten ohne den Array neu schreiben zu muessen
+        double[][] newImageData = new double[this.height][this.width / amount];
         for (int i = 0; i <= data.length - 1; i++) {
             double[] row = new double[data[i].length / amount];
 

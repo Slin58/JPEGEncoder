@@ -33,8 +33,10 @@ public class Main {
         System.out.println(Bitstream.getDataOfBitstream("001100000001", root));
          */
         Image image1 = Utils.readImageFromPPM("ppm\\test2.ppm");
-
+        System.out.println("test: " + image1.data1[299][167]);
         //image1.changeResolution(5, 2, 2, Arrays.asList(1,2,3));
+        System.out.println(Arrays.toString(image1.data1[0]));
+        System.out.println(Arrays.toString(image1.data1[1]));
 
     }
 }
