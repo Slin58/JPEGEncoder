@@ -7,7 +7,6 @@ import java.util.List;
 
 import static org.testng.Assert.fail;
 
-
 public class ImageTest {
     private Image getImage(){
         List<List<Double>> data1 = new ArrayList<>();

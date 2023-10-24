@@ -9,6 +9,11 @@ public class Image {
     int width;
     ColorSpace colorSpace;
 
+    //TODO: Schrittweiten nachdefinieren; Abfrage nicht per Pixel (s. getData)
+    //todo: list zu array; downsample size mit reinnehmen?
+    // max color immer auf 256 (? raff ich nicht tbh)
+    // tests fuer riesige bilder
+
     //Farbwerte zwischen 0 und 1
     List<List<Double>> data1;
     List<List<Double>> data2;
@@ -39,6 +44,7 @@ public class Image {
         }
         return true;
     }
+    //todo: test fuer GROSSES bild
     public List<List<Double>> changeResolutionHorizontal(List<List<Double>> data, int amount) {
         List<List<Double>> newImageData = new ArrayList<>();
 

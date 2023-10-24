@@ -53,6 +53,7 @@ public class Utils {
                 List<Double> row3 = new ArrayList<>();
 
                 for (int j = 0; j <= row.length - 1; j += 3) {
+                    //todo: divide by 0 check
                     row1.add(checkForValidRange(Double.parseDouble(row[j]) / maxColor));
                     row2.add(checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
                     row3.add(checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
@@ -120,4 +121,3 @@ public class Utils {
         return image;
     }
 }
-
