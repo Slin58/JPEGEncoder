@@ -51,25 +51,34 @@ public class Utils {
             double[][] data2 = new double[imageSize[0]][imageSize[1]];
             double[][] data3 = new double[imageSize[0]][imageSize[1]];
 
+            System.out.println("allLines: " + allLines.size());
+            System.out.println("image height: " + imageSize[0]);
+            System.out.println("image width: " + imageSize[1]);
+
             for (int i = 0; i <= allLines.size() - 1; i++) {
                 String[] row = allLines.get(i).trim().split("\\s+");
-                double[] row1 = new double[imageSize[1]];
-                double[] row2 = new double[imageSize[1]];
-                double[] row3 = new double[imageSize[1]];
 
-                for (int j = 0; j <= row.length - 1; j += 3) {
-                    System.out.println("row length: " + row.length);
-                    System.out.println("row: " + row);
-                    System.out.println("row1.length: " + row1.length);
-                    System.out.println("width: " + imageSize[1]);
+                for(int k = 0; k <= imageSize[1] - 1; k++) {
+                    double[] row1 = new double[imageSize[1]];
+                    double[] row2 = new double[imageSize[1]];
+                    double[] row3 = new double[imageSize[1]];
 
-                    row1[j/3] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
-                    row2[j/3] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
-                    row3[j/3] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
+                    for (int j = 0; j <= row.length - 1; j += 3) {
+                        k++;
+                        System.out.println("row length: " + row.length);
+                        System.out.println("row: " + row);
+                        System.out.println("row1.length: " + row1.length);
+                        System.out.println("width: " + imageSize[1]);
+
+                        row1[k] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
+                        row2[k] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
+                        row3[k] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
+                    }
+                    data1[i] = row1;
+                    data2[i] = row2;
+                    data3[i] = row3;
+
                 }
-                data1[i] = row1;
-                data2[i] = row2;
-                data3[i] = row3;
             }
             result = new Image(imageSize[0], imageSize[1], ColorSpace.RGB, data1, data2, data3);
         }

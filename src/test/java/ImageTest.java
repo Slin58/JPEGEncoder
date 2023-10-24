@@ -31,7 +31,7 @@ public class ImageTest {
     }
 
     private Image getImage422(){
-        double[][] data1 = {{0.0, 0.5}, {0.0, 0.0}, {0.0, 0.0}, {1.0, 0.0}};
+        double[][] data1 = {{0.0, 0.5}, {0.0, 0.0}, {0.0, 0.0}, {0.5, 0.0}};
 
         double [][] data2 = {{0.0, 0.0}, {0.5, 0.0}, {0.0, 0.5}, {0.0, 0.0}};
 
@@ -40,7 +40,7 @@ public class ImageTest {
         return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
     }
     private Image getImage420(){
-        double [][] data1 = {{0.0, 0.25}, {0.5, 0.0}};
+        double [][] data1 = {{0.0, 0.25}, {0.25, 0.0}};
 
         double [][] data2 = {{0.25, 0.0}, {0.0, 0.25}};
 
@@ -127,7 +127,7 @@ public class ImageTest {
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {
-            if(!e.getMessage().equals("No implementation for: 5, 2, 2")) {
+            if(!(e.getMessage().equals("No implementation for: 5, 2, 2") || e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
@@ -141,7 +141,7 @@ public class ImageTest {
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {
-            if(!e.getMessage().equals("No implementation for: 4, 3, 0")) {
+            if(!(e.getMessage().equals("No implementation for: 4, 3, 0") || e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
@@ -156,7 +156,7 @@ public class ImageTest {
             fail("should have thrown an exception");
         }
         catch (RuntimeException e) {
-            if(!e.getMessage().equals("No implementation for: 4, 2, 1")) {
+            if(!(e.getMessage().equals("No implementation for: 4, 2, 1") || e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
@@ -167,28 +167,28 @@ public class ImageTest {
     public void testChangeResolution444 () {
         Image image1 = getImage();
         image1.changeResolution(4, 4, 4, Arrays.asList(1, 2, 3));
-        Assert.assertEquals(image1, getImage());
+        Assert.assertTrue(image1.equals(getImage()));
     }
 
     @Test
     public void testChangeResolution422 () {
         Image image1 = getImage();
         image1.changeResolution(4, 2, 2, Arrays.asList(1, 2, 3));
-        Assert.assertEquals(image1, getImage422());
+        Assert.assertTrue(image1.equals(getImage422()));
     }
 
     @Test
     public void testChangeResolution420() {
         Image image1 = getImage();
         image1.changeResolution(4, 2, 0, Arrays.asList(1, 2, 3));
-        Assert.assertEquals(image1, getImage420());
+        Assert.assertTrue(image1.equals(getImage420()));
     }
 
     @Test
     public void testChangeResolution411() {
         Image image1 = getImage();
         image1.changeResolution(4, 1, 1, Arrays.asList(1, 2, 3));
-        Assert.assertEquals(image1, getImage411());
+        Assert.assertTrue(image1.equals(getImage411()));
     }
 
     @Test

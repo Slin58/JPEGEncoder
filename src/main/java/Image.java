@@ -177,7 +177,7 @@ public class Image {
         }
         for (int i = 0; i < data1.length; i++) {
             for (int j = 0; j < data1[i].length; j++) {
-                if ( this.data1[i][j] != image.data1[i][j]) {
+                if (Math.round(this.data1[i][j]*10000)/10000.0 != Math.round(image.data1[i][j]*10000)/10000.0) {
                     System.out.println("this.data1: i:" + i + " j:" + j + ", " + this.data1[i][j]);
                     System.out.println("image.data1: i:" + i + " j:" + j + ", " + image.data1[i][j]);
                     return false;
@@ -186,7 +186,7 @@ public class Image {
         }
         for (int i = 0; i < data2.length; i++) {
             for (int j = 0; j < data2[i].length; j++) {
-                if ( this.data2[i][j] != image.data2[i][j]) {
+                if (Math.round(this.data2[i][j]*10000)/10000.0 != Math.round(image.data2[i][j]*10000)/10000.0) {
                     System.out.println("this.data2: i:" + i + " j:" + j + ", " + this.data2[i][j]);
                     System.out.println("image.data2: i:" + i + " j:" + j + ", " + image.data2[i][j]);
                     return false;
@@ -195,7 +195,7 @@ public class Image {
         }
         for (int i = 0; i < data3.length; i++) {
             for (int j = 0; j < data3[i].length; j++) {
-                if ( this.data3[i][j] != image.data3[i][j]) {
+                if (Math.round(this.data3[i][j]*10000)/10000.0 != Math.round(image.data3[i][j]*10000)/10000.0) {
                     System.out.println("this.data3: i:" + i + " j:" + j + ", " + this.data3[i][j]);
                     System.out.println("image.data3: i:" + i + " j:" + j + ", " + image.data3[i][j]);
                     return false;

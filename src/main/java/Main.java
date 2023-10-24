@@ -1,15 +1,17 @@
 import Bitstream.Bitstream;
 import Bitstream.Node;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        /*
         Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
         System.out.println(image1);
         image1.changeResolution(4, 0, 0, List.of(2, 3));
         System.out.println(image1);
-
+         */
         /*
         Node <String> test = new Node<String>();
 
@@ -30,5 +32,9 @@ public class Main {
 
         System.out.println(Bitstream.getDataOfBitstream("001100000001", root));
          */
+        Image image1 = Utils.readImageFromPPM("ppm\\test2.ppm");
+
+        //image1.changeResolution(5, 2, 2, Arrays.asList(1,2,3));
+
     }
 }
