@@ -8,24 +8,63 @@ import java.util.List;
 import static org.testng.Assert.fail;
 
 public class ImageTest {
-    private Image getImage(){
-        List<List<Double>> data1 = new ArrayList<>();
-        data1.add(Arrays.asList(0.0, 0.0, 0.0, 1.0));
-        data1.add(Arrays.asList(0.0, 0.0, 0.0, 0.0));
-        data1.add(Arrays.asList(0.0, 0.0, 0.0, 0.0));
-        data1.add(Arrays.asList(1.0, 0.0, 0.0, 0.0));
+    private Image getImage() {
+        double[][] data1 = {
+                {0.0, 0.0, 0.0, 1.0},
+                {0.0, 0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0},
+                {1.0, 0.0, 0.0, 0.0}
+        };
+        double[][] data2 = {
+                {0.0, 0.0, 0.0, 0.0},
+                {0.0, 1.0, 0.0, 0.0},
+                {0.0, 0.0, 1.0, 0.0},
+                {0.0, 0.0, 0.0, 0.0}
+        };
+        double[][] data3 = {
+                {0.0, 0.0, 0.0, 1.0},
+                {0.0, 7.0 / 15.0, 0.0, 0.0},
+                {0.0, 0.0, 7.0 / 15.0, 0.0},
+                {1.0, 0.0, 0.0, 0.0}
+        };
+        return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
+    }
 
-        List<List<Double>> data2 = new ArrayList<>();
-        data2.add(Arrays.asList(0.0, 0.0, 0.0, 0.0));
-        data2.add(Arrays.asList(0.0, 1.0, 0.0, 0.0));
-        data2.add(Arrays.asList(0.0, 0.0, 1.0, 0.0));
-        data2.add(Arrays.asList(0.0, 0.0, 0.0, 0.0));
+    private Image getImage422(){
+        double[][] data1 = {{0.0, 0.5}, {0.0, 0.0}, {0.0, 0.0}, {1.0, 0.0}};
 
-        List<List<Double>> data3 = new ArrayList<>();
-        data3.add(Arrays.asList(0.0, 0.0, 0.0, 1.0));
-        data3.add(Arrays.asList(0.0, 7.0/15.0, 0.0, 0.0));
-        data3.add(Arrays.asList(0.0, 0.0, 7.0/15.0, 0.0));
-        data3.add(Arrays.asList(1.0, 0.0, 0.0, 0.0));
+        double [][] data2 = {{0.0, 0.0}, {0.5, 0.0}, {0.0, 0.5}, {0.0, 0.0}};
+
+        double [][] data3 = {{0.0, 0.5}, {7.0/30.0, 0.0}, {0.0, 7.0/30.0}, {0.5, 0.0}};
+
+        return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
+    }
+    private Image getImage420(){
+        double [][] data1 = {{0.0, 0.25}, {0.5, 0.0}};
+
+        double [][] data2 = {{0.25, 0.0}, {0.0, 0.25}};
+
+        double [][] data3 = {{7.0/60.0, 0.25}, {0.25, 7.0/60.0}};
+
+        return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
+    }
+
+    private Image getImage411(){
+        double [][] data1 = {{0.25}, {0.0}, {0.0}, {0.25}};
+
+        double [][] data2 = {{0.0}, {0.25}, {0.25}, {0.0}};
+
+        double [][] data3 = {{0.25}, {7.0/60.0}, {7.0/60.0}, {0.25}};
+
+        return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
+    }
+
+    private Image getImage410(){
+        double [][] data1 = {{0.125}, {0.125}};
+
+        double [][] data2 = {{0.125}, {0.125}};
+
+        double [][] data3 = {{11.0/60.0}, {11.0/60.0}};
 
         return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
     }
@@ -125,4 +164,41 @@ public class ImageTest {
         }
 
     }
+
+    @Test
+    public void testChangeResolution444 () {
+        Image image1 = getImage();
+        image1.changeResolution(4, 4, 4, Arrays.asList(1, 2, 3));
+        Assert.assertEquals(image1, getImage());
+    }
+
+    @Test
+    public void testChangeResolution422 () {
+        Image image1 = getImage();
+        image1.changeResolution(4, 2, 2, Arrays.asList(1, 2, 3));
+        Assert.assertEquals(image1, getImage422());
+    }
+
+    @Test
+    public void testChangeResolution420() {
+        Image image1 = getImage();
+        image1.changeResolution(4, 2, 0, Arrays.asList(1, 2, 3));
+        Assert.assertEquals(image1, getImage420());
+    }
+
+    @Test
+    public void testChangeResolution411() {
+        Image image1 = getImage();
+        image1.changeResolution(4, 1, 1, Arrays.asList(1, 2, 3));
+        Assert.assertEquals(image1, getImage411());
+    }
+
+    @Test
+    public void testChangeResolution410() {
+        Image image1 = getImage();
+        image1.changeResolution(4, 1, 0, Arrays.asList(1, 2, 3));
+        Assert.assertTrue(image1.equals(getImage410()));
+    }
+
+    //todo Test with bigger PPM
 }
