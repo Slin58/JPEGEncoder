@@ -42,21 +42,30 @@ public class Utils {
         if (allLines.get(0).equals("P3")) {
             int[] imageSize = {Integer.parseInt(allLines.get(1).split("\\s+")[0]), Integer.parseInt(allLines.get(1).split("\\s+")[1])}; //height, width
 
-            int maxColor = Integer.parseInt(allLines.get(2));
+            double maxColor = Double.parseDouble(allLines.get(2));
+            allLines.remove(0);
+            allLines.remove(0);
+            allLines.remove(0);
+
             double[][] data1 = new double[imageSize[0]][imageSize[1]];
             double[][] data2 = new double[imageSize[0]][imageSize[1]];
             double[][] data3 = new double[imageSize[0]][imageSize[1]];
 
-            for (int i = 3; i <= allLines.size() - 1; i++) {
+            for (int i = 0; i <= allLines.size() - 1; i++) {
                 String[] row = allLines.get(i).trim().split("\\s+");
                 double[] row1 = new double[imageSize[1]];
                 double[] row2 = new double[imageSize[1]];
                 double[] row3 = new double[imageSize[1]];
 
                 for (int j = 0; j <= row.length - 1; j += 3) {
-                    row1[j] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
-                    row2[j] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
-                    row3[j] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
+                    System.out.println("row length: " + row.length);
+                    System.out.println("row: " + row);
+                    System.out.println("row1.length: " + row1.length);
+                    System.out.println("width: " + imageSize[1]);
+
+                    row1[j/3] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
+                    row2[j/3] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
+                    row3[j/3] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
                 }
                 data1[i] = row1;
                 data2[i] = row2;

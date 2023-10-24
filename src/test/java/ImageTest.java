@@ -105,7 +105,6 @@ public class ImageTest {
         Assert.assertEquals(image.getData3(-2, -3), 0.0);
     }
 
-
     @Test
     public void testImagesEqualTrue () {
         Image image1 = getImage();
@@ -132,7 +131,6 @@ public class ImageTest {
                 fail("wrong exception was thrown");
             }
         }
-
     }
 
     @Test

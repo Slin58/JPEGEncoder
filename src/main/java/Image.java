@@ -57,7 +57,7 @@ public class Image {
                 for (int k = 0; k < amount; k++) {
                     d2 += data[i][j+k];
                 }
-                row[j] = d2 / amount;
+                row[j/amount] = d2 / amount;
             }
             newImageData[i] = row;
         }
@@ -74,7 +74,7 @@ public class Image {
                 double d2 = (data[i][j] + data[i + 1][j]) / 2;
                 row[j] = d2;
             }
-            newImageData[i] = row;
+            newImageData[i/2] = row;
         }
         return newImageData;
     }
