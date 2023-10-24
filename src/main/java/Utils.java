@@ -40,29 +40,29 @@ public class Utils {
 
         Image result = null;
         if (allLines.get(0).equals("P3")) {
-            String[] imageSize = allLines.get(1).split("\\s+");
+            int[] imageSize = {Integer.parseInt(allLines.get(1).split("\\s+")[0]), Integer.parseInt(allLines.get(1).split("\\s+")[1])}; //height, width
+
             int maxColor = Integer.parseInt(allLines.get(2));
-            List<List<Double>> data1 = new ArrayList<>();
-            List<List<Double>> data2 = new ArrayList<>();
-            List<List<Double>> data3 = new ArrayList<>();
+            double[][] data1 = new double[imageSize[0]][imageSize[1]];
+            double[][] data2 = new double[imageSize[0]][imageSize[1]];
+            double[][] data3 = new double[imageSize[0]][imageSize[1]];
 
             for (int i = 3; i <= allLines.size() - 1; i++) {
                 String[] row = allLines.get(i).trim().split("\\s+");
-                List<Double> row1 = new ArrayList<>();
-                List<Double> row2 = new ArrayList<>();
-                List<Double> row3 = new ArrayList<>();
+                double[] row1 = new double[imageSize[1]];
+                double[] row2 = new double[imageSize[1]];
+                double[] row3 = new double[imageSize[1]];
 
                 for (int j = 0; j <= row.length - 1; j += 3) {
-                    //todo: divide by 0 check
-                    row1.add(checkForValidRange(Double.parseDouble(row[j]) / maxColor));
-                    row2.add(checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
-                    row3.add(checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
+                    row1[j] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
+                    row2[j] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
+                    row3[j] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
                 }
-                data1.add(row1);
-                data2.add(row2);
-                data3.add(row3);
+                data1[i] = row1;
+                data2[i] = row2;
+                data3[i] = row3;
             }
-            result = new Image(Integer.parseInt(imageSize[0]), Integer.parseInt(imageSize[1]), ColorSpace.RGB, data1, data2, data3);
+            result = new Image(imageSize[0], imageSize[1], ColorSpace.RGB, data1, data2, data3);
         }
         return result;
     }
@@ -74,12 +74,12 @@ public class Utils {
             writer.write(image.height + " " + image.width + "\n");
             writer.write("255\n"); // Maximum color value
 
-            for (int i = 0; i < image.data1.size(); i++) {
-                for (int j = 0; j < image.data1.get(i).size(); j++) {
+            for (int i = 0; i < image.data1.length; i++) {
+                for (int j = 0; j < image.data1[i].length; j++) {
                     //for RGB here
-                    int r = (int) Math.round(image.data1.get(i).get(j) * 255);
-                    int g = (int) Math.round(image.data2.get(i).get(j) * 255);
-                    int b = (int) Math.round(image.data3.get(i).get(j) * 255);
+                    int r = (int) Math.round(image.data1[i][j] * 255);
+                    int g = (int) Math.round(image.data2[i][j] * 255);
+                    int b = (int) Math.round(image.data3[i][j] * 255);
                     //  System.out.println("r,g,b: " + r + "," + g + "," + b );
 
                     writer.write(r + " " + g + " " + b + " ");
@@ -104,17 +104,17 @@ public class Utils {
                 {0.5}
         });
 
-        for(int i = 0; i < image.data1.size(); i++) {
-            for(int j = 0; j < image.data1.get(i).size(); j++) {
+        for(int i = 0; i < image.data1.length; i++) {
+            for(int j = 0; j < image.data1[i].length; j++) {
                 SimpleMatrix rgbVector = new SimpleMatrix(new double[][] {
                         {image.getData1(i,j)},
                         {image.getData2(i,j)},
                         {image.getData3(i,j)},
                 });
                 rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector));
-                image.data1.get(i).set(j, rgbVector.get(0, 0));
-                image.data2.get(i).set(j, rgbVector.get(1, 0));
-                image.data3.get(i).set(j, rgbVector.get(2, 0));
+                image.data1[i][j] = rgbVector.get(0,0);
+                image.data2[i][j] = rgbVector.get(1,0);
+                image.data3[i][j] = rgbVector.get(2,0);
             }
         }
         image.colorSpace = ColorSpace.YCbCr;
