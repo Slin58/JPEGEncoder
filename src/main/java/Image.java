@@ -205,7 +205,30 @@ public class Image {
 
     @Override
     public String toString () {
+        String d1 = "";
+        String d2 = "";
+        String d3 = "";
+
+        for (double[] a: data1) {
+            for (double b: a) {
+                d1 += b + ", ";
+            }
+            d1 += "\n";
+        }
+        for (double[] a: data2) {
+            for (double b: a) {
+                d2 += b+ ", ";
+            }
+            d2 += "\n";
+        }
+        for (double[] a: data2) {
+            for (double b: a) {
+                d3 += b + ", ";
+            }
+            d3 += "\n";
+        }
+
         return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace +
-                "\ndata1 = " + data1 + "\ndata2 = " + data2 + "\ndata3 = " + data3;
+                "\ndata1 = " + d1 + "\ndata2 = " + d2 + "\ndata3 = " + d3;
     }
 }

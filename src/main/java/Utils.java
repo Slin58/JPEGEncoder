@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -50,44 +49,24 @@ public class Utils {
             double[][] data1 = new double[imageSize[0]][imageSize[1]];
             double[][] data2 = new double[imageSize[0]][imageSize[1]];
             double[][] data3 = new double[imageSize[0]][imageSize[1]];
+            int i = 0;
+            int j = 0;
 
-            System.out.println("allLines: " + allLines.size());
-            System.out.println("image height: " + imageSize[0]);
-            System.out.println("image width: " + imageSize[1]);
+            for (int rowInFile = 0; rowInFile <= allLines.size() - 1; rowInFile++) {
+                String[] rowFile = allLines.get(rowInFile).trim().split("\\s+");
 
-            int lineCount = 0;
-            double[] row1 = new double[imageSize[1]];
-            double[] row2 = new double[imageSize[1]];
-            double[] row3 = new double[imageSize[1]];
-            int k = 0;
-
-                for (int i = 0; i <= allLines.size() - 1; i++) {
-                    String[] row = allLines.get(i).trim().split("\\s+");
-
-                    for (int j = 0; j <= row.length - 1; j += 3) {
-                       /* System.out.println("row length: " + row.length);
-                        System.out.println("row: " + row);
-                        System.out.println("row1.length: " + row1.length);
-                        System.out.println("width: " + imageSize[1]);   */
-
-                        row1[k] = (checkForValidRange(Double.parseDouble(row[j]) / maxColor));
-                        row2[k] = (checkForValidRange(Double.parseDouble(row[j + 1]) / maxColor));
-                        row3[k] = (checkForValidRange(Double.parseDouble(row[j + 2]) / maxColor));
-                        k++;
-                        if(k >= imageSize[1]) {
-                            data1[lineCount] = row1;
-                            data2[lineCount] = row2;
-                            data3[lineCount] = row3;
-                            lineCount++;
-
-                            //System.out.println(lineCount);
-                            row1 = new double[imageSize[1]];
-                            row2 = new double[imageSize[1]];
-                            row3 = new double[imageSize[1]];
-                            k = 0;
-                        }
+                for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow+=3) {
+                    if (j >= imageSize[1]) {
+                        i++;
+                        j = 0;
                     }
+                    data1[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow]) / maxColor);
+                    data2[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
+                    data3[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) / maxColor);
+                    j++;
                 }
+
+            }
             result = new Image(imageSize[0], imageSize[1], ColorSpace.RGB, data1, data2, data3);
         }
         return result;
