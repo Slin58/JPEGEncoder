@@ -41,4 +41,23 @@ public class UtilsTest {
         Assert.assertNull(image);
     }
 
+    @Test
+    public void testReadImageFrom (){
+        Image image1 = Utils.readImageFromPPM("ppm\\test2.ppm");
+        Assert.assertEquals(image1.data1[0][0], 0.11764705882352941);
+        Assert.assertEquals(image1.data2[0][0], 0.2627450980392157);
+        Assert.assertEquals(image1.data3[0][0], 0.5294117647058824);
+        Assert.assertEquals(image1.data1[299][167], 0.48627450980392156);
+        Assert.assertEquals(image1.data2[299][167], 0.3137254901960784);
+        Assert.assertEquals(image1.data3[299][167], 0.21568627450980393);
+
+    }
+
+    @Test
+    public void testReadBigImage () {
+        Image image = Utils.readImageFromPPM("ppm\\fat.ppm");
+        Assert.assertNotNull(image);
+    }
+
+
 }

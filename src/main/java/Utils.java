@@ -12,6 +12,15 @@ import static java.lang.Math.min;
 
 public class Utils {
 
+    public static boolean isNumeric(char c) {
+        try {
+            Double.parseDouble(String.valueOf(c));
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     public static double checkForValidRange(double number) {
         double newNumber = min(max(number, 0.0), 1.0);
         if (number != newNumber) {
@@ -26,25 +35,33 @@ public class Utils {
         try {
             allLines = Files.readAllLines(Paths.get(path));
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i <= allLines.size() - 1; i++) {
-            if (allLines.get(i).charAt(0) == '#') {
-                allLines.remove(i);
-                i--;
-            }
-        }
-
         Image result = null;
+        double maxColor = -1.0;
+        int[] imageSize = null;
         if (allLines.get(0).equals("P3")) {
-            int[] imageSize = {Integer.parseInt(allLines.get(1).split("\\s+")[0]), Integer.parseInt(allLines.get(1).split("\\s+")[1])}; //height, width
+            int commentCounter = 0;
+            for(int i = 1; i <= allLines.size()-1; i++) {
+                if (isNumeric(allLines.get(i).charAt(0))) {
+                    if (imageSize == null) {
+                        imageSize = new int[]{Integer.parseInt(allLines.get(i).split("\\s+")[0]), Integer.parseInt(allLines.get(i).split("\\s+")[1])}; //height, width
+                    }
+                    else {
+                        maxColor = Double.parseDouble(allLines.get(i));
+                    }
+                }
+                else {
+                    commentCounter++;
+                }
+                if (maxColor != -1.0) {
+                    break;
+                }
 
-            double maxColor = Double.parseDouble(allLines.get(2));
-            allLines.remove(0);
-            allLines.remove(0);
-            allLines.remove(0);
+            }
 
             double[][] data1 = new double[imageSize[0]][imageSize[1]];
             double[][] data2 = new double[imageSize[0]][imageSize[1]];
@@ -52,9 +69,11 @@ public class Utils {
             int i = 0;
             int j = 0;
 
-            for (int rowInFile = 0; rowInFile <= allLines.size() - 1; rowInFile++) {
+            for (int rowInFile = 3 + commentCounter; rowInFile <= allLines.size() - 1; rowInFile++) {
                 String[] rowFile = allLines.get(rowInFile).trim().split("\\s+");
-
+                if (rowFile[0] == "#") {
+                    continue;
+                }
                 for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow+=3) {
                     if (j >= imageSize[1]) {
                         i++;

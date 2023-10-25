@@ -198,5 +198,6 @@ public class ImageTest {
         Assert.assertTrue(image1.equals(getImage410()));
     }
 
+
     //todo Test with bigger PPM
 }
