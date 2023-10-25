@@ -14,7 +14,7 @@ public class Main {
          */
         long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
 
-        Image image1 = Utils.readImageFromPPM("ppm\\fat.ppm");
+        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
 
         long endTime = System.currentTimeMillis(); // Get the time after the function call
         long elapsedTime = endTime - startTime; // Calculate the elapsed time

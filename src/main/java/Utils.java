@@ -30,6 +30,8 @@ public class Utils {
     }
 
     public static Image readImageFromPPM(String path) {
+        long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
+
         List<String> allLines = null;
 
         try {
@@ -42,13 +44,15 @@ public class Utils {
 
         Image result = null;
         double maxColor = -1.0;
-        int[] imageSize = null;
+        int height = -1;
+        int width = -1;
         if (allLines.get(0).equals("P3")) {
             int commentCounter = 0;
             for(int i = 1; i <= allLines.size()-1; i++) {
                 if (isNumeric(allLines.get(i).charAt(0))) {
-                    if (imageSize == null) {
-                        imageSize = new int[]{Integer.parseInt(allLines.get(i).split("\\s+")[0]), Integer.parseInt(allLines.get(i).split("\\s+")[1])}; //height, width
+                    if (height == -1) {
+                        height = Integer.parseInt(allLines.get(i).split("\\s+")[0]);
+                        width = Integer.parseInt(allLines.get(i).split("\\s+")[1]);
                     }
                     else {
                         maxColor = Double.parseDouble(allLines.get(i));
@@ -63,9 +67,9 @@ public class Utils {
 
             }
 
-            double[][] data1 = new double[imageSize[0]][imageSize[1]];
-            double[][] data2 = new double[imageSize[0]][imageSize[1]];
-            double[][] data3 = new double[imageSize[0]][imageSize[1]];
+            double[][] data1 = new double[height][width];
+            double[][] data2 = new double[height][width];
+            double[][] data3 = new double[height][width];
             int i = 0;
             int j = 0;
 
@@ -75,18 +79,18 @@ public class Utils {
                     continue;
                 }
                 for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow+=3) {
-                    if (j >= imageSize[1]) {
+                    if (j >= width) {
                         i++;
                         j = 0;
                     }
-                    data1[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow]) / maxColor);
-                    data2[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
-                    data3[i][j] = checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) / maxColor);
+                    data1[i][j] = Double.parseDouble(rowFile[valueInRow]) / maxColor;       //checkForValidRange(Double.parseDouble(rowFile[valueInRow]) / maxColor);
+                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) / maxColor;    //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
+                    data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]) / maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) / maxColor);
                     j++;
                 }
 
             }
-            result = new Image(imageSize[0], imageSize[1], ColorSpace.RGB, data1, data2, data3);
+            result = new Image(height, width, ColorSpace.RGB, data1, data2, data3);
         }
         return result;
     }
