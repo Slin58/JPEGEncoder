@@ -30,8 +30,6 @@ public class Utils {
     }
 
     public static Image readImageFromPPM(String path) {
-        long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
-
         List<String> allLines = null;
 
         try {
@@ -84,7 +82,7 @@ public class Utils {
                         j = 0;
                     }
                     data1[i][j] = Double.parseDouble(rowFile[valueInRow]) / maxColor;       //checkForValidRange(Double.parseDouble(rowFile[valueInRow]) / maxColor);
-                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) / maxColor;    //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
+                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) / maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
                     data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]) / maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) / maxColor);
                     j++;
                 }
