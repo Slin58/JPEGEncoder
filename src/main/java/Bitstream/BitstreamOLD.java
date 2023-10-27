@@ -1,9 +1,9 @@
 package Bitstream;
 
-public class Bitstream {
+public class BitstreamOLD {
 
-    public static void addObjectWithIdentifier(String bitfolge, String object, Node<String> root) {
-        Node <String> test = root;
+    public static void addObjectWithIdentifier(String bitfolge, String object, NodeOLD<String> root) {
+        NodeOLD<String> test = root;
         char [] bitfolgeChar = bitfolge.toCharArray();
 
         for (char c : bitfolgeChar) {
@@ -12,15 +12,15 @@ public class Bitstream {
         test.t = object;
     }
 
-    public static String getBitstreamOfData (String bitstrom, Node <String> root) {
+    public static String getBitstreamOfData (String bitstrom, NodeOLD<String> root) {
         //todo
 
         return "";
     }
 
-    public static String getDataOfBitstream (String bitstrom, Node <String> root) {
+    public static String getDataOfBitstream (String bitstrom, NodeOLD<String> root) {
         char [] bitstromChar = bitstrom.toCharArray();
-        Node <String> test2 = root;
+        NodeOLD<String> test2 = root;
         String result = "";
         for(int i = 0; i <= bitstromChar.length - 1 ; i++) {
             test2 = test2.getNode(bitstromChar[i], false);

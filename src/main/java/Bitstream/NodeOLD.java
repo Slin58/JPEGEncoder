@@ -1,32 +1,32 @@
 package Bitstream;
 
-public class Node <T> {
-    public Node<T> left;
-    public Node<T> right;
+public class NodeOLD<T> {
+    public NodeOLD<T> left;
+    public NodeOLD<T> right;
     public T t;
 
     public void addToTree(String a, T t) {
 
         if (a.charAt(0) == '0') {
             if (a.length() == 1) {
-                this.left = new Node<T>();
+                this.left = new NodeOLD<T>();
                 this.left.t = t;
             }
             else {
                 if (this.left == null) {
-                    this.left = new Node<T>();
+                    this.left = new NodeOLD<T>();
                 }
                 this.left.addToTree(a.substring(1), t);
             }
         }
         else {
             if (a.length() == 1) {
-                this.right = new Node<T>();
+                this.right = new NodeOLD<T>();
                 this.right.t = t;
             }
             else {
                 if (this.right == null) {
-                    this.right = new Node<T>();
+                    this.right = new NodeOLD<T>();
                 }
                 this.right.addToTree(a.substring(1), t);
             }
@@ -34,13 +34,13 @@ public class Node <T> {
     }
 
 
-    public Node<T> getNode(char c, boolean addNode) {
+    public NodeOLD<T> getNode(char c, boolean addNode) {
 
         if (c == '0') {
 
             if (this.left == null) {
                 if (addNode) {
-                    this.left = new Node<T>();
+                    this.left = new NodeOLD<T>();
                 }
                 else {
                     return this;
@@ -52,7 +52,7 @@ public class Node <T> {
         else {
             if (this.right == null) {
                 if (addNode) {
-                    this.right = new Node<T>();
+                    this.right = new NodeOLD<T>();
                 }
                 else {
                     return this;

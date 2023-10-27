@@ -1,9 +1,3 @@
-import Bitstream.Bitstream;
-import Bitstream.Node;
-
-import java.util.Arrays;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
         /*
@@ -34,8 +28,6 @@ public class Main {
 
     }
 }
-
-
 
         /*
         Node <String> test = new Node<String>();
