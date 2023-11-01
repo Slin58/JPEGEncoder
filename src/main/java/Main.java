@@ -1,5 +1,9 @@
 import Bitstream.BitStream;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
         /*
@@ -29,15 +33,33 @@ public class Main {
         //System.out.println(Arrays.toString(image1.data1[0]));
         //System.out.println(Arrays.toString(image1.data1[1]));
 
-        BitStream bitStream = new BitStream(10000000);
+        int size = 10000000;
+        BitStream bitStream = new BitStream(size);
 
-        for(int i = 0; i < 10000000; i++) {
+        long startTimeSetBits = System.currentTimeMillis(); // Record the start time
+
+        for (int i = 0; i < size - 1; i++) {
             bitStream.setBit(true);
         }
         bitStream.setBit(false);
 
+        long endTimeSetBits = System.currentTimeMillis();
+        long executionTime = endTimeSetBits - startTimeSetBits;
+        System.out.println("endTimeToSetBits: " + executionTime + " milliseconds");
+
+        long startTimeReadAndWriteBits = System.currentTimeMillis();
+
+        bitStream.writeBitStreamToFile();
+
+        long endTimeToReadAndWriteBits = System.currentTimeMillis();
+
+        executionTime = endTimeToReadAndWriteBits - startTimeReadAndWriteBits;
+        System.out.println("Execution Time: " + executionTime + " milliseconds");
+
     }
+
 }
+
 
         /*
         Node <String> test = new Node<String>();
