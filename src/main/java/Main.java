@@ -1,3 +1,5 @@
+import Bitstream.BitStream;
+
 public class Main {
     public static void main(String[] args) {
         /*
@@ -6,7 +8,7 @@ public class Main {
         image1.changeResolution(4, 0, 0, List.of(2, 3));
         System.out.println(image1);
          */
-        long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
+       /* long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
 
         Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
 
@@ -14,6 +16,7 @@ public class Main {
         long elapsedTime = endTime - startTime; // Calculate the elapsed time
 
         System.out.println("Function call took " + elapsedTime + " milliseconds.");
+        */
 
         /*Image image1 = Utils.readImageFromPPM("ppm\\test2.ppm");
         System.out.println(image1.data1[0][0]);
@@ -25,6 +28,13 @@ public class Main {
         //image1.changeResolution(5, 2, 2, Arrays.asList(1,2,3));
         //System.out.println(Arrays.toString(image1.data1[0]));
         //System.out.println(Arrays.toString(image1.data1[1]));
+
+        BitStream bitStream = new BitStream(10000000);
+
+        for(int i = 0; i < 10000000; i++) {
+            bitStream.setBit(true);
+        }
+        bitStream.setBit(false);
 
     }
 }

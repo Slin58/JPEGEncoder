@@ -1,8 +1,10 @@
 package Bitstream;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.Arrays;
 import java.util.BitSet;
 
 public class BitStream {
@@ -12,22 +14,33 @@ public class BitStream {
     private int lastSetBitIdx;
     private BitSet bitSet; //todo: koennen nach Test mal versuchen auf 20 000 000 oder mehr zu gehen
 
-    public BitStream(int lastSetBitIdx , int maxSize) {
+    public BitStream(int maxSize) {
         this.maxSize = maxSize;
         this.bitSet = new BitSet(maxSize);
-        this.lastSetBitIdx = 0;
+        this.lastSetBitIdx = -1;
     }
 
     public void setBit(boolean bit) {
         if(lastSetBitIdx >= this.maxSize-1) {
             writeBitStreamToFile();
+            this.bitSet = new BitSet(maxSize);
+            this.lastSetBitIdx = -1;
         }
-        this.bitSet.set(lastSetBitIdx);
-        lastSetBitIdx++;
+        this.lastSetBitIdx++;
+        if (bit) {
+            this.bitSet.set(lastSetBitIdx, true);
+        } else {
+            this.bitSet.set(lastSetBitIdx, false);
+        }
     }
-    public boolean getNewestBit() {
+
+    public int getNewestBit() {
+        if(this.lastSetBitIdx == -1) {
+            throw new RuntimeException("BitStream empty");
+        }
         this.lastSetBitIdx--;
-        return this.bitSet.get(lastSetBitIdx+1);
+       // System.out.println(this.lastSetBitIdx + "; " + this.bitSet.get(lastSetBitIdx+1));
+        return (this.bitSet.get(lastSetBitIdx+1)) ? 1 : 0;
 
         //alternativ:
         /*boolean fuckYou = this.bitSet.get(lastSetBitIdx);
@@ -36,14 +49,16 @@ public class BitStream {
     }
 
     //todo: check if performance is dogshit; sponsored by ChatGPT
-    public void writeBitStreamToFile() {
-        try (FileOutputStream fileOutputStream = new FileOutputStream("bitstream\\bitstreamOutput.txt");
-             DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream)) {
+    public void writeBitStreamToFile()  {
+        try (Writer wr = new FileWriter("bitstream\\bitstreamOutput.txt");) {
+            //byte[] byteArray = bitSet.toByteArray();
+            int[] arr = new int[this.maxSize];
+            for (int i = 0; i < this.maxSize; i++) {
+                arr[i] = getNewestBit();
+            }
+            wr.write(Arrays.toString(arr));
 
-            byte[] byteArray = bitSet.toByteArray();
-            dataOutputStream.write(byteArray);
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
