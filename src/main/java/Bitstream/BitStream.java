@@ -54,6 +54,12 @@ public class BitStream {
         }
     }
 
+    public void writeBits(boolean ... bits){
+        for (boolean bit : bits) {
+            this.setBit(bit);
+        }
+    }
+
     public byte[] getBytes() {
         return this.byteArray;
     }

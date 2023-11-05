@@ -2,7 +2,6 @@ import Bitstream.BitStream;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HexFormat;
 
@@ -11,7 +10,8 @@ public class BitStreamTest {
     @Test
     void writeBit() {
         BitStream bitStream = new BitStream();
-        bitStream.setBit(true);Assert.assertEquals(bitStream.getBytes()[0], HexFormat.of().parseHex("80")[0]);
+        bitStream.setBit(true);
+        Assert.assertEquals(bitStream.getBytes()[0], HexFormat.of().parseHex("80")[0]);
     }
 
     @Test
@@ -19,7 +19,7 @@ public class BitStreamTest {
         byte[] value = HexFormat.of().parseHex("C5");
         BitStream bitStream = new BitStream();
         bitStream.setByte(value[0]);
-        Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(value,256));
+        Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(value, 256));
     }
 
     @Test
@@ -28,7 +28,7 @@ public class BitStreamTest {
         BitStream bitStream = new BitStream();
         bitStream.setBytes(values);
         byte[] result = bitStream.getBytes();
-        Assert.assertEquals(result, Arrays.copyOf(values,256));
+        Assert.assertEquals(result, Arrays.copyOf(values, 256));
     }
 
 
@@ -45,11 +45,11 @@ public class BitStreamTest {
 
         byte[] expected = HexFormat.of().parseHex("C56BE0");
         byte[] bytes = bitStream.getBytes();
-        Assert.assertEquals(bytes, Arrays.copyOf(expected,256));
+        Assert.assertEquals(bytes, Arrays.copyOf(expected, 256));
     }
 
     @Test
-    void writeMassiveByteArray(){
+    void writeMassiveByteArray() {
         byte[] values = HexFormat.of().parseHex("8627d1f0ffa864167bb58870837f93d5aafbcb608d5ca54095bcfff" +
                 "3d43e1ed792babd937fd409f3da112720616b05629a48dcfbb79de8fff12a4864cf4a9b7d3ba3d47fb1eb1c2ebc5b" +
                 "e3138dd916306d7c2b273e81256786877be4e21207a1badffde70561c3238b53b6816dba5f8a05f96ff30a6ef3b1f" +
@@ -59,6 +59,14 @@ public class BitStreamTest {
                 "db0157feb6b4c14757697d77d34555");
         BitStream bitStream = new BitStream();
         bitStream.setBytes(values);
-        Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(values,512));
+        Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(values, 512));
+    }
+
+    @Test
+    void writeMultipleBits() {
+        BitStream bitStream = new BitStream();
+        bitStream.writeBits(true, false, true, true, false, false, true, false, true, false);
+        byte[] result = HexFormat.of().parseHex("B280");
+        Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(result, 256));
     }
 }
