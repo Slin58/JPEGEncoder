@@ -1,9 +1,10 @@
-package Bitstream;
+package bitstream;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HexFormat;
 
 /**
  * Class represents little endian. last byte may be flipped i.e for last byte containing 011 -> results in int 6
@@ -52,7 +53,7 @@ public class BitStream {
         }
     }
 
-    public void writeBits(boolean ... bits){
+    public void writeBits(boolean... bits) {
         for (boolean bit : bits) {
             this.setBit(bit);
         }
@@ -65,6 +66,14 @@ public class BitStream {
     public void setBytes(byte[] bytes) {
         for (byte aByte : bytes) {
             this.setByte(aByte);
+        }
+    }
+
+    public void writeHexString(String string) {
+        if (string.length() % 2 != 0) {
+            throw new RuntimeException("String should contain only whole bytes");
+        } else {
+            this.setBytes(HexFormat.of().parseHex(string));
         }
     }
 

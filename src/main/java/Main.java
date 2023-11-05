@@ -1,4 +1,6 @@
-import Bitstream.BitStream;
+import bitstream.BitStream;
+import segments.JFIFSegment;
+import segments.SOF0Segment;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,31 +31,17 @@ public class Main {
         //System.out.println(Arrays.toString(image1.data1[0]));
         //System.out.println(Arrays.toString(image1.data1[1]));
 
-        int size = 10000000;
+
         BitStream bitStream = new BitStream();
 
-        long startTimeSetBits = System.currentTimeMillis(); // Record the start time
 
-        for (int i = 0; i < size - 1; i++) {
-            if (i % 3 == 0)
-                bitStream.setBit(true);
-            else
-                bitStream.setBit(false);
-        }
-        bitStream.setBit(false);
-
-        long endTimeSetBits = System.currentTimeMillis();
-        long executionTime = endTimeSetBits - startTimeSetBits;
-        System.out.println("endTimeToSetBits: " + executionTime + " milliseconds");
-
-        long startTimeReadAndWriteBits = System.currentTimeMillis();
-
+        SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2), new SOF0Segment.Component(3, "11", 3)};
+        new JFIFSegment(bitStream).writeSegmentToBitStream();
+        new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         bitStream.writeBitStreamToFile();
 
-        long endTimeToReadAndWriteBits = System.currentTimeMillis();
 
-        executionTime = endTimeToReadAndWriteBits - startTimeReadAndWriteBits;
-        System.out.println("Execution Time: " + executionTime + " milliseconds");
+
 
     }
 

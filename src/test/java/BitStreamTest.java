@@ -1,4 +1,4 @@
-import Bitstream.BitStream;
+import bitstream.BitStream;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -69,4 +69,27 @@ public class BitStreamTest {
         byte[] result = HexFormat.of().parseHex("B280");
         Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(result, 256));
     }
+
+    @Test
+    void testPerformance() {
+        int size = 10000000;
+        BitStream bitStream = new BitStream();
+        long startTimeSetBits = System.currentTimeMillis(); // Record the start time
+        for (int i = 0; i < size - 1; i++) {
+            if (i % 3 == 0)
+                bitStream.setBit(true);
+            else
+                bitStream.setBit(false);
+        }
+        bitStream.setBit(false);
+        long endTimeSetBits = System.currentTimeMillis();
+        long executionTime = endTimeSetBits - startTimeSetBits;
+        System.out.println("endTimeToSetBits: " + executionTime + " milliseconds");
+        long startTimeReadAndWriteBits = System.currentTimeMillis();
+        bitStream.writeBitStreamToFile();
+        long endTimeToReadAndWriteBits = System.currentTimeMillis();
+        executionTime = endTimeToReadAndWriteBits - startTimeReadAndWriteBits;
+        System.out.println("Execution Time: " + executionTime + " milliseconds");
+    }
+
 }
