@@ -34,7 +34,7 @@ public class Main {
         //System.out.println(Arrays.toString(image1.data1[1]));
 
         int size = 10000000;
-        BitStream bitStream = new BitStream(size);
+        BitStream bitStream = new BitStream();
 
         long startTimeSetBits = System.currentTimeMillis(); // Record the start time
 
