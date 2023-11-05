@@ -13,11 +13,9 @@ public class BitStream {
     private final static int BYTE_START_INDEX = 7;
     //"Die zu Grunde liegende Repräsentation muss weiterhin auf Byte-Folgen basieren" --> wtf does this mean??
     // werden bytes reingeschrieben oder muss der datentyp im bitstream bytes sein?
-    //todo: wuerde es erst mal mit BitSet probieren. Sieht gut optimiert aus
-    private String storageDir = "bitstream";
     private int lastSetBitIdx;
     private int currentByteIdx;
-    private byte[] byteArray; //todo: koennen nach Test mal versuchen auf 20 000 000 oder mehr zu gehen
+    private byte[] byteArray;
 
     public BitStream() {
         this.byteArray = new byte[256];

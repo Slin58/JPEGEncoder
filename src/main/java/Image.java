@@ -8,7 +8,6 @@ public class Image {
     ColorSpace colorSpace;
 
     //TODO: Schrittweiten nachdefinieren; Abfrage nicht per Pixel (s. getData)
-    //todo: list zu array; downsample size mit reinnehmen?
     // max color immer auf 255 (? raff ich nicht tbh)
     // tests fuer riesige bilder
     // ppm reader Zeilenaufteilung mit Width,
