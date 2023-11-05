@@ -1,9 +1,5 @@
 import Bitstream.BitStream;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) {
         /*
@@ -39,7 +35,10 @@ public class Main {
         long startTimeSetBits = System.currentTimeMillis(); // Record the start time
 
         for (int i = 0; i < size - 1; i++) {
-            bitStream.setBit(true);
+            if (i % 3 == 0)
+                bitStream.setBit(true);
+            else
+                bitStream.setBit(false);
         }
         bitStream.setBit(false);
 
