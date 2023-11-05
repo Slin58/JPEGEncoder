@@ -16,7 +16,7 @@ public class Utils {
         try {
             Double.parseDouble(String.valueOf(c));
             return true;
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -46,17 +46,15 @@ public class Utils {
         int width = -1;
         if (allLines.get(0).equals("P3")) {
             int commentCounter = 0;
-            for(int i = 1; i <= allLines.size()-1; i++) {
+            for (int i = 1; i <= allLines.size() - 1; i++) {
                 if (isNumeric(allLines.get(i).charAt(0))) {
                     if (height == -1) {
                         height = Integer.parseInt(allLines.get(i).split("\\s+")[0]);
                         width = Integer.parseInt(allLines.get(i).split("\\s+")[1]);
-                    }
-                    else {
+                    } else {
                         maxColor = Double.parseDouble(allLines.get(i));
                     }
-                }
-                else {
+                } else {
                     commentCounter++;
                 }
                 if (maxColor != -1.0) {
@@ -76,7 +74,7 @@ public class Utils {
                 if (rowFile[0] == "#") {
                     continue;
                 }
-                for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow+=3) {
+                for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow += 3) {
                     if (j >= width) {
                         i++;
                         j = 0;
@@ -117,30 +115,30 @@ public class Utils {
         }
     }
 
-    public static Image rgbToYCbCr (Image image) {
+    public static Image rgbToYCbCr(Image image) {
         //todo: Test
-        SimpleMatrix transformMatrix = new SimpleMatrix(new double[][] {
+        SimpleMatrix transformMatrix = new SimpleMatrix(new double[][]{
                 {0.299, 0.587, 0.114},
                 {-0.1687, -0.3312, 0.5},
                 {0.5, -0.4186, -0.0813}
         });
-        SimpleMatrix prefixVector = new SimpleMatrix(new double[][] {
+        SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{
                 {0.0},
                 {0.5},
                 {0.5}
         });
 
-        for(int i = 0; i < image.data1.length; i++) {
-            for(int j = 0; j < image.data1[i].length; j++) {
-                SimpleMatrix rgbVector = new SimpleMatrix(new double[][] {
-                        {image.getData1(i,j)},
-                        {image.getData2(i,j)},
-                        {image.getData3(i,j)},
+        for (int i = 0; i < image.data1.length; i++) {
+            for (int j = 0; j < image.data1[i].length; j++) {
+                SimpleMatrix rgbVector = new SimpleMatrix(new double[][]{
+                        {image.getData1(i, j)},
+                        {image.getData2(i, j)},
+                        {image.getData3(i, j)},
                 });
                 rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector));
-                image.data1[i][j] = rgbVector.get(0,0);
-                image.data2[i][j] = rgbVector.get(1,0);
-                image.data3[i][j] = rgbVector.get(2,0);
+                image.data1[i][j] = rgbVector.get(0, 0);
+                image.data2[i][j] = rgbVector.get(1, 0);
+                image.data3[i][j] = rgbVector.get(2, 0);
             }
         }
         image.colorSpace = ColorSpace.YCbCr;
