@@ -1,7 +1,6 @@
 package segments;
 
 import bitstream.BitStream;
-
 import java.util.HexFormat;
 
 public class SOF0Segment {
@@ -26,7 +25,8 @@ public class SOF0Segment {
 
         public void writeSegmentToBitStream() {
                 this.bitStream.writeHexString("FFC0");
-                this.bitStream.setByte((byte) (8 + this.components.length * 3));
+                int length = 8 + this.components.length * 3;
+                this.bitStream.setBytes( new byte[]{(byte) (length >> 8), (byte) length});
                 this.bitStream.setByte((byte) this.accuracy);
                 this.bitStream.setBytes(new byte[]{(byte) (this.yMax >> 8), (byte) this.yMax});
                 this.bitStream.setBytes(new byte[]{(byte) (this.xMax >> 8), (byte) this.xMax});

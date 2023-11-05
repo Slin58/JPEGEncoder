@@ -31,18 +31,14 @@ public class Main {
         //System.out.println(Arrays.toString(image1.data1[0]));
         //System.out.println(Arrays.toString(image1.data1[1]));
 
-
         BitStream bitStream = new BitStream();
-
+        bitStream.writeHexString("ffd8");
 
         SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2), new SOF0Segment.Component(3, "11", 3)};
         new JFIFSegment(bitStream).writeSegmentToBitStream();
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         bitStream.writeBitStreamToFile();
-
-
-
-
+        bitStream.writeHexString("ffd9");
     }
 
 }
