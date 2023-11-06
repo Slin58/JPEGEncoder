@@ -1,5 +1,5 @@
 import bitstream.BitStream;
-import segments.JFIFSegment;
+import segments.APP0JFIFSegment;
 import segments.SOF0Segment;
 
 public class Main {
@@ -35,9 +35,10 @@ public class Main {
         bitStream.writeHexString("ffd8");
 
         SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2), new SOF0Segment.Component(3, "11", 3)};
-        new JFIFSegment(bitStream).writeSegmentToBitStream();
+        new APP0JFIFSegment(bitStream).writeSegmentToBitStream();
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         bitStream.writeHexString("ffd9");
         bitStream.writeBitStreamToFile();
+        System.out.println(bitStream.getHexString());
     }
 }

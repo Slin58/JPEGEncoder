@@ -42,10 +42,9 @@ public class BitStream {
 
     public void writeBitStreamToFile() {
         String fName = "bitstreamOutput.jpeg";
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fName);
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)) {
+        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fName))) {
             byte[] bytes = this.byteArray;
-            bufferedOutputStream.write(bytes);
+            bufferedOutputStream.write(bytes, 0, currentByteIdx + 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,6 +72,14 @@ public class BitStream {
         } else {
             this.setBytes(HexFormat.of().parseHex(string));
         }
+    }
+
+    public String getHexString() {
+        String result = "";
+        for (byte b : byteArray) {
+            result += String.format("%02X", b);
+        }
+        return result;
     }
 
 }

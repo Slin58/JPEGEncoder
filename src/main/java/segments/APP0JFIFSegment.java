@@ -2,16 +2,16 @@ package segments;
 
 import bitstream.BitStream;
 
-public class JFIFSegment {
+public class APP0JFIFSegment {
     BitStream bitStream;
 
-    public JFIFSegment(BitStream bitStream) {
+    public APP0JFIFSegment(BitStream bitStream) {
         this.bitStream = bitStream;
     }
 
     public void writeSegmentToBitStream() {
         this.bitStream.writeHexString("ffe0");          //marker
-        this.bitStream.writeHexString("0010");            //segment length
+        this.bitStream.writeHexString("0010");          //segment length
         this.bitStream.writeHexString("4a46494600");    //JFIF String
         this.bitStream.writeHexString("01");            //major revision number
         this.bitStream.writeHexString("01");            //minor revision number
@@ -20,7 +20,7 @@ public class JFIFSegment {
         this.bitStream.writeHexString("0048");          //y-density
         this.bitStream.writeHexString("00");            //size thumbnail x
         this.bitStream.writeHexString("00");            //size thumbnail y
-        this.bitStream.writeHexString("ffff");            //size thumbnail y
+        this.bitStream.writeHexString("ffff");          //size thumbnail y
     }
 
 }
