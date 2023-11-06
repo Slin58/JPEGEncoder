@@ -37,8 +37,7 @@ public class Main {
         SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2), new SOF0Segment.Component(3, "11", 3)};
         new JFIFSegment(bitStream).writeSegmentToBitStream();
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
-        bitStream.writeBitStreamToFile();
         bitStream.writeHexString("ffd9");
+        bitStream.writeBitStreamToFile();
     }
-
 }

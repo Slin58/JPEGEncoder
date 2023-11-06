@@ -12,8 +12,6 @@ import java.util.HexFormat;
  */
 public class BitStream {
     private final static int BYTE_START_INDEX = 7;
-    //"Die zu Grunde liegende Repräsentation muss weiterhin auf Byte-Folgen basieren" --> wtf does this mean??
-    // werden bytes reingeschrieben oder muss der datentyp im bitstream bytes sein?
     private int lastSetBitIdx;
     private int currentByteIdx;
     private byte[] byteArray;
@@ -38,7 +36,7 @@ public class BitStream {
 
     public void setByte(byte value) {
         for (int i = Byte.SIZE - 1; i >= 0; i--) {
-            this.setBit(((value >> i) & 1) == 1);
+            this.setBit(((value >> i) & 1) == 1);       //kann & 1 vlt weg?
         }
     }
 

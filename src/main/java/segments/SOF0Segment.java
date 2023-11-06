@@ -1,7 +1,6 @@
 package segments;
 
 import bitstream.BitStream;
-
 import java.util.HexFormat;
 
 public class SOF0Segment {
