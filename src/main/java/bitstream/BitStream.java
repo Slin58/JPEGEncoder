@@ -39,6 +39,11 @@ public class BitStream {
             this.setBit(((value >> i) & 1) == 1);       //kann & 1 vlt weg?
         }
     }
+    public void setInt(int value,int bits) {
+        for (int i = bits - 1; i >= 0; i--) {
+            this.setBit(((value >> i) & 1) == 1);
+        }
+    }
 
     public void writeBitStreamToFile() {
         String fName = "bitstreamOutput.jpeg";
