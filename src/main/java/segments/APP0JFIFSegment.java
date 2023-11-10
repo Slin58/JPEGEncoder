@@ -20,7 +20,6 @@ public class APP0JFIFSegment {
         this.bitStream.writeHexString("0048");          //y-density
         this.bitStream.writeHexString("00");            //size thumbnail x
         this.bitStream.writeHexString("00");            //size thumbnail y
-        this.bitStream.writeHexString("ffff");          //size thumbnail y
     }
 
 }
