@@ -60,6 +60,7 @@ public class BitStream {
             this.setBit(bit);
         }
     }
+    //todo getBits -> mit Counter
 
     public byte[] getBytes() {
         return this.byteArray;

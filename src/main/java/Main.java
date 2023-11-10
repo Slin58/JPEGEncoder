@@ -39,6 +39,6 @@ public class Main {
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         bitStream.writeHexString("ffd9");
         bitStream.writeBitStreamToFile();
-        System.out.println(bitStream.getHexString());
+        //System.out.println(bitStream.getHexString());
     }
 }

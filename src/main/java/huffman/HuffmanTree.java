@@ -1,13 +1,17 @@
 package huffman;
 
+import bitstream.BitStream;
+
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HuffmanTree<T> {
 
-    private HuffmanNode<T> root;
+    public HuffmanNode<T> root;
+    public Map<T, HuffmanLookUpRow<T>> lookUpTable = new HashMap<>();
 
     public HuffmanTree(HuffmanNode<T> root) {
         this.root = root;
@@ -35,6 +39,31 @@ public class HuffmanTree<T> {
 
         return sb.toString();
     }
+
+    public void createLookUpTable(HuffmanNode<T> node) {
+        traverseTree(node, 0, 0);
+    }
+
+    private void traverseTree(HuffmanNode<T> node, int path, int counter) {
+        if (node.getLeft() == null && node.getRight() == null) {
+            //System.out.println(node.getValue() + ", path: " + path + ", counter: " + counter);
+            //lookUpTable.put(node.getValue(), path + "," + counter); //class mit path, counter
+            lookUpTable.put(node.getValue(), new HuffmanLookUpRow<>(node.getValue(), path, counter));
+        }
+        else {
+            counter++;
+            traverseTree(node.getLeft(), (path<<1) | 0, counter);
+            traverseTree(node.getRight(), (path<<1) | 1, counter);
+        }
+    }
+
+    public void encode(List<T> input, BitStream bitStream) {
+        for (T i : input) {
+            HuffmanLookUpRow<T> huffmanLookUpRow = lookUpTable.get(i);
+            bitStream.setInt(huffmanLookUpRow.getPath(), huffmanLookUpRow.getCounter());
+        }
+    }
+
 
     private String getIndentation(int depth) {
         StringBuilder sb = new StringBuilder();

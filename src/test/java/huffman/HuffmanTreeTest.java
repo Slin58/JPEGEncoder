@@ -1,5 +1,6 @@
 package huffman;
 
+import bitstream.BitStream;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -27,5 +28,14 @@ public class HuffmanTreeTest {
 
         HuffmanTree<Character> huffmanTree = new HuffmanTree.Builder<Character>().add(valueList).build();
         System.out.println(huffmanTree);
+
+
+        huffmanTree.createLookUpTable(huffmanTree.root);
+        System.out.println(huffmanTree.lookUpTable);
+        BitStream bitStream = new BitStream();
+        List<Character> input = new ArrayList<>();
+        input.add('A');
+        huffmanTree.encode(input, bitStream);
+        System.out.println();
     }
 }
