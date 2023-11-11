@@ -29,10 +29,8 @@ public class HuffmanTree<T> {
 
         StringBuilder sb = new StringBuilder();
 
-        if (right)
-            sb.append(getIndentation(depth)).append(node).append(" right").append("\n");
-        else
-            sb.append(getIndentation(depth)).append(node).append(" left").append("\n");
+        if (right) sb.append(getIndentation(depth)).append(node).append(" right").append("\n");
+        else sb.append(getIndentation(depth)).append(node).append(" left").append("\n");
 
         sb.append(treeToString(node.getLeft(), depth + 1, false));
         sb.append(treeToString(node.getRight(), depth + 1, true));
@@ -46,14 +44,11 @@ public class HuffmanTree<T> {
 
     private void traverseTree(HuffmanNode<T> node, int path, int counter) {
         if (node.getLeft() == null && node.getRight() == null) {
-            //System.out.println(node.getValue() + ", path: " + path + ", counter: " + counter);
-            //lookUpTable.put(node.getValue(), path + "," + counter); //class mit path, counter
             lookUpTable.put(node.getValue(), new HuffmanLookUpRow<>(node.getValue(), path, counter));
-        }
-        else {
+        } else {
             counter++;
-            traverseTree(node.getLeft(), (path<<1) | 0, counter);
-            traverseTree(node.getRight(), (path<<1) | 1, counter);
+            traverseTree(node.getLeft(), (path << 1) | 0, counter);
+            traverseTree(node.getRight(), (path << 1) | 1, counter);
         }
     }
 
@@ -63,7 +58,6 @@ public class HuffmanTree<T> {
             bitStream.setInt(huffmanLookUpRow.getPath(), huffmanLookUpRow.getCounter());
         }
     }
-
 
     private String getIndentation(int depth) {
         StringBuilder sb = new StringBuilder();
@@ -78,14 +72,18 @@ public class HuffmanTree<T> {
         private final Map<HuffmanNode<T>, Double> probabilities = new HashMap<>();
 
         public HuffmanTree<T> build() {
-            System.out.println(this.probabilities.entrySet().stream().map(huffmanNodeDoubleEntry -> huffmanNodeDoubleEntry.getKey().toString() + ":" + huffmanNodeDoubleEntry.getValue()).collect(Collectors.joining("\n")));
+            System.out.println(this.probabilities.entrySet().stream()
+                                       .map(huffmanNodeDoubleEntry -> huffmanNodeDoubleEntry.getKey().toString() + ":" +
+                                                                      huffmanNodeDoubleEntry.getValue())
+                                       .collect(Collectors.joining("\n")));
             while (this.probabilities.size() > 1) {
                 HuffmanNode<T> currentNode = new HuffmanNode<>();
                 Double currentProbability = 0d;
                 for (int i = 0; i < 2; i++) {
                     // find min probability
-                    Map.Entry<HuffmanNode<T>, Double> lowest = this.probabilities.entrySet()
-                            .stream().min(Map.Entry.comparingByValue()).orElseThrow(() -> new RuntimeException("No Value Found"));
+                    Map.Entry<HuffmanNode<T>, Double> lowest =
+                            this.probabilities.entrySet().stream().min(Map.Entry.comparingByValue())
+                                    .orElseThrow(() -> new RuntimeException("No Value Found"));
                     this.probabilities.remove(lowest.getKey());
                     currentNode.setNode(lowest.getKey());
                     currentProbability += lowest.getValue();

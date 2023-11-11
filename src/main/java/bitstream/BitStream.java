@@ -11,35 +11,36 @@ import java.util.HexFormat;
  * Because of this we may need to manually change the last byte when writing.
  */
 public class BitStream {
-    private final static int BYTE_START_INDEX = 7;
-    private int lastSetBitIdx;
-    private int currentByteIdx;
+    public final static int BYTE_START_INDEX = 7;
+    private int currentSetBitIdx;
+    private int currentSetByteIdx;
     private byte[] byteArray;
 
     public BitStream() {
         this.byteArray = new byte[256];
-        this.lastSetBitIdx = BYTE_START_INDEX;
-        this.currentByteIdx = 0;
+        this.currentSetBitIdx = BYTE_START_INDEX;
+        this.currentSetByteIdx = 0;
     }
 
     public void setBit(boolean bit) {
-        if (this.lastSetBitIdx < 0) {
-            this.currentByteIdx++;
-            this.lastSetBitIdx = BYTE_START_INDEX;
-            if (currentByteIdx == byteArray.length - 1) {
+        if (this.currentSetBitIdx < 0) {
+            this.currentSetByteIdx++;
+            this.currentSetBitIdx = BYTE_START_INDEX;
+            if (currentSetByteIdx == byteArray.length - 1) {
                 this.byteArray = Arrays.copyOf(this.byteArray, this.byteArray.length * 2);
             }
         }
-        this.byteArray[this.currentByteIdx] |= (bit ? 1 : 0) << this.lastSetBitIdx;
-        this.lastSetBitIdx--;
+        this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
+        this.currentSetBitIdx--;
     }
 
     public void setByte(byte value) {
         for (int i = Byte.SIZE - 1; i >= 0; i--) {
-            this.setBit(((value >> i) & 1) == 1);       //kann & 1 vlt weg?
+            this.setBit(((value >> i) & 1) == 1);
         }
     }
-    public void setInt(int value,int bits) {
+
+    public void setInt(int value, int bits) {
         for (int i = bits - 1; i >= 0; i--) {
             this.setBit(((value >> i) & 1) == 1);
         }
@@ -49,7 +50,7 @@ public class BitStream {
         String fName = "bitstreamOutput.jpeg";
         try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fName))) {
             byte[] bytes = this.byteArray;
-            bufferedOutputStream.write(bytes, 0, currentByteIdx + 1);
+            bufferedOutputStream.write(bytes, 0, currentSetByteIdx + 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +61,6 @@ public class BitStream {
             this.setBit(bit);
         }
     }
-    //todo getBits -> mit Counter
 
     public byte[] getBytes() {
         return this.byteArray;
@@ -78,6 +78,14 @@ public class BitStream {
         } else {
             this.setBytes(HexFormat.of().parseHex(string));
         }
+    }
+
+    public int getCurrentSetBitIdx() {
+        return currentSetBitIdx;
+    }
+
+    public int getCurrentSetByteIdx() {
+        return currentSetByteIdx;
     }
 
     public String getHexString() {

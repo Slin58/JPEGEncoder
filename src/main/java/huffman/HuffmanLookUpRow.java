@@ -1,6 +1,6 @@
 package huffman;
 
-public class HuffmanLookUpRow<T> {
+public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
     private T value;
     private int path;
     private int counter;
@@ -33,5 +33,10 @@ public class HuffmanLookUpRow<T> {
 
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    @Override
+    public int compareTo(HuffmanLookUpRow<T> o) {
+        return this.getPath() > o.getPath() ? 1 : -1;
     }
 }

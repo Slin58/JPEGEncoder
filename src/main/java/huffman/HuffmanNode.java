@@ -9,7 +9,7 @@ public class HuffmanNode<T> {
         this.value = value;
     }
 
-    public HuffmanNode(){
+    public HuffmanNode() {
 
     }
 
@@ -28,12 +28,12 @@ public class HuffmanNode<T> {
         return right;
     }
 
-    public void setNode(HuffmanNode<T> node){
-        if (this.left == null){
+    public void setNode(HuffmanNode<T> node) {
+        if (this.left == null) {
             this.left = node;
-        } else if (this.right == null){
+        } else if (this.right == null) {
             this.right = node;
-        }else {
+        } else {
             throw new RuntimeException("something went wrong while writing node");
         }
     }

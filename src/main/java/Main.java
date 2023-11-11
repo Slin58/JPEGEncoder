@@ -1,6 +1,7 @@
 import bitstream.BitStream;
-import segments.APP0JFIFSegment;
-import segments.SOF0Segment;
+
+import java.util.Arrays;
+import java.util.HexFormat;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,14 +32,24 @@ public class Main {
         //System.out.println(Arrays.toString(image1.data1[0]));
         //System.out.println(Arrays.toString(image1.data1[1]));
 
-        BitStream bitStream = new BitStream();
+      /*  BitStream bitStream = new BitStream();
         bitStream.writeHexString("ffd8");
 
-        SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2), new SOF0Segment.Component(3, "11", 3)};
+        SOF0Segment.Component[] components = {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2,
+        "11", 2), new SOF0Segment.Component(3, "11", 3)};
         new APP0JFIFSegment(bitStream).writeSegmentToBitStream();
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         bitStream.writeHexString("ffd9");
         bitStream.writeBitStreamToFile();
         //System.out.println(bitStream.getHexString());
+       */
+
+        BitStream bitStream = new BitStream();
+        byte[] values = HexFormat.of().parseHex("ffff"); //5bab71d5800ae6
+        System.out.println(Arrays.toString(values));
+        bitStream.setBytes(values);
+        // int result = bitStream.getBits(11);
+        // System.out.println(result);
+
     }
 }

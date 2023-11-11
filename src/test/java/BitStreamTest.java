@@ -51,12 +51,12 @@ public class BitStreamTest {
     @Test
     void writeMassiveByteArray() {
         byte[] values = HexFormat.of().parseHex("8627d1f0ffa864167bb58870837f93d5aafbcb608d5ca54095bcfff" +
-                "3d43e1ed792babd937fd409f3da112720616b05629a48dcfbb79de8fff12a4864cf4a9b7d3ba3d47fb1eb1c2ebc5b" +
-                "e3138dd916306d7c2b273e81256786877be4e21207a1badffde70561c3238b53b6816dba5f8a05f96ff30a6ef3b1f" +
-                "c688ad1cef26eef4accaf66fb5ae8f9376ec154fd7bbec898a2648afa1b4eb25ab750bb3733c61e64569b07253b9f" +
-                "805170253d72a2444f326a1c2f0d7ef2755acf4b12c15b8c68896dc35258a3bda159d04e4fddf71936dc668b34413" +
-                "4c3b0a9bb5c5f3a2971b14738ce3ac61eba537d98c87b77bf73d93ac651b6f520c615cd26e46b3b1ca1e5f68d521f" +
-                "db0157feb6b4c14757697d77d34555");
+                                                "3d43e1ed792babd937fd409f3da112720616b05629a48dcfbb79de8fff12a4864cf4a9b7d3ba3d47fb1eb1c2ebc5b" +
+                                                "e3138dd916306d7c2b273e81256786877be4e21207a1badffde70561c3238b53b6816dba5f8a05f96ff30a6ef3b1f" +
+                                                "c688ad1cef26eef4accaf66fb5ae8f9376ec154fd7bbec898a2648afa1b4eb25ab750bb3733c61e64569b07253b9f" +
+                                                "805170253d72a2444f326a1c2f0d7ef2755acf4b12c15b8c68896dc35258a3bda159d04e4fddf71936dc668b34413" +
+                                                "4c3b0a9bb5c5f3a2971b14738ce3ac61eba537d98c87b77bf73d93ac651b6f520c615cd26e46b3b1ca1e5f68d521f" +
+                                                "db0157feb6b4c14757697d77d34555");
         BitStream bitStream = new BitStream();
         bitStream.setBytes(values);
         Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(values, 512));
@@ -76,10 +76,8 @@ public class BitStreamTest {
         BitStream bitStream = new BitStream();
         long startTimeSetBits = System.currentTimeMillis(); // Record the start time
         for (int i = 0; i < size - 1; i++) {
-            if (i % 3 == 0)
-                bitStream.setBit(true);
-            else
-                bitStream.setBit(false);
+            if (i % 3 == 0) bitStream.setBit(true);
+            else bitStream.setBit(false);
         }
         bitStream.setBit(false);
         long endTimeSetBits = System.currentTimeMillis();

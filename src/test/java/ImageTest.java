@@ -7,24 +7,10 @@ import static org.testng.Assert.fail;
 
 public class ImageTest {
     private Image getImage() {
-        double[][] data1 = {
-                {0.0, 0.0, 0.0, 1.0},
-                {0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0},
-                {1.0, 0.0, 0.0, 0.0}
-        };
-        double[][] data2 = {
-                {0.0, 0.0, 0.0, 0.0},
-                {0.0, 1.0, 0.0, 0.0},
-                {0.0, 0.0, 1.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0}
-        };
-        double[][] data3 = {
-                {0.0, 0.0, 0.0, 1.0},
-                {0.0, 7.0 / 15.0, 0.0, 0.0},
-                {0.0, 0.0, 7.0 / 15.0, 0.0},
-                {1.0, 0.0, 0.0, 0.0}
-        };
+        double[][] data1 = {{0.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 0.0, 0.0}, {0.0, 0.0, 0.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
+        double[][] data2 = {{0.0, 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}, {0.0, 0.0, 0.0, 0.0}};
+        double[][] data3 =
+                {{0.0, 0.0, 0.0, 1.0}, {0.0, 7.0 / 15.0, 0.0, 0.0}, {0.0, 0.0, 7.0 / 15.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
         return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
@@ -126,7 +112,8 @@ public class ImageTest {
             image1.changeResolution(5, 2, 2, Arrays.asList(1, 2, 3));
             fail("should have thrown an exception");
         } catch (RuntimeException e) {
-            if (!(e.getMessage().equals("No implementation for: 5, 2, 2") || e.getMessage().equals("Not power of two"))) {
+            if (!(e.getMessage().equals("No implementation for: 5, 2, 2") ||
+                  e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
@@ -139,7 +126,8 @@ public class ImageTest {
             image1.changeResolution(4, 3, 0, Arrays.asList(1, 2, 3));
             fail("should have thrown an exception");
         } catch (RuntimeException e) {
-            if (!(e.getMessage().equals("No implementation for: 4, 3, 0") || e.getMessage().equals("Not power of two"))) {
+            if (!(e.getMessage().equals("No implementation for: 4, 3, 0") ||
+                  e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
@@ -153,7 +141,8 @@ public class ImageTest {
             image1.changeResolution(4, 2, 1, Arrays.asList(1, 2, 3));
             fail("should have thrown an exception");
         } catch (RuntimeException e) {
-            if (!(e.getMessage().equals("No implementation for: 4, 2, 1") || e.getMessage().equals("Not power of two"))) {
+            if (!(e.getMessage().equals("No implementation for: 4, 2, 1") ||
+                  e.getMessage().equals("Not power of two"))) {
                 fail("wrong exception was thrown");
             }
         }
