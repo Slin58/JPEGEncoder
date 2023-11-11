@@ -2,10 +2,7 @@ package huffman;
 
 import bitstream.BitStream;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HuffmanTree<T> {
@@ -15,6 +12,14 @@ public class HuffmanTree<T> {
 
     public HuffmanTree(HuffmanNode<T> root) {
         this.root = root;
+    }
+
+    public HuffmanNode<T> getRoot() {
+        return root;
+    }
+
+    public Map<T, HuffmanLookUpRow<T>> getLookUpTable() {
+        return lookUpTable;
     }
 
     @Override
@@ -38,8 +43,8 @@ public class HuffmanTree<T> {
         return sb.toString();
     }
 
-    public void createLookUpTable(HuffmanNode<T> node) {
-        traverseTree(node, 0, 0);
+    public void createLookUpTable() {
+        traverseTree(root, 0, 0);
     }
 
     private void traverseTree(HuffmanNode<T> node, int path, int counter) {
@@ -67,15 +72,23 @@ public class HuffmanTree<T> {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HuffmanTree<?> that)) return false;
+        return Objects.equals(root, that.root) && Objects.equals(lookUpTable, that.lookUpTable);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(root, lookUpTable);
+    }
+
     public static class Builder<T> {
 
         private final Map<HuffmanNode<T>, Double> probabilities = new HashMap<>();
 
         public HuffmanTree<T> build() {
-            System.out.println(this.probabilities.entrySet().stream()
-                                       .map(huffmanNodeDoubleEntry -> huffmanNodeDoubleEntry.getKey().toString() + ":" +
-                                                                      huffmanNodeDoubleEntry.getValue())
-                                       .collect(Collectors.joining("\n")));
             while (this.probabilities.size() > 1) {
                 HuffmanNode<T> currentNode = new HuffmanNode<>();
                 Double currentProbability = 0d;

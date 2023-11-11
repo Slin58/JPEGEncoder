@@ -12,12 +12,11 @@ import static bitstream.BitStream.BYTE_START_INDEX;
 
 public class HuffmanDecoder<T> {
 
+    private final int maxSize;
     List<HuffmanLookUpRow<T>> lookUpTable;
     private int currentGetBitIdx;
-
     private int currentGetByteIdx;
     private BitStream bitStream;
-    private int maxSize;
 
     public HuffmanDecoder(Map<T, HuffmanLookUpRow<T>> lookUpTable, BitStream bitStream) {
         this.maxSize = lookUpTable.values().stream().map(HuffmanLookUpRow::getCounter).max(Integer::compareTo)
@@ -27,7 +26,8 @@ public class HuffmanDecoder<T> {
         this.lookUpTable = lookUpTable.values().stream()
                 .map(tHuffmanLookUpRow -> { //convert Map to list, fillUp Paths to same lengths and sort list by path
                     // in ASC
-                    tHuffmanLookUpRow.setPath(fillLookUpRow(tHuffmanLookUpRow.getPath(), this.maxSize));
+                    tHuffmanLookUpRow.setPath(
+                            fillLookUpRow(tHuffmanLookUpRow.getPath(), this.maxSize, tHuffmanLookUpRow.getCounter()));
                     return tHuffmanLookUpRow;
                 }).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         this.currentGetBitIdx = BYTE_START_INDEX;
@@ -35,10 +35,10 @@ public class HuffmanDecoder<T> {
         this.bitStream = bitStream;
     }
 
-    private List<T> decodeAll() {
+    public List<T> decodeAll() {
         List<T> result = new ArrayList<>();
-        while (this.currentGetByteIdx >= this.bitStream.getCurrentSetByteIdx() &&
-               this.currentGetBitIdx <= this.bitStream.getCurrentSetBitIdx()) {
+        while (this.currentGetByteIdx < this.bitStream.getCurrentSetByteIdx() ||
+               this.currentGetBitIdx - 1 > this.bitStream.getCurrentSetBitIdx()) {
             result.add(decodeOne());
         }
         return result;
@@ -50,17 +50,20 @@ public class HuffmanDecoder<T> {
         int code = getBits(maxSize);
         for (HuffmanLookUpRow<T> elem : this.lookUpTable) {
             if (temp != null) {
-                if (code >= elem.getPath()) {
+                if (code < elem.getPath()) {
                     break;
                 }
             }
             temp = elem;
         }
+        this.currentGetBitIdx += (this.maxSize - temp.getCounter());
+        this.currentGetByteIdx -= (this.currentGetBitIdx / 8);
+        this.currentGetBitIdx %= 8;
         return temp.getValue();
     }
 
-    private int fillLookUpRow(int key, int maxSize) {
-        for (int i = maxSize - this.lookUpTable.get(key).getCounter(); i >= 0; i--) {
+    private int fillLookUpRow(int key, int maxSize, int currentSize) {
+        for (int i = maxSize - currentSize; i > 0; i--) {
             key = (key << 1) | 1;
         }
         return key;
