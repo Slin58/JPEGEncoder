@@ -85,11 +85,11 @@ public class HuffmanTreeTest {
     @Test
     void testEncoding() {
         BitStream bitStream = new BitStream();
-        String values = "AAAFDEBE";
+        String values = "AAAFDEBE"; //1001 0010 0011 1100 1010 0
         Character[] array = values.chars().mapToObj(c -> (char) c).toArray(Character[]::new);
         resultTreeWithLookupTable.encode(Arrays.asList(array), bitStream);
 
-        byte[] result = HexFormat.of().parseHex("923CA0");//1001 0010 0011 1100 1010 0000
+        byte[] result = HexFormat.of().parseHex("923CA0"); //1001 0010 0011 1100 1010 0000
         System.out.println(Arrays.toString(bitStream.getBytes()));
         Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(result, 256));
     }
