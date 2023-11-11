@@ -5,6 +5,7 @@ import java.util.Objects;
 public class HuffmanNode<T> {
     private HuffmanNode<T> left;
     private HuffmanNode<T> right;
+
     private T value;
 
     public HuffmanNode(T value) {
@@ -33,6 +34,10 @@ public class HuffmanNode<T> {
 
     public T getValue() {
         return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
     }
 
     public HuffmanNode<T> getLeft() {

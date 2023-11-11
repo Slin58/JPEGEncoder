@@ -103,7 +103,14 @@ public class HuffmanTree<T> {
                 }
                 this.probabilities.put(currentNode, currentProbability);
             }
-            return new HuffmanTree<T>(this.probabilities.keySet().iterator().next());
+            HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
+            HuffmanNode<T> temp = root;
+            while (temp.getRight() != null) {
+                temp = temp.getRight();
+            }
+            temp.setRight(new HuffmanNode<>(temp.getValue()));
+            temp.setValue(null);
+            return new HuffmanTree<T>(root);
         }
 
         public Builder<T> add(Collection<T> values) {
