@@ -62,7 +62,7 @@ public class HuffmanTree<T> {
     private String getIndentation(int depth) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < depth; i++) {
-            sb.append("--"); // Two spaces for each level of depth
+            sb.append("--");
         }
         return sb.toString();
     }
