@@ -39,7 +39,7 @@ public class HuffmanNode<T> {
         return left;
     }
 
-    private void setLeft(HuffmanNode<T> left) {
+    void setLeft(HuffmanNode<T> left) {
         this.left = left;
     }
 
@@ -47,7 +47,7 @@ public class HuffmanNode<T> {
         return right;
     }
 
-    private void setRight(HuffmanNode<T> right) {
+    void setRight(HuffmanNode<T> right) {
         this.right = right;
     }
 
