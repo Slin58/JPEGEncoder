@@ -49,13 +49,12 @@ public class HuffmanDecoder<T> {
         if (this.lookUpTable.isEmpty()) throw new RuntimeException("LookUpTable empty");
         int code = getBits(maxSize);
         for (HuffmanLookUpRow<T> elem : this.lookUpTable) {
-            if (temp != null) {
-                if (code < elem.getPath()) {
-                    break;
-                }
-            }
             temp = elem;
+            if (code <= temp.getPath()) {
+                break;
+            }
         }
+
         this.currentGetBitIdx += (this.maxSize - temp.getCounter());
         this.currentGetByteIdx -= (this.currentGetBitIdx / 8);
         this.currentGetBitIdx %= 8;
