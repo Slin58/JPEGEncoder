@@ -1,5 +1,7 @@
 package huffman;
 
+import java.util.Objects;
+
 public class HuffmanNode<T> {
     private HuffmanNode<T> left;
     private HuffmanNode<T> right;
@@ -30,9 +32,6 @@ public class HuffmanNode<T> {
     }
 
     public T getValue() {
-        if (value == null) {
-            throw new RuntimeException("Tried to access value of a branch node without a value");
-        }
         return value;
     }
 
@@ -75,5 +74,18 @@ public class HuffmanNode<T> {
             return "+";
         }
         return this.value.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HuffmanNode<?> that)) return false;
+        return Objects.equals(getLeft(), that.getLeft()) && Objects.equals(getRight(), that.getRight()) &&
+               Objects.equals(getValue(), that.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLeft(), getRight(), getValue());
     }
 }
