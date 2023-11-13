@@ -22,27 +22,6 @@ public class HuffmanTree<T> {
         return lookUpTable;
     }
 
-    @Override
-    public String toString() {
-        return treeToString(root, 0, true);
-    }
-
-    private String treeToString(HuffmanNode<T> node, int depth, boolean right) {
-        if (node == null) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        if (right) sb.append(getIndentation(depth)).append(node).append(" right").append("\n");
-        else sb.append(getIndentation(depth)).append(node).append(" left").append("\n");
-
-        sb.append(treeToString(node.getLeft(), depth + 1, false));
-        sb.append(treeToString(node.getRight(), depth + 1, true));
-
-        return sb.toString();
-    }
-
     public void createLookUpTable() {
         traverseTree(root, 0, 0);
     }
@@ -64,12 +43,25 @@ public class HuffmanTree<T> {
         }
     }
 
-    private String getIndentation(int depth) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            sb.append("--"); // Two spaces for each level of depth
+    @Override
+    public String toString() {
+        String[] result = getTreeAsString(root, new String[]{"", ""}, "");
+        return result[1];
+    }
+
+    private String[] getTreeAsString(HuffmanNode<T> node, String[] result, String depth) {
+        if (node.getLeft() != null || node.getRight() != null) {
+            result[0] += "\n" + depth + "left";
+            result = getTreeAsString(node.getLeft(), result, depth + "-");
+            result[0] += "\n" + depth + "right";
+            result = getTreeAsString(node.getRight(), result, depth + "-");
+        } else {
+            if (node.getValue() != null) {
+                result[1] += result[0] + ": " + node.getValue();
+            }
+            result[0] = "";
         }
-        return sb.toString();
+        return result;
     }
 
     @Override
