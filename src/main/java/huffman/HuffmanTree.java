@@ -83,15 +83,16 @@ public class HuffmanTree<T> {
 
     public static class Builder<T> {
 
-        private final Map<HuffmanNode<T>, Double> probabilities = new HashMap<>();
+        private final Map<HuffmanNode<T>, Long> probabilities = new HashMap<>();
+        private int limit = 16;
 
         public HuffmanTree<T> build() {
             while (this.probabilities.size() > 1) {
                 HuffmanNode<T> currentNode = new HuffmanNode<>();
-                Double currentProbability = 0d;
+                Long currentProbability = 0L;
                 for (int i = 0; i < 2; i++) {
                     // find min probability
-                    Map.Entry<HuffmanNode<T>, Double> lowest =
+                    Map.Entry<HuffmanNode<T>, Long> lowest =
                             this.probabilities.entrySet().stream().min(Map.Entry.comparingByValue())
                                     .orElseThrow(() -> new RuntimeException("No Value Found"));
                     this.probabilities.remove(lowest.getKey());
@@ -105,16 +106,47 @@ public class HuffmanTree<T> {
             while (temp.getRight() != null) {
                 temp = temp.getRight();
             }
-            temp.setLeft(new HuffmanNode<>(temp.getValue()));
+            temp.setLeft(new HuffmanNode<>(temp.getValue(), temp.getWeight()));
             temp.setValue(null);
-            return new HuffmanTree<T>(root);
+
+            root = BRCI(root);
+            return new HuffmanTree<>(root);
+        }
+
+        public Builder<T> setLimit(int limit) {
+            this.limit = limit;
+            return this;
         }
 
         public Builder<T> add(Collection<T> values) {
             Map<T, Long> collect = values.stream().collect(Collectors.groupingBy(t -> t, Collectors.counting()));
             double size = values.size();
-            collect.forEach((t, count) -> this.probabilities.put(new HuffmanNode<>(t), count / size));
+            collect.forEach((t, count) -> this.probabilities.put(new HuffmanNode<>(t, count), count));
             return this;
+        }
+
+        private HuffmanNode<T> BRCI(HuffmanNode<T> root) {
+            if (HuffmanNode.getMaxDepth(root) > this.limit) {
+                HuffmanNode<T> t2root = removeAtDepth(root, this.limit);
+                int maxDepth = HuffmanNode.getMaxDepth(t2root);
+                int selectedDepth = this.limit - maxDepth - 1;
+                HuffmanNode<T> selectedNode = selectNodeAtDepth(root, selectedDepth);
+                if (selectedNode.equals(root)) {
+                    HuffmanNode<T> newRootNode = new HuffmanNode<>();
+                    newRootNode.setNode(root);
+                    newRootNode.setNode(t2root);
+                    return newRootNode;
+                }
+            }
+            return root;
+        }
+
+        private HuffmanNode<T> selectNodeAtDepth(HuffmanNode<T> root, int selectedDepth) {
+            return root;
+        }
+
+        private HuffmanNode<T> removeAtDepth(HuffmanNode<T> root, int limit) {
+            return root;
         }
     }
 }

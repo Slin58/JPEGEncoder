@@ -8,8 +8,11 @@ public class HuffmanNode<T> {
 
     private T value;
 
-    public HuffmanNode(T value) {
+    private long weight = 0;
+
+    public HuffmanNode(T value, long weight) {
         this.value = value;
+        this.weight = weight;
     }
 
     public HuffmanNode() {
@@ -56,6 +59,18 @@ public class HuffmanNode<T> {
         this.right = right;
     }
 
+    public long getWeight() {
+        return weight;
+    }
+
+    public void setWeight(long weight) {
+        this.weight = weight;
+    }
+
+    public void addWeight(long weight) {
+        this.weight += weight;
+    }
+
     public void setNode(HuffmanNode<T> node) {
         if (this.getLeft() == null) {
             this.left = node;
@@ -64,6 +79,7 @@ public class HuffmanNode<T> {
         } else {
             throw new RuntimeException("something went wrong while writing node");
         }
+        addWeight(node.getWeight());
         if (this.getLeft() != null && this.getRight() != null) {
             if (getMaxDepth(this.getLeft()) > getMinDepth(this.getRight())) {
                 final HuffmanNode<T> rightLeft = this.getRight().getLeft();
