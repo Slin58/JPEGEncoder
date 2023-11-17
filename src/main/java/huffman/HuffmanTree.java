@@ -39,7 +39,7 @@ public class HuffmanTree<T> {
     public void encode(List<T> input, BitStream bitStream) {
         for (T i : input) {
             HuffmanLookUpRow<T> huffmanLookUpRow = lookUpTable.get(i);
-            bitStream.setInt(huffmanLookUpRow.getPath(), huffmanLookUpRow.getCounter());
+            bitStream.setInt(huffmanLookUpRow.getPath(), huffmanLookUpRow.getBitSize());
         }
     }
 
@@ -62,7 +62,7 @@ public class HuffmanTree<T> {
 
         } else {
             if (node.getValue() != null) {
-                result[1] += result[0] + ": " + node.getValue();
+                result[1] += result[0] + ": " + node;
             }
             result[0] = "";
         }
@@ -109,7 +109,7 @@ public class HuffmanTree<T> {
             temp.setLeft(new HuffmanNode<>(temp.getValue(), temp.getWeight()));
             temp.setValue(null);
 
-            root = BRCI(root);
+            //            root = BRCI(root);
             return new HuffmanTree<>(root);
         }
 
@@ -131,12 +131,21 @@ public class HuffmanTree<T> {
                 int maxDepth = HuffmanNode.getMaxDepth(t2root);
                 int selectedDepth = this.limit - maxDepth - 1;
                 HuffmanNode<T> selectedNode = selectNodeAtDepth(root, selectedDepth);
+                HuffmanNode<T> yStar = new HuffmanNode<>();
                 if (selectedNode.equals(root)) {
-                    HuffmanNode<T> newRootNode = new HuffmanNode<>();
-                    newRootNode.setNode(root);
-                    newRootNode.setNode(t2root);
-                    return newRootNode;
+                    yStar.setNode(root);
+                    yStar.setNode(t2root);
+                    return yStar;
                 }
+                HuffmanNode<T> parent = selectedNode.getParent();
+                if (parent.getRight().equals(selectedNode)) {
+                    parent.setRight(yStar);
+                } else {
+                    parent.setLeft(yStar);
+                }
+                yStar.setNode(selectedNode);
+                yStar.setNode(t2root);
+
             }
             return root;
         }

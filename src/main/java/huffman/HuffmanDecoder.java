@@ -19,7 +19,7 @@ public class HuffmanDecoder<T> {
     private BitStream bitStream;
 
     public HuffmanDecoder(Map<T, HuffmanLookUpRow<T>> lookUpTable, BitStream bitStream) {
-        this.maxSize = lookUpTable.values().stream().map(HuffmanLookUpRow::getCounter).max(Integer::compareTo)
+        this.maxSize = lookUpTable.values().stream().map(HuffmanLookUpRow::getBitSize).max(Integer::compareTo)
                 .orElseThrow(() -> new RuntimeException(
                         "Something went wrong when trying to get maxSize of path on lookUpTable"));
 
@@ -27,7 +27,7 @@ public class HuffmanDecoder<T> {
                 .map(tHuffmanLookUpRow -> { //convert Map to list, fillUp Paths to same lengths and sort list by path
                     // in ASC
                     tHuffmanLookUpRow.setPath(
-                            fillLookUpRow(tHuffmanLookUpRow.getPath(), this.maxSize, tHuffmanLookUpRow.getCounter()));
+                            fillLookUpRow(tHuffmanLookUpRow.getPath(), this.maxSize, tHuffmanLookUpRow.getBitSize()));
                     return tHuffmanLookUpRow;
                 }).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         this.currentGetBitIdx = BYTE_START_INDEX;
@@ -54,8 +54,8 @@ public class HuffmanDecoder<T> {
                 break;
             }
         }
-
-        this.currentGetBitIdx += (this.maxSize - temp.getCounter());
+        int tmp = this.maxSize - temp.getBitSize();
+        this.currentGetBitIdx += tmp;
         this.currentGetByteIdx -= (this.currentGetBitIdx / 8);
         this.currentGetBitIdx %= 8;
         return temp.getValue();

@@ -5,12 +5,12 @@ import java.util.Objects;
 public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
     private T value;
     private int path;
-    private int counter;
+    private int bitSize;
 
-    public HuffmanLookUpRow(T value, int path, int counter) {
+    public HuffmanLookUpRow(T value, int path, int bitSize) {
         this.value = value;
         this.path = path;
-        this.counter = counter;
+        this.bitSize = bitSize;
     }
 
     public T getValue() {
@@ -29,12 +29,12 @@ public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
         this.path = path;
     }
 
-    public int getCounter() {
-        return counter;
+    public int getBitSize() {
+        return bitSize;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setBitSize(int bitSize) {
+        this.bitSize = bitSize;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HuffmanLookUpRow<?> that)) return false;
-        return getPath() == that.getPath() && getCounter() == that.getCounter() &&
+        return getPath() == that.getPath() && getBitSize() == that.getBitSize() &&
                Objects.equals(getValue(), that.getValue());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getValue(), getPath(), getCounter());
+        return Objects.hash(getValue(), getPath(), getBitSize());
     }
 }

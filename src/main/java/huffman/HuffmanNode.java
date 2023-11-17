@@ -6,6 +6,8 @@ public class HuffmanNode<T> {
     private HuffmanNode<T> left;
     private HuffmanNode<T> right;
 
+    private HuffmanNode<T> parent;
+
     private T value;
 
     private long weight = 0;
@@ -33,6 +35,14 @@ public class HuffmanNode<T> {
         if (node.getLeft() == null) return getMaxDepth(node.getLeft());
         if (node.getRight() == null) return getMaxDepth(node.getRight());
         return Math.max(getMaxDepth(node.getLeft()), getMaxDepth(node.getRight())) + 1;
+    }
+
+    public HuffmanNode<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(HuffmanNode<T> parent) {
+        this.parent = parent;
     }
 
     public T getValue() {
@@ -72,15 +82,22 @@ public class HuffmanNode<T> {
     }
 
     public void setNode(HuffmanNode<T> node) {
-        if (this.getLeft() == null) {
-            this.left = node;
-        } else if (this.getRight() == null) {
+        if (this.getRight() == null) {
             this.right = node;
+        } else if (this.getLeft() == null) {
+            this.left = node;
         } else {
             throw new RuntimeException("something went wrong while writing node");
         }
+        node.setParent(this);
         addWeight(node.getWeight());
         if (this.getLeft() != null && this.getRight() != null) {
+            if (getMinDepth(this.getRight()) == 1 && getMaxDepth(this.getLeft()) > 1) {
+                HuffmanNode<T> tmp = this.getLeft();
+                this.setLeft(this.getRight());
+                this.setRight(tmp);
+            }
+
             if (getMaxDepth(this.getLeft()) > getMinDepth(this.getRight())) {
                 final HuffmanNode<T> rightLeft = this.getRight().getLeft();
                 this.getRight().setLeft(this.getLeft().getRight());
@@ -91,10 +108,10 @@ public class HuffmanNode<T> {
 
     @Override
     public String toString() {
-        if (value == null) {
-            return "+";
+        if (this.value == null) {
+            return "+, Weight:" + this.weight;
         }
-        return this.value.toString();
+        return this.value + ", Weight:" + this.weight;
     }
 
     @Override
