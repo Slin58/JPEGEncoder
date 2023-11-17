@@ -52,8 +52,8 @@ public class HuffmanTree<T> {
             lookUpTable.put(node.getValue(), new HuffmanLookUpRow<>(node.getValue(), path, counter));
         } else {
             counter++;
-            traverseTree(node.getLeft(), (path << 1) | 0, counter);
-            traverseTree(node.getRight(), (path << 1) | 1, counter);
+            if (node.getLeft() != null) traverseTree(node.getLeft(), (path << 1) | 0, counter);
+            if (node.getRight() != null) traverseTree(node.getRight(), (path << 1) | 1, counter);
         }
     }
 
@@ -108,7 +108,7 @@ public class HuffmanTree<T> {
             while (temp.getRight() != null) {
                 temp = temp.getRight();
             }
-            temp.setRight(new HuffmanNode<>(temp.getValue()));
+            temp.setLeft(new HuffmanNode<>(temp.getValue()));
             temp.setValue(null);
             return new HuffmanTree<T>(root);
         }
