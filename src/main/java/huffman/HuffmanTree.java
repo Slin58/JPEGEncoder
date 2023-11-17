@@ -151,10 +151,12 @@ public class HuffmanTree<T> {
         }
 
         private HuffmanNode<T> selectNodeAtDepth(HuffmanNode<T> root, int selectedDepth) {
+            //todo get Node at seletected Depth
             return root;
         }
 
         private HuffmanNode<T> removeAtDepth(HuffmanNode<T> root, int limit) {
+            //todo remove Nodes at depth
             return root;
         }
     }
