@@ -14,14 +14,6 @@ public class HuffmanTree<T> {
         this.root = root;
     }
 
-    public HuffmanNode<T> getRoot() {
-        return root;
-    }
-
-    public Map<T, HuffmanLookUpRow<T>> getLookUpTable() {
-        return lookUpTable;
-    }
-
     public void createLookUpTable() {
         traverseTree(root, 0, 0);
     }
@@ -43,21 +35,29 @@ public class HuffmanTree<T> {
         }
     }
 
+    public HuffmanNode<T> getRoot() {
+        return root;
+    }
+
+    public Map<T, HuffmanLookUpRow<T>> getLookUpTable() {
+        return lookUpTable;
+    }
+
     @Override
     public String toString() {
-        String[] result = getTreeAsString(root, new String[]{"", ""}, "");
+        String[] result = getNodeAsString(root, new String[]{"", ""}, "");
         return result[1];
     }
 
-    private String[] getTreeAsString(HuffmanNode<T> node, String[] result, String depth) {
+    private String[] getNodeAsString(HuffmanNode<T> node, String[] result, String depth) {
         if (node.getLeft() != null || node.getRight() != null) {
             if (node.getLeft() != null) {
                 result[0] += "\n" + depth + "left";
-                result = getTreeAsString(node.getLeft(), result, depth + "-");
+                result = getNodeAsString(node.getLeft(), result, depth + "-");
             }
             if (node.getRight() != null) {
                 result[0] += "\n" + depth + "right";
-                result = getTreeAsString(node.getRight(), result, depth + "-");
+                result = getNodeAsString(node.getRight(), result, depth + "-");
             }
 
         } else {

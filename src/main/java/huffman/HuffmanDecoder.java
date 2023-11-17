@@ -38,7 +38,8 @@ public class HuffmanDecoder<T> {
     public List<T> decodeAll() {
         List<T> result = new ArrayList<>();
         while (this.currentGetByteIdx < this.bitStream.getCurrentSetByteIdx() ||
-               this.currentGetBitIdx - 1 > this.bitStream.getCurrentSetBitIdx()) {
+               (this.currentGetByteIdx == this.bitStream.getCurrentSetByteIdx() &&
+                this.currentGetBitIdx - 1 > this.bitStream.getCurrentSetBitIdx())) {
             result.add(decodeOne());
         }
         return result;
@@ -54,6 +55,7 @@ public class HuffmanDecoder<T> {
                 break;
             }
         }
+        //zu viele gelesene Bits zurückgehen + ggf. Bytes zurückgehen:
         int tmp = this.maxSize - temp.getBitSize();
         this.currentGetBitIdx += tmp;
         this.currentGetByteIdx -= (this.currentGetBitIdx / 8);
@@ -71,12 +73,14 @@ public class HuffmanDecoder<T> {
     public int getBits(int bitSize) {
         int value = 0;
         for (int i = bitSize - 1; i >= 0; i--) {
-            if (this.currentGetByteIdx >= this.bitStream.getCurrentSetByteIdx() &&
-                this.currentGetBitIdx <= this.bitStream.getCurrentSetBitIdx()) {
+            if (this.currentGetByteIdx > this.bitStream.getCurrentSetByteIdx() ||
+                (this.currentGetByteIdx == this.bitStream.getCurrentSetByteIdx() &&
+                 this.currentGetBitIdx <= this.bitStream.getCurrentSetBitIdx())) {
                 value = (value << 1) | 1;
-                continue;
+            } else {
+                value = (value << 1) |
+                        ((this.bitStream.getBytes()[this.currentGetByteIdx] >> this.currentGetBitIdx) & 1);
             }
-            value = (value << 1) | ((this.bitStream.getBytes()[this.currentGetByteIdx] >> this.currentGetBitIdx) & 1);
             this.currentGetBitIdx--;
             if (this.currentGetBitIdx < 0) {
                 this.currentGetByteIdx++;
