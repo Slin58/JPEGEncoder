@@ -31,8 +31,8 @@ public class HuffmanTree<T> {
             lookUpTable.put(node.getValue(), new HuffmanLookUpRow<>(node.getValue(), path, counter));
         } else {
             counter++;
-            traverseTree(node.getLeft(), (path << 1) | 0, counter);
-            traverseTree(node.getRight(), (path << 1) | 1, counter);
+            if (node.getLeft() != null) traverseTree(node.getLeft(), (path << 1) | 0, counter);
+            if (node.getRight() != null) traverseTree(node.getRight(), (path << 1) | 1, counter);
         }
     }
 
@@ -95,7 +95,14 @@ public class HuffmanTree<T> {
                 }
                 this.probabilities.put(currentNode, currentProbability);
             }
-            return new HuffmanTree<T>(this.probabilities.keySet().iterator().next());
+            HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
+            HuffmanNode<T> temp = root;
+            while (temp.getRight() != null) {
+                temp = temp.getRight();
+            }
+            temp.setLeft(new HuffmanNode<>(temp.getValue()));
+            temp.setValue(null);
+            return new HuffmanTree<T>(root);
         }
 
         public Builder<T> add(Collection<T> values) {

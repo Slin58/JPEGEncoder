@@ -22,19 +22,21 @@ public class HuffmanTreeTest {
         HuffmanNode<Character> fNode = new HuffmanNode<>('F');
         HuffmanNode<Character> rootNode = new HuffmanNode<>();
         HuffmanNode<Character> leftNode = new HuffmanNode<>();
-        HuffmanNode<Character> leftRightNode = new HuffmanNode<>();
         HuffmanNode<Character> rightNode = new HuffmanNode<>();
+        HuffmanNode<Character> rightLeftNode = new HuffmanNode<>();
         HuffmanNode<Character> rightRightNode = new HuffmanNode<>();
-        leftNode.setNode(eNode);
-        leftNode.setNode(leftRightNode);
-        leftRightNode.setNode(aNode);
-        leftRightNode.setNode(bNode);
-        rightNode.setNode(fNode);
-        rightNode.setNode(rightRightNode);
-        rightRightNode.setNode(cNode);
-        rightRightNode.setNode(dNode);
-        rootNode.setNode(leftNode);
-        rootNode.setNode(rightNode);
+        HuffmanNode<Character> rightRightRightNode = new HuffmanNode<>();
+        leftNode.setLeft(eNode);
+        leftNode.setRight(fNode);
+        rightNode.setLeft(rightLeftNode);
+        rightNode.setRight(rightRightNode);
+        rightRightNode.setRight(rightRightRightNode);
+        rightRightRightNode.setLeft(dNode);
+        rightRightNode.setLeft(cNode);
+        rightLeftNode.setRight(bNode);
+        rightLeftNode.setLeft(aNode);
+        rootNode.setLeft(leftNode);
+        rootNode.setRight(rightNode);
         this.resultTree = new HuffmanTree<>(rootNode);
         this.resultTreeWithLookupTable = new HuffmanTree<>(rootNode);
     }
@@ -42,12 +44,12 @@ public class HuffmanTreeTest {
     @BeforeMethod(dependsOnMethods = "setupResultTree")
     void setupLookupTable() {
         this.resultTreeWithLookupTable.lookUpTable = new HashMap<>();
-        this.resultTreeWithLookupTable.lookUpTable.put('A', new HuffmanLookUpRow<>('A', 2, 3));
-        this.resultTreeWithLookupTable.lookUpTable.put('B', new HuffmanLookUpRow<>('B', 3, 3));
+        this.resultTreeWithLookupTable.lookUpTable.put('A', new HuffmanLookUpRow<>('A', 4, 3));
+        this.resultTreeWithLookupTable.lookUpTable.put('B', new HuffmanLookUpRow<>('B', 5, 3));
         this.resultTreeWithLookupTable.lookUpTable.put('C', new HuffmanLookUpRow<>('C', 6, 3));
-        this.resultTreeWithLookupTable.lookUpTable.put('D', new HuffmanLookUpRow<>('D', 7, 3));
+        this.resultTreeWithLookupTable.lookUpTable.put('D', new HuffmanLookUpRow<>('D', 14, 4));
         this.resultTreeWithLookupTable.lookUpTable.put('E', new HuffmanLookUpRow<>('E', 0, 2));
-        this.resultTreeWithLookupTable.lookUpTable.put('F', new HuffmanLookUpRow<>('F', 2, 2));
+        this.resultTreeWithLookupTable.lookUpTable.put('F', new HuffmanLookUpRow<>('F', 1, 2));
     }
 
     @Test
@@ -71,8 +73,9 @@ public class HuffmanTreeTest {
         }
 
         HuffmanTree<Character> huffmanTree = new HuffmanTree.Builder<Character>().add(valueList).build();
-        Assert.assertEquals(resultTree, huffmanTree);
         System.out.println(huffmanTree);
+        System.out.println(this.resultTree);
+        Assert.assertEquals(this.resultTree, huffmanTree);
     }
 
     @Test
@@ -84,11 +87,11 @@ public class HuffmanTreeTest {
     @Test
     void testEncoding() {
         BitStream bitStream = new BitStream();
-        String values = "AAAFDEBE";
+        String values = "AAAFDEBE"; //1001 0010 0011 1100 0101 00
         Character[] array = values.chars().mapToObj(c -> (char) c).toArray(Character[]::new);
         resultTreeWithLookupTable.encode(Arrays.asList(array), bitStream);
 
-        byte[] result = HexFormat.of().parseHex("495C60");//0100 1001 0101 1100 0110 0000
+        byte[] result = HexFormat.of().parseHex("923C50"); //1001 0010 0011 1100 0101 0000
         System.out.println(Arrays.toString(bitStream.getBytes()));
         Assert.assertEquals(bitStream.getBytes(), Arrays.copyOf(result, 256));
     }
