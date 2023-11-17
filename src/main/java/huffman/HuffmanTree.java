@@ -51,10 +51,15 @@ public class HuffmanTree<T> {
 
     private String[] getTreeAsString(HuffmanNode<T> node, String[] result, String depth) {
         if (node.getLeft() != null || node.getRight() != null) {
-            result[0] += "\n" + depth + "left";
-            result = getTreeAsString(node.getLeft(), result, depth + "-");
-            result[0] += "\n" + depth + "right";
-            result = getTreeAsString(node.getRight(), result, depth + "-");
+            if (node.getLeft() != null) {
+                result[0] += "\n" + depth + "left";
+                result = getTreeAsString(node.getLeft(), result, depth + "-");
+            }
+            if (node.getRight() != null) {
+                result[0] += "\n" + depth + "right";
+                result = getTreeAsString(node.getRight(), result, depth + "-");
+            }
+
         } else {
             if (node.getValue() != null) {
                 result[1] += result[0] + ": " + node.getValue();
