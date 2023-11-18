@@ -115,15 +115,11 @@ public class HuffmanTree<T> {
 
         private void checkOnes(HuffmanNode<T> root) {
             HuffmanNode<T> node = root;
-            int depth = 0;
             while (node.getRight() != null) {
                 node = node.getRight();
-                depth++;
             }
-            int currDepth = depth;
             if (node.getParent() != null) {
                 HuffmanNode<T> parent = node.getParent();
-                currDepth--;
                 while (true) {
                     if (HuffmanNode.getMinDepth(parent.getLeft()) < HuffmanNode.getMinDepth(parent.getRight())) {
                         while (true) {
