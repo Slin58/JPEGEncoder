@@ -23,7 +23,7 @@ public class HuffmanNode<T> {
 
     public static <T> int getMinDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 1;
+        if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMinDepth(node.getLeft());
         if (node.getRight() == null) return getMinDepth(node.getRight());
         return Math.min(getMinDepth(node.getLeft()), getMinDepth(node.getRight())) + 1;
@@ -31,7 +31,7 @@ public class HuffmanNode<T> {
 
     public static <T> int getMaxDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 1;
+        if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMaxDepth(node.getLeft());
         if (node.getRight() == null) return getMaxDepth(node.getRight());
         return Math.max(getMaxDepth(node.getLeft()), getMaxDepth(node.getRight())) + 1;
@@ -58,7 +58,9 @@ public class HuffmanNode<T> {
     }
 
     void setLeft(HuffmanNode<T> left) {
-        left.setParent(this);
+        if (left != null) {
+            left.setParent(this);
+        }
         this.left = left;
     }
 
@@ -67,7 +69,9 @@ public class HuffmanNode<T> {
     }
 
     void setRight(HuffmanNode<T> right) {
-        right.setParent(this);
+        if (right != null) {
+            right.setParent(this);
+        }
         this.right = right;
     }
 
@@ -96,6 +100,11 @@ public class HuffmanNode<T> {
         if (this.getLeft() != null && this.getRight() != null) {
             if (getMinDepth(this.getRight()) == 1 && getMaxDepth(this.getLeft()) > 1) {
                 HuffmanNode<T> tmp = this.getLeft();
+                this.setLeft(this.getRight());
+                this.setRight(tmp);
+            }
+            if (getMaxDepth(this.getLeft()) > getMaxDepth(this.getRight())) {
+                final HuffmanNode<T> tmp = this.getLeft();
                 this.setLeft(this.getRight());
                 this.setRight(tmp);
             }

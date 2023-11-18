@@ -87,6 +87,9 @@ public class HuffmanTree<T> {
         private int limit = 16;
 
         public HuffmanTree<T> build() {
+            if (this.probabilities.size() > Math.pow(2, this.limit)) {
+                throw new RuntimeException("There ar to many values for a depth of " + this.limit);
+            }
             while (this.probabilities.size() > 1) {
                 HuffmanNode<T> currentNode = new HuffmanNode<>();
                 Long currentProbability = 0L;
@@ -102,15 +105,54 @@ public class HuffmanTree<T> {
                 this.probabilities.put(currentNode, currentProbability);
             }
             HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
-            HuffmanNode<T> temp = root;
-            while (temp.getRight() != null) {
-                temp = temp.getRight();
-            }
-            temp.setLeft(new HuffmanNode<>(temp.getValue(), temp.getWeight()));
-            temp.setValue(null);
 
-            //            root = BRCI(root);
+            root = BRCI(root);
+
+            checkOnes(root);
+
             return new HuffmanTree<>(root);
+        }
+
+        private void checkOnes(HuffmanNode<T> root) {
+            HuffmanNode<T> node = root;
+            int depth = 0;
+            while (node.getRight() != null) {
+                node = node.getRight();
+                depth++;
+            }
+            int currDepth = depth;
+            if (node.getParent() != null) {
+                HuffmanNode<T> parent = node.getParent();
+                currDepth--;
+                while (true) {
+                    if (HuffmanNode.getMinDepth(parent.getLeft()) < HuffmanNode.getMinDepth(parent.getRight())) {
+                        while (true) {
+                            if (parent.getValue() != null) {
+                                node.getParent().setRight(null);
+                                HuffmanNode<T> newParent = parent.getParent();
+                                HuffmanNode<T> tmp = new HuffmanNode<>();
+                                tmp.setLeft(parent);
+                                tmp.setRight(node);
+                                if (newParent.getLeft().equals(parent)) {
+                                    newParent.setLeft(tmp);
+                                } else {
+                                    newParent.setRight(tmp);
+                                }
+                                break;
+                            }
+                            if (HuffmanNode.getMinDepth(parent.getRight()) >
+                                HuffmanNode.getMinDepth(parent.getLeft())) {
+                                parent = parent.getLeft();
+                            } else {
+                                parent = parent.getRight();
+                            }
+                        }
+                        break;
+                    }
+                    parent = parent.getParent();
+                }
+            }
+
         }
 
         public Builder<T> setLimit(int limit) {
@@ -120,7 +162,6 @@ public class HuffmanTree<T> {
 
         public Builder<T> add(Collection<T> values) {
             Map<T, Long> collect = values.stream().collect(Collectors.groupingBy(t -> t, Collectors.counting()));
-            double size = values.size();
             collect.forEach((t, count) -> this.probabilities.put(new HuffmanNode<>(t, count), count));
             return this;
         }
@@ -143,8 +184,8 @@ public class HuffmanTree<T> {
                 } else {
                     parent.setLeft(yStar);
                 }
-                yStar.setNode(selectedNode);
                 yStar.setNode(t2root);
+                yStar.setNode(selectedNode);
 
             }
             return root;
@@ -164,35 +205,34 @@ public class HuffmanTree<T> {
         }
 
         private void addTooDeepNodesToList(HuffmanNode<T> node, int limit, List<HuffmanNode<T>> removedNodes) {
-            if (node.getLeft() == null && node.getRight() == null && limit <= 0) {
-                removedNodes.add(node);
-                HuffmanNode<T> parent = node.getParent();
-                node.setParent(null);
-                if (parent.getLeft().equals(node)) {
-                    parent.setLeft(null);
-                    if (parent.getRight().getValue() != null) {
-                        parent.setValue(parent.getRight().getValue());
-                        parent.setRight(null);
-                    }
-                } else {
-                    parent.setRight(null);
-                }
-                return;
+            if (node.getRight() != null) {
+                addTooDeepNodesToList(node.getRight(), limit - 1, removedNodes);
             }
             if (node.getLeft() != null) {
                 addTooDeepNodesToList(node.getLeft(), limit - 1, removedNodes);
             }
-            if (node.getRight() != null) {
-                addTooDeepNodesToList(node.getRight(), limit - 1, removedNodes);
+            if (node.getLeft() == null && node.getRight() == null && limit <= 0) {
+
+                HuffmanNode<T> parent = node.getParent();
+                node.setParent(null);
+                if (parent.getRight() != null && parent.getRight().equals(node)) {
+                    removedNodes.add(node);
+                    parent.setRight(null);
+                } else {
+                    if (parent.getLeft().getValue() != null) {
+                        parent.setValue(parent.getLeft().getValue());
+                    }
+                    parent.setLeft(null);
+                }
             }
         }
 
         private HuffmanNode<T> buildBinaryTree(List<HuffmanNode<T>> nodes) {
             while (nodes.size() > 1) {
                 HuffmanNode<T> newParent = new HuffmanNode<>();
-                newParent.setRight(nodes.get(0));
-                nodes.remove(0);
                 newParent.setLeft(nodes.get(0));
+                nodes.remove(0);
+                newParent.setRight(nodes.get(0));
                 nodes.remove(0);
                 nodes.add(newParent);
             }
