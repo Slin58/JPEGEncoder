@@ -58,6 +58,7 @@ public class HuffmanNode<T> {
     }
 
     void setLeft(HuffmanNode<T> left) {
+        left.setParent(this);
         this.left = left;
     }
 
@@ -66,6 +67,7 @@ public class HuffmanNode<T> {
     }
 
     void setRight(HuffmanNode<T> right) {
+        right.setParent(this);
         this.right = right;
     }
 

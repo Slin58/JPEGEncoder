@@ -150,14 +150,53 @@ public class HuffmanTree<T> {
             return root;
         }
 
-        private HuffmanNode<T> selectNodeAtDepth(HuffmanNode<T> root, int selectedDepth) {
-            //todo get Node at seletected Depth
-            return root;
+        private HuffmanNode<T> selectNodeAtDepth(HuffmanNode<T> node, int selectedDepth) {
+            if (selectedDepth == 0) {
+                return node;
+            } else if (node.getRight() != null) return selectNodeAtDepth(node.getRight(), selectedDepth - 1);
+            return null;
         }
 
         private HuffmanNode<T> removeAtDepth(HuffmanNode<T> root, int limit) {
-            //todo remove Nodes at depth
-            return root;
+            List<HuffmanNode<T>> nodesTooDeep = new ArrayList<>();
+            addTooDeepNodesToList(root, limit, nodesTooDeep);
+            return buildBinaryTree(nodesTooDeep);
+        }
+
+        private void addTooDeepNodesToList(HuffmanNode<T> node, int limit, List<HuffmanNode<T>> removedNodes) {
+            if (node.getLeft() == null && node.getRight() == null && limit <= 0) {
+                removedNodes.add(node);
+                HuffmanNode<T> parent = node.getParent();
+                node.setParent(null);
+                if (parent.getLeft().equals(node)) {
+                    parent.setLeft(null);
+                    if (parent.getRight().getValue() != null) {
+                        parent.setValue(parent.getRight().getValue());
+                        parent.setRight(null);
+                    }
+                } else {
+                    parent.setRight(null);
+                }
+                return;
+            }
+            if (node.getLeft() != null) {
+                addTooDeepNodesToList(node.getLeft(), limit - 1, removedNodes);
+            }
+            if (node.getRight() != null) {
+                addTooDeepNodesToList(node.getRight(), limit - 1, removedNodes);
+            }
+        }
+
+        private HuffmanNode<T> buildBinaryTree(List<HuffmanNode<T>> nodes) {
+            while (nodes.size() > 1) {
+                HuffmanNode<T> newParent = new HuffmanNode<>();
+                newParent.setRight(nodes.get(0));
+                nodes.remove(0);
+                newParent.setLeft(nodes.get(0));
+                nodes.remove(0);
+                nodes.add(newParent);
+            }
+            return nodes.get(0);
         }
     }
 }
