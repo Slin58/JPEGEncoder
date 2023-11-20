@@ -50,22 +50,18 @@ public class HuffmanTree<T> {
     }
 
     private String[] getNodeAsString(HuffmanNode<T> node, String[] result, String depth) {
-        if (node.getLeft() != null || node.getRight() != null) {
-            if (node.getLeft() != null) {
-                result[0] += "\n" + depth + "left";
-                result = getNodeAsString(node.getLeft(), result, depth + "-");
-            }
-            if (node.getRight() != null) {
-                result[0] += "\n" + depth + "right";
-                result = getNodeAsString(node.getRight(), result, depth + "-");
-            }
-
-        } else {
-            if (node.getValue() != null) {
-                result[1] += result[0] + ": " + node;
-            }
-            result[0] = "";
+        if (node.getLeft() != null) {
+            result[0] += "\n" + depth + "left: ";
+            result = getNodeAsString(node.getLeft(), result, depth + "-");
         }
+        if (node.getRight() != null) {
+            result[0] += "\n" + depth + "right: ";
+            result = getNodeAsString(node.getRight(), result, depth + "-");
+        }
+        if (node.getValue() != null) {
+            result[1] += result[0] + node;
+        }
+        result[0] = "";
         return result;
     }
 
@@ -88,7 +84,7 @@ public class HuffmanTree<T> {
 
         public HuffmanTree<T> build() {
             if (this.probabilities.size() > Math.pow(2, this.limit)) {
-                throw new RuntimeException("There ar to many values for a depth of " + this.limit);
+                throw new RuntimeException("There are too many values for a depth of " + this.limit);
             }
             while (this.probabilities.size() > 1) {
                 HuffmanNode<T> currentNode = new HuffmanNode<>();
@@ -120,32 +116,28 @@ public class HuffmanTree<T> {
             }
             if (node.getParent() != null) {
                 HuffmanNode<T> parent = node.getParent();
-                while (true) {
-                    if (HuffmanNode.getMinDepth(parent.getLeft()) < HuffmanNode.getMinDepth(parent.getRight())) {
-                        while (true) {
-                            if (parent.getValue() != null) {
-                                node.getParent().setRight(null);
-                                HuffmanNode<T> newParent = parent.getParent();
-                                HuffmanNode<T> tmp = new HuffmanNode<>();
-                                tmp.setLeft(parent);
-                                tmp.setRight(node);
-                                if (newParent.getLeft().equals(parent)) {
-                                    newParent.setLeft(tmp);
-                                } else {
-                                    newParent.setRight(tmp);
-                                }
-                                break;
-                            }
-                            if (HuffmanNode.getMinDepth(parent.getRight()) >
-                                HuffmanNode.getMinDepth(parent.getLeft())) {
-                                parent = parent.getLeft();
-                            } else {
-                                parent = parent.getRight();
-                            }
-                        }
-                        break;
-                    }
+                while (!(HuffmanNode.getMinDepth(parent.getLeft()) < HuffmanNode.getMinDepth(
+                        parent.getRight()))) { //find node where leftsubtree is smaller than rightsubtree
                     parent = parent.getParent();
+                }
+
+                while (parent.getValue() == null) { //find space for removed leaf
+                    if (HuffmanNode.getMinDepth(parent.getRight()) > HuffmanNode.getMinDepth(parent.getLeft())) {
+                        parent = parent.getLeft();
+                    } else {
+                        parent = parent.getRight();
+                    }
+                }
+
+                node.getParent().setRight(null);    //remove Node with ones
+                HuffmanNode<T> newParent = parent.getParent();
+                HuffmanNode<T> tmp = new HuffmanNode<>();
+                tmp.setLeft(parent);
+                tmp.setRight(node);
+                if (newParent.getLeft().equals(parent)) {
+                    newParent.setLeft(tmp);
+                } else {
+                    newParent.setRight(tmp);
                 }
             }
 

@@ -120,7 +120,7 @@ public class HuffmanNode<T> {
     @Override
     public String toString() {
         if (this.value == null) {
-            return "+, Weight:" + this.weight;
+            return " Weight:" + this.weight;
         }
         return this.value + ", Weight:" + this.weight;
     }
