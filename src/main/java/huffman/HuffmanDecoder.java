@@ -2,6 +2,7 @@ package huffman;
 
 import bitstream.BitStream;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static bitstream.BitStream.BYTE_START_INDEX;
 
-public class HuffmanDecoder<T> {
+public class HuffmanDecoder<T extends Serializable> {
 
     private final int maxSize;
     List<HuffmanLookUpRow<T>> lookUpTable;

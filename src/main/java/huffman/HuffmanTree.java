@@ -2,10 +2,11 @@ package huffman;
 
 import bitstream.BitStream;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HuffmanTree<T> {
+public class HuffmanTree<T extends Serializable> {
 
     public HuffmanNode<T> root;
     public Map<T, HuffmanLookUpRow<T>> lookUpTable = new HashMap<>();
@@ -77,7 +78,7 @@ public class HuffmanTree<T> {
         return Objects.hash(root, lookUpTable);
     }
 
-    public static class Builder<T> {
+    public static class Builder<T extends Serializable> {
 
         private final Map<HuffmanNode<T>, Long> probabilities = new HashMap<>();
         private int limit = 16;
@@ -102,8 +103,10 @@ public class HuffmanTree<T> {
             }
             HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
 
-            root = BRCI(root);
 
+            while (HuffmanNode.getMaxDepth(root) > this.limit) {
+                root = BRCI(root);
+            }
             checkOnes(root);
 
             return new HuffmanTree<>(root);
@@ -180,7 +183,7 @@ public class HuffmanTree<T> {
         }
 
         private HuffmanNode<T> selectNodeAtDepth(HuffmanNode<T> node, int selectedDepth) {
-            if (selectedDepth == 0) {
+            if (selectedDepth <= 0) {
                 return node;
             } else if (node.getRight() != null) return selectNodeAtDepth(node.getRight(), selectedDepth - 1);
             return null;
@@ -209,6 +212,7 @@ public class HuffmanTree<T> {
                 } else {
                     if (parent.getLeft().getValue() != null) {
                         parent.setValue(parent.getLeft().getValue());
+                        parent.setWeight(parent.getLeft().getWeight());
                     }
                     parent.setLeft(null);
                 }

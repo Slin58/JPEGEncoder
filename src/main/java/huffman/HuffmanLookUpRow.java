@@ -1,8 +1,11 @@
 package huffman;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
+public class HuffmanLookUpRow<T extends Serializable> implements Comparable<HuffmanLookUpRow<T>> {
     private T value;
     private int path;
     private int bitSize;
@@ -19,6 +22,11 @@ public class HuffmanLookUpRow<T> implements Comparable<HuffmanLookUpRow<T>> {
 
     public void setValue(T value) {
         this.value = value;
+    }
+
+    public byte encodedValue() {
+        byte[] serialize = SerializationUtils.serialize(this.value);
+        return serialize[serialize.length - 1];
     }
 
     public int getPath() {

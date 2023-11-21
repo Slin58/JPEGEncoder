@@ -1,26 +1,13 @@
+import huffman.HuffmanLookUpRow;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class UtilsTest {
     private Image getImageTestPPM() {
-        double[][] data1 = {
-                {0.0, 0.0, 0.0, 1.0},
-                {0.0, 0.0, 0.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0},
-                {1.0, 0.0, 0.0, 0.0}
-        };
-        double[][] data2 = {
-                {0.0, 0.0, 0.0, 0.0},
-                {0.0, 1.0, 0.0, 0.0},
-                {0.0, 0.0, 1.0, 0.0},
-                {0.0, 0.0, 0.0, 0.0}
-        };
-        double[][] data3 = {
-                {0.0, 0.0, 0.0, 1.0},
-                {0.0, 7.0 / 15.0, 0.0, 0.0},
-                {0.0, 0.0, 7.0 / 15.0, 0.0},
-                {1.0, 0.0, 0.0, 0.0}
-        };
+        double[][] data1 = {{0.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 0.0, 0.0}, {0.0, 0.0, 0.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
+        double[][] data2 = {{0.0, 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}, {0.0, 0.0, 0.0, 0.0}};
+        double[][] data3 =
+                {{0.0, 0.0, 0.0, 1.0}, {0.0, 7.0 / 15.0, 0.0, 0.0}, {0.0, 0.0, 7.0 / 15.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
         return new Image(4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
@@ -53,6 +40,12 @@ public class UtilsTest {
     public void testReadBigImage() {
         Image image = Utils.readImageFromPPM("ppm\\fat.ppm");
         Assert.assertNotNull(image);
+    }
+
+    @Test
+    public void testTcast() {
+        HuffmanLookUpRow<Character> row = new HuffmanLookUpRow<>('A', 0, 0);
+        System.out.println(row.encodedValue());
     }
 
 

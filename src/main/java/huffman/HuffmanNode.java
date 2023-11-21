@@ -1,8 +1,9 @@
 package huffman;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class HuffmanNode<T> {
+public class HuffmanNode<T extends Serializable> {
     private HuffmanNode<T> left;
     private HuffmanNode<T> right;
 
@@ -21,7 +22,7 @@ public class HuffmanNode<T> {
 
     }
 
-    public static <T> int getMinDepth(HuffmanNode<T> node) {
+    public static <T extends Serializable> int getMinDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
         if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMinDepth(node.getLeft());
@@ -29,7 +30,7 @@ public class HuffmanNode<T> {
         return Math.min(getMinDepth(node.getLeft()), getMinDepth(node.getRight())) + 1;
     }
 
-    public static <T> int getMaxDepth(HuffmanNode<T> node) {
+    public static <T extends Serializable> int getMaxDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
         if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMaxDepth(node.getLeft());
