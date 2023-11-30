@@ -1,0 +1,8 @@
+# ignore .idea
+/.idea
+
+# ignore build
+/target
+
+# ignore results
+/*.jpeg
