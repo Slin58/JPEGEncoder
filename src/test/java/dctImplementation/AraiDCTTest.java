@@ -51,8 +51,4 @@ public class AraiDCTTest {
         Assert.assertTrue(Arrays.deepEquals(randomValuesDCT, randomValuesResult));
         Assert.assertTrue(Arrays.deepEquals(checkerboardDCT, checkerboardResult));
     }
-
-    @Test
-    public void testOneDDCT() {
-    }
 }
