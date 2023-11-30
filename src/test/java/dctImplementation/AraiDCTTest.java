@@ -4,6 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AraiDCTTest {
 
@@ -50,5 +52,26 @@ public class AraiDCTTest {
         }
         Assert.assertTrue(Arrays.deepEquals(randomValuesDCT, randomValuesResult));
         Assert.assertTrue(Arrays.deepEquals(checkerboardDCT, checkerboardResult));
+    }
+
+    @Test
+    void performanceDctTestWithMultithreading() {
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        double[][] randomValues = {{6, 18, 4, 200, 123, 65, 11, 241}, {54, 154, 190, 2, 251, 201, 55, 143},
+                                   {133, 102, 99, 201, 55, 21, 66, 65}, {77, 1, 211, 87, 95, 103, 66, 137},
+                                   {63, 98, 220, 102, 100, 9, 76, 32}, {21, 144, 29, 1, 102, 198, 201, 11},
+                                   {87, 21, 85, 230, 241, 21, 54, 94}, {103, 191, 9, 32, 105, 43, 91, 102}};
+        int counter = 0;
+        int runs = 138420; // Around the operations per 4k picture
+        long t = System.currentTimeMillis();
+        AraiDCT araiDCT = new AraiDCT();
+        for (int i = 0; i < runs; i++) {
+            System.out.print(counter++ + ",");
+            executorService.execute(() -> {
+                araiDCT.twoDDCT(randomValues);
+            });
+        }
+        executorService.shutdown();
+        System.out.println("Time in ms for " + runs + " with Arai DCT: " + (System.currentTimeMillis() - t));
     }
 }
