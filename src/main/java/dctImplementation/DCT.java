@@ -7,4 +7,6 @@ public interface DCT {
      * @return a 8x8 matrix of a DCT
      */
     double[][] twoDDCT(double[][] original);
+
+    double[][] inverseTwoDDCT(double[][] dct);
 }

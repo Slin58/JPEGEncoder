@@ -51,6 +51,12 @@ public class AraiDCT implements DCT {
         return new SimpleMatrix(transposedResult).transpose().toArray2();
     }
 
+    @Override
+    public double[][] inverseTwoDDCT(double[][] dct) {
+        //todo
+        return new double[0][];
+    }
+
     /**
      * @param original has to be lenth 8
      * @return a dct of the original

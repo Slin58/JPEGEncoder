@@ -36,4 +36,11 @@ public class DCT2 implements DCT {
         return aMatrix;
     }
 
+    @Override
+    public double[][] inverseTwoDDCT(double[][] dct) {
+        //todo
+        return new double[0][];
+    }
+
+
 }
