@@ -131,7 +131,6 @@ public class HuffmanTree<T extends Serializable> {
                         parent = parent.getRight();
                     }
                 }
-
                 node.getParent().setRight(null);    //remove Node with ones
                 HuffmanNode<T> newParent = parent.getParent();
                 HuffmanNode<T> tmp = new HuffmanNode<>();
@@ -143,7 +142,6 @@ public class HuffmanTree<T extends Serializable> {
                     newParent.setRight(tmp);
                 }
             }
-
         }
 
         public Builder<T> setLimit(int limit) {

@@ -2,8 +2,7 @@ package dctImplementation;
 
 public class DCT1 implements DCT {
 
-
-    public static double c(double number) {
+    private static double c(double number) {
         if (number == 0) {
             return 1.0 / Math.sqrt(2);
         }
