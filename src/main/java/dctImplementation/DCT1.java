@@ -23,7 +23,7 @@ public class DCT1 implements DCT {
                     }
                 }
                 result[i][j] = 2.0 / original.length * c(i) * c(j) * sum;
-                //todo Math.round(2.0 / original.length * c(i) * c(j) * sum) + Change to int isn't correct
+                //todo Rundungsfehler
             }
         }
         return result;
@@ -45,7 +45,7 @@ public class DCT1 implements DCT {
 
             }
         }
-        return result;
+        return result;  //todo Rundungsfehler
     }
 
 }

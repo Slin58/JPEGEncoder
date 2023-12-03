@@ -38,8 +38,14 @@ public class DCT2 implements DCT {
 
     @Override
     public double[][] inverseTwoDDCT(double[][] dct) {
-        //todo
-        return new double[0][];
+        SimpleMatrix aMatrix = new SimpleMatrix(buildAMatrix(dct.length));
+        SimpleMatrix originalMatrix = new SimpleMatrix(dct);
+
+        SimpleMatrix aMatrixInverse = aMatrix.invert();
+
+        return Arrays.stream(aMatrixInverse.mult(originalMatrix.mult(aMatrixInverse.transpose())).toArray2())
+                .map(row -> Arrays.stream(row).map(Math::round).toArray())
+                .toArray(double[][]::new);    //todo: rundungsfehler oder rechenfehler?
     }
 
 
