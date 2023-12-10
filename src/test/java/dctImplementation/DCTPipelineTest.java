@@ -5,20 +5,35 @@ import org.testng.annotations.Test;
 import utils.Utils;
 
 public class DCTPipelineTest {
+
     @Test
-    public void testTwoDDCT() { //todo: unfinished, one test for each dct impl
+    public void testDCT1Pipeline() {
         JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\testDCT.ppm");
-
-        AraiDCT araiDCT = new AraiDCT();
-        araiDCT.calculatePictureDataWithDCT(image);
-
-        DCT2 dct2 = new DCT2();
-        dct2.calculatePictureDataWithInverseDCT(image);
+        DCT1 dct1 = new DCT1();
+        dct1.calculatePictureDataWithDCT(image);
+        dct1.calculatePictureDataWithInverseDCT(image);
         DCT.stop();
-
-        Utils.writePPMFile("ppm\\dctoutput1.jpg", image);
-
+        Utils.writePPMFile("ppm\\dctoutputDCT1.jpg", image);
     }
 
+    @Test
+    public void testDCT2Pipeline() {
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\testDCT.ppm");
+        DCT2 dct2 = new DCT2();
+        dct2.calculatePictureDataWithDCT(image);
+        dct2.calculatePictureDataWithInverseDCT(image);
+        DCT.stop();
+        Utils.writePPMFile("ppm\\dctoutputDCT2.jpg", image);
+    }
+
+    @Test
+    public void testAraiDCTPipeline() {
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\testDCT.ppm");
+        AraiDCT araiDCT = new AraiDCT();
+        araiDCT.calculatePictureDataWithDCT(image);
+        araiDCT.calculatePictureDataWithInverseDCT(image);
+        DCT.stop();
+        Utils.writePPMFile("ppm\\dctoutputArayDCT.jpg", image);
+    }
 
 }
