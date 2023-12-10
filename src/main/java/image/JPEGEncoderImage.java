@@ -1,9 +1,11 @@
+package image;
+
 import java.util.List;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Image {
+public class JPEGEncoderImage {
     int height;
     int width;
     ColorSpace colorSpace;
@@ -18,7 +20,8 @@ public class Image {
     double[][] data2;
     double[][] data3;
 
-    public Image(int height, int width, ColorSpace colorSpace, double[][] data1, double[][] data2, double[][] data3) {
+    public JPEGEncoderImage(int height, int width, ColorSpace colorSpace, double[][] data1, double[][] data2,
+                            double[][] data3) {
         if (data2.length != data3.length) {
             throw new RuntimeException("Unequal channel size. Something may be wrong with the image");
         }
@@ -34,6 +37,54 @@ public class Image {
         this.colorSpace = colorSpace;
         this.data1 = data1;
         this.data2 = data2;
+        this.data3 = data3;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public ColorSpace getColorSpace() {
+        return colorSpace;
+    }
+
+    public void setColorSpace(ColorSpace colorSpace) {
+        this.colorSpace = colorSpace;
+    }
+
+    public double[][] getData1() {
+        return data1;
+    }
+
+    public void setData1(double[][] data1) {
+        this.data1 = data1;
+    }
+
+    public double[][] getData2() {
+        return data2;
+    }
+
+    public void setData2(double[][] data2) {
+        this.data2 = data2;
+    }
+
+    public double[][] getData3() {
+        return data3;
+    }
+
+    public void setData3(double[][] data3) {
         this.data3 = data3;
     }
 
@@ -141,55 +192,58 @@ public class Image {
         if (this.getClass() != o.getClass()) {
             return false;
         }
-        Image image = (Image) o;
+        JPEGEncoderImage JPEGEncoderImage = (JPEGEncoderImage) o;
 
-        if (this.height != image.height) {
+        if (this.height != JPEGEncoderImage.height) {
             System.out.println("Images height is not the same");
             return false;
         }
-        if (this.width != image.width) {
+        if (this.width != JPEGEncoderImage.width) {
             System.out.println("Images width is not the same");
             return false;
         }
-        if (this.colorSpace != image.colorSpace) {
+        if (this.colorSpace != JPEGEncoderImage.colorSpace) {
             System.out.println("Images colorSpace is not the same");
             return false;
         }
-        if (this.data1.length != image.data1.length) {
+        if (this.data1.length != JPEGEncoderImage.data1.length) {
             System.out.println("Images data1.size() is not the same");
             return false;
         }
-        if (this.data2.length != image.data2.length) {
+        if (this.data2.length != JPEGEncoderImage.data2.length) {
             System.out.println("Images data2.size() is not the same");
             return false;
         }
-        if (this.data3.length != image.data3.length) {
+        if (this.data3.length != JPEGEncoderImage.data3.length) {
             System.out.println("Images data3.size() is not the same");
             return false;
         }
         for (int i = 0; i < data1.length; i++) {
             for (int j = 0; j < data1[i].length; j++) {
-                if (Math.round(this.data1[i][j] * 10000) / 10000.0 != Math.round(image.data1[i][j] * 10000) / 10000.0) {
+                if (Math.round(this.data1[i][j] * 10000) / 10000.0 !=
+                    Math.round(JPEGEncoderImage.data1[i][j] * 10000) / 10000.0) {
                     System.out.println("this.data1: i:" + i + " j:" + j + ", " + this.data1[i][j]);
-                    System.out.println("image.data1: i:" + i + " j:" + j + ", " + image.data1[i][j]);
+                    System.out.println("image.data1: i:" + i + " j:" + j + ", " + JPEGEncoderImage.data1[i][j]);
                     return false;
                 }
             }
         }
         for (int i = 0; i < data2.length; i++) {
             for (int j = 0; j < data2[i].length; j++) {
-                if (Math.round(this.data2[i][j] * 10000) / 10000.0 != Math.round(image.data2[i][j] * 10000) / 10000.0) {
+                if (Math.round(this.data2[i][j] * 10000) / 10000.0 !=
+                    Math.round(JPEGEncoderImage.data2[i][j] * 10000) / 10000.0) {
                     System.out.println("this.data2: i:" + i + " j:" + j + ", " + this.data2[i][j]);
-                    System.out.println("image.data2: i:" + i + " j:" + j + ", " + image.data2[i][j]);
+                    System.out.println("image.data2: i:" + i + " j:" + j + ", " + JPEGEncoderImage.data2[i][j]);
                     return false;
                 }
             }
         }
         for (int i = 0; i < data3.length; i++) {
             for (int j = 0; j < data3[i].length; j++) {
-                if (Math.round(this.data3[i][j] * 10000) / 10000.0 != Math.round(image.data3[i][j] * 10000) / 10000.0) {
+                if (Math.round(this.data3[i][j] * 10000) / 10000.0 !=
+                    Math.round(JPEGEncoderImage.data3[i][j] * 10000) / 10000.0) {
                     System.out.println("this.data3: i:" + i + " j:" + j + ", " + this.data3[i][j]);
-                    System.out.println("image.data3: i:" + i + " j:" + j + ", " + image.data3[i][j]);
+                    System.out.println("image.data3: i:" + i + " j:" + j + ", " + JPEGEncoderImage.data3[i][j]);
                     return false;
                 }
             }
@@ -222,7 +276,7 @@ public class Image {
             d3 += "\n";
         }
 
-        return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace +
-                "\ndata1 = " + d1 + "\ndata2 = " + d2 + "\ndata3 = " + d3;
+        return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace + "\ndata1 = " + d1 +
+               "\ndata2 = " + d2 + "\ndata3 = " + d3;
     }
 }

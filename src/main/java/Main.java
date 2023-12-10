@@ -12,14 +12,14 @@ public class Main {
     public static void main(String[] args) {
 
         /*
-        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
+        Image image1 = utils.Utils.readImageFromPPM("ppm\\test.ppm");
         System.out.println(image1);
         image1.changeResolution(4, 0, 0, List.of(2, 3));
         System.out.println(image1);
          */
        /* long startTime = System.currentTimeMillis(); // Get the current time in milliseconds
 
-        Image image1 = Utils.readImageFromPPM("ppm\\test.ppm");
+        Image image1 = utils.Utils.readImageFromPPM("ppm\\test.ppm");
 
         long endTime = System.currentTimeMillis(); // Get the time after the function call
         long elapsedTime = endTime - startTime; // Calculate the elapsed time
@@ -27,11 +27,11 @@ public class Main {
         System.out.println("Function call took " + elapsedTime + " milliseconds.");
         */
 
-        /*Image image1 = Utils.readImageFromPPM("ppm\\test2.ppm");
+        /*Image image1 = utils.Utils.readImageFromPPM("ppm\\test2.ppm");
         System.out.println(image1.data1[0][0]);
         System.out.println(image1.data2[0][0]);
         System.out.println(image1.data3[0][0]);
-        Utils.writePPMFile("ppm\\test3.ppm", image1);
+        utils.Utils.writePPMFile("ppm\\test3.ppm", image1);
          */
 
         //image1.changeResolution(5, 2, 2, Arrays.asList(1,2,3));

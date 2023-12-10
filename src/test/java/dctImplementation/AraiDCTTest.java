@@ -1,11 +1,11 @@
 package dctImplementation;
 
+import image.ColorSpace;
+import image.JPEGEncoderImage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AraiDCTTest {
 
@@ -22,7 +22,7 @@ public class AraiDCTTest {
                             {0, -166, 0, -196, 0, -294, 0, -837}};
 
         AraiDCT araiDCT = new AraiDCT();
-        int[][] checkerboardDCT = AraiDCT.toInt(araiDCT.twoDDCT(checkerboard));
+        int[][] checkerboardDCT = DCT.toInt(araiDCT.twoDDCT(checkerboard));
         for (int[] row : checkerboardDCT) {
             System.out.println(Arrays.toString(row));
         }
@@ -42,7 +42,7 @@ public class AraiDCTTest {
                                       {-79, -11, 103, 50, -58, 62, -102, -123},
                                       {-29, 114, -50, -111, 144, 96, -64, -24}};
 
-        int[][] randomValuesDCT = AraiDCT.toInt(araiDCT.twoDDCT(randomValues));
+        int[][] randomValuesDCT = DCT.toInt(araiDCT.twoDDCT(randomValues));
         for (int[] row : randomValuesDCT) {
             System.out.println(Arrays.toString(row));
         }
@@ -56,20 +56,18 @@ public class AraiDCTTest {
 
     @Test
     void performanceDctTestWithMultithreading() {
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
-        double[][] randomValues = {{6, 18, 4, 200, 123, 65, 11, 241}, {54, 154, 190, 2, 251, 201, 55, 143},
-                                   {133, 102, 99, 201, 55, 21, 66, 65}, {77, 1, 211, 87, 95, 103, 66, 137},
-                                   {63, 98, 220, 102, 100, 9, 76, 32}, {21, 144, 29, 1, 102, 198, 201, 11},
-                                   {87, 21, 85, 230, 241, 21, 54, 94}, {103, 191, 9, 32, 105, 43, 91, 102}};
-        int runs = 138420; // Around the operations per 4k picture
-        long t = System.currentTimeMillis();
-        AraiDCT araiDCT = new AraiDCT();
-        for (int i = 0; i < runs; i++) {
-            executorService.execute(() -> {
-                araiDCT.twoDDCT(randomValues);
-            });
+        JPEGEncoderImage jpegEncoderImage =
+                new JPEGEncoderImage(3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
+                                     new double[][]{});
+        double[][] data1 = jpegEncoderImage.getData1();
+        for (int i = 0; i < 3840; i++) {
+            for (int j = 0; j < 2160; j++) {
+                data1[i][j] = (i + j * 8) % 256;
+            }
         }
-        executorService.shutdown();
-        System.out.println("Time in ms for " + runs + " with Arai DCT: " + (System.currentTimeMillis() - t));
+        AraiDCT araiDCT = new AraiDCT();
+        long t = System.currentTimeMillis();
+        araiDCT.calculateOnePictureDataWithDCT(jpegEncoderImage);
+        System.out.println("Time in ms with Arai DCT: " + (System.currentTimeMillis() - t));
     }
 }

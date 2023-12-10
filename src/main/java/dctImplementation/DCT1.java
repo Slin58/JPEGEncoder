@@ -1,10 +1,12 @@
 package dctImplementation;
 
-public class DCT1 implements DCT {
+public class DCT1 extends DCT {
+
+    private static final double sqrt = 1.0 / Math.sqrt(2);
 
     private static double c(double number) {
         if (number == 0) {
-            return 1.0 / Math.sqrt(2);
+            return sqrt;
         }
         return 1.0;
     }

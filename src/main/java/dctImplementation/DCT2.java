@@ -4,11 +4,13 @@ import org.ejml.simple.SimpleMatrix;
 
 import java.util.Arrays;
 
-public class DCT2 implements DCT {
+public class DCT2 extends DCT {
 
-    private static double c0(double k) {
-        if (k == 0) {
-            return 1.0 / Math.sqrt(2);
+    private static final double sqrt = 1.0 / Math.sqrt(2);
+
+    private static double c0(double number) {
+        if (number == 0) {
+            return sqrt;
         }
         return 1.0;
     }

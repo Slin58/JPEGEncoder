@@ -1,3 +1,7 @@
+package utils;
+
+import image.ColorSpace;
+import image.JPEGEncoderImage;
 import org.ejml.simple.SimpleMatrix;
 
 import java.io.BufferedWriter;
@@ -29,7 +33,7 @@ public class Utils {
         return newNumber;
     }
 
-    public static Image readImageFromPPM(String path) {
+    public static JPEGEncoderImage readImageFromPPM(String path) {
         List<String> allLines = null;
 
         try {
@@ -40,7 +44,7 @@ public class Utils {
             e.printStackTrace();
         }
 
-        Image result = null;
+        JPEGEncoderImage result = null;
         double maxColor = -1.0;
         int height = -1;
         int width = -1;
@@ -79,31 +83,37 @@ public class Utils {
                         i++;
                         j = 0;
                     }
-                    data1[i][j] = Double.parseDouble(rowFile[valueInRow]) / maxColor;       //checkForValidRange(Double.parseDouble(rowFile[valueInRow]) / maxColor);
-                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) / maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) / maxColor);
-                    data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]) / maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) / maxColor);
+                    data1[i][j] = Double.parseDouble(rowFile[valueInRow]) /
+                                  maxColor;       //checkForValidRange(Double.parseDouble(rowFile[valueInRow]) /
+                    // maxColor);
+                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) /
+                                  maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) /
+                    // maxColor);
+                    data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]) /
+                                  maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) /
+                    // maxColor);
                     j++;
                 }
 
             }
-            result = new Image(height, width, ColorSpace.RGB, data1, data2, data3);
+            result = new JPEGEncoderImage(height, width, ColorSpace.RGB, data1, data2, data3);
         }
         return result;
     }
 
-    public static void writePPMFile(String outputPath, Image image) {
+    public static void writePPMFile(String outputPath, JPEGEncoderImage JPEGEncoderImage) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
             // Write PPM header
             writer.write("P3\n");
-            writer.write(image.height + " " + image.width + "\n");
+            writer.write(JPEGEncoderImage.getHeight() + " " + JPEGEncoderImage.getWidth() + "\n");
             writer.write("255\n"); // Maximum color value
 
-            for (int i = 0; i < image.data1.length; i++) {
-                for (int j = 0; j < image.data1[i].length; j++) {
+            for (int i = 0; i < JPEGEncoderImage.getData1().length; i++) {
+                for (int j = 0; j < JPEGEncoderImage.getData1()[i].length; j++) {
                     //for RGB here
-                    int r = (int) Math.round(image.data1[i][j] * 255);
-                    int g = (int) Math.round(image.data2[i][j] * 255);
-                    int b = (int) Math.round(image.data3[i][j] * 255);
+                    int r = (int) Math.round(JPEGEncoderImage.getData1()[i][j] * 255);
+                    int g = (int) Math.round(JPEGEncoderImage.getData2()[i][j] * 255);
+                    int b = (int) Math.round(JPEGEncoderImage.getData3()[i][j] * 255);
                     //  System.out.println("r,g,b: " + r + "," + g + "," + b );
 
                     writer.write(r + " " + g + " " + b + " ");
@@ -115,33 +125,24 @@ public class Utils {
         }
     }
 
-    public static Image rgbToYCbCr(Image image) {
+    public static JPEGEncoderImage rgbToYCbCr(JPEGEncoderImage JPEGEncoderImage) {
         //todo: Test
-        SimpleMatrix transformMatrix = new SimpleMatrix(new double[][]{
-                {0.299, 0.587, 0.114},
-                {-0.1687, -0.3312, 0.5},
-                {0.5, -0.4186, -0.0813}
-        });
-        SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{
-                {0.0},
-                {0.5},
-                {0.5}
-        });
+        SimpleMatrix transformMatrix = new SimpleMatrix(
+                new double[][]{{0.299, 0.587, 0.114}, {-0.1687, -0.3312, 0.5}, {0.5, -0.4186, -0.0813}});
+        SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{{0.0}, {0.5}, {0.5}});
 
-        for (int i = 0; i < image.data1.length; i++) {
-            for (int j = 0; j < image.data1[i].length; j++) {
-                SimpleMatrix rgbVector = new SimpleMatrix(new double[][]{
-                        {image.getData1(i, j)},
-                        {image.getData2(i, j)},
-                        {image.getData3(i, j)},
-                });
+        for (int i = 0; i < JPEGEncoderImage.getData1().length; i++) {
+            for (int j = 0; j < JPEGEncoderImage.getData1()[i].length; j++) {
+                SimpleMatrix rgbVector = new SimpleMatrix(
+                        new double[][]{{JPEGEncoderImage.getData1(i, j)}, {JPEGEncoderImage.getData2(i, j)},
+                                       {JPEGEncoderImage.getData3(i, j)},});
                 rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector));
-                image.data1[i][j] = rgbVector.get(0, 0);
-                image.data2[i][j] = rgbVector.get(1, 0);
-                image.data3[i][j] = rgbVector.get(2, 0);
+                JPEGEncoderImage.getData1()[i][j] = rgbVector.get(0, 0);
+                JPEGEncoderImage.getData2()[i][j] = rgbVector.get(1, 0);
+                JPEGEncoderImage.getData3()[i][j] = rgbVector.get(2, 0);
             }
         }
-        image.colorSpace = ColorSpace.YCbCr;
-        return image;
+        JPEGEncoderImage.setColorSpace(ColorSpace.YCbCr);
+        return JPEGEncoderImage;
     }
 }

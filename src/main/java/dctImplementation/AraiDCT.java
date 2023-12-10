@@ -1,22 +1,20 @@
 package dctImplementation;
 
-import org.ejml.simple.SimpleMatrix;
+public class AraiDCT extends DCT {
 
-public class AraiDCT implements DCT {
-
-    private static double s0 = calcS(0);
-    private static double s1 = calcS(1);
-    private static double s2 = calcS(2);
-    private static double s3 = calcS(3);
-    private static double s4 = calcS(4);
-    private static double s5 = calcS(5);
-    private static double s6 = calcS(6);
-    private static double s7 = calcS(7);
-    private static double a1 = calcC(4);
-    private static double a2 = calcC(2) - calcC(6);
-    private static double a3 = a1;
-    private static double a4 = calcC(6) + calcC(2);
-    private static double a5 = calcC(6);
+    private static final double s0 = calcS(0);
+    private static final double s1 = calcS(1);
+    private static final double s2 = calcS(2);
+    private static final double s3 = calcS(3);
+    private static final double s4 = calcS(4);
+    private static final double s5 = calcS(5);
+    private static final double s6 = calcS(6);
+    private static final double s7 = calcS(7);
+    private static final double a1 = calcC(4);
+    private static final double a2 = calcC(2) - calcC(6);
+    private static final double a3 = a1;
+    private static final double a4 = calcC(6) + calcC(2);
+    private static final double a5 = calcC(6);
 
     private static double calcC(double k) {
         return Math.cos(k * Math.PI / 16);
@@ -29,26 +27,16 @@ public class AraiDCT implements DCT {
         return 1 / (4 * calcC(k));
     }
 
-    public static int[][] toInt(double[][] array) {
-        int[][] result = new int[8][8];
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                result[i][j] = (int) Math.round(array[i][j] * 10000) / 10000;
-            }
-        }
-        return result;
-    }
-
     @Override
     public double[][] twoDDCT(double[][] original) {
         for (int i = 0; i < original.length; i++) {
             original[i] = oneDDCT(original[i]);
         }
-        double[][] transposedResult = new SimpleMatrix(original).transpose().toArray2();
+        double[][] transposedResult = transposeMatrix(original);
         for (int i = 0; i < transposedResult.length; i++) {
             transposedResult[i] = oneDDCT(transposedResult[i]);
         }
-        return new SimpleMatrix(transposedResult).transpose().toArray2();
+        return transposeMatrix(transposedResult);
     }
 
     @Override
