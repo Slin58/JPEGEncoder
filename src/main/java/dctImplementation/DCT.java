@@ -1,6 +1,5 @@
 package dctImplementation;
 
-
 import image.JPEGEncoderImage;
 
 import java.util.concurrent.Executors;
@@ -26,6 +25,10 @@ public abstract class DCT {
         double[][] temp = new double[m[0].length][m.length];
         for (int i = 0; i < m.length; i++) {for (int j = 0; j < m[0].length; j++) {temp[j][i] = m[i][j];}}
         return temp;
+    }
+
+    public static void stop() {
+        EXECUTOR_SERVICE.shutdown();
     }
 
     public void calculateDateOnArrays(double[][] data, Function<double[][], double[][]> method) {
@@ -78,6 +81,26 @@ public abstract class DCT {
         calculateDateOnArrays(data.getData1(), this::twoDDCT);
         calculateDateOnArrays(data.getData2(), this::twoDDCT);
         calculateDateOnArrays(data.getData3(), this::twoDDCT);
+        while (EXECUTOR_SERVICE.getActiveCount() != 0) {
+            try {
+                Thread.sleep(0, 10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void calculatePictureDataWithInverseDCT(JPEGEncoderImage data) {
+        calculateDateOnArrays(data.getData1(), this::inverseTwoDDCT);
+        calculateDateOnArrays(data.getData2(), this::inverseTwoDDCT);
+        calculateDateOnArrays(data.getData3(), this::inverseTwoDDCT);
+        while (EXECUTOR_SERVICE.getActiveCount() != 0) {
+            try {
+                Thread.sleep(0, 10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     // Used In the performance test

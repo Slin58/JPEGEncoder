@@ -279,4 +279,5 @@ public class JPEGEncoderImage {
         return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace + "\ndata1 = " + d1 +
                "\ndata2 = " + d2 + "\ndata3 = " + d3;
     }
+    
 }
