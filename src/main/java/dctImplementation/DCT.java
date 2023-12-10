@@ -5,6 +5,7 @@ import image.JPEGEncoderImage;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Function;
 
 public abstract class DCT {
 
@@ -27,19 +28,20 @@ public abstract class DCT {
         return temp;
     }
 
-    public void calculateDateOnArrays(double[][] data) {
+    public void calculateDateOnArrays(double[][] data, Function<double[][], double[][]> method) {
         for (int i = 0; i < data.length; i += 8) {
             for (int j = 0; j < data[i].length; j += 8) {
                 final int i1 = i;
                 final int j1 = j;
                 EXECUTOR_SERVICE.execute(
-                        () -> saveNewValues(i1, j1, data, calculateTwoDDctFromDataArray(data, i1, j1)));
+                        () -> saveNewValues(i1, j1, data, calculateTwoDDctFromDataArray(data, i1, j1, method)));
             }
         }
     }
 
-    private double[][] calculateTwoDDctFromDataArray(double[][] data, int i1, int j1) {
-        return twoDDCT(new double[][]{
+    private double[][] calculateTwoDDctFromDataArray(double[][] data, int i1, int j1,
+                                                     Function<double[][], double[][]> method) {
+        return method.apply(new double[][]{
                 {data[i1][j1], data[i1][j1 + 1], data[i1][j1 + 2], data[i1][j1 + 3], data[i1][j1 + 4], data[i1][j1 + 5],
                  data[i1][j1 + 6], data[i1][j1 + 7]},
                 {data[i1 + 1][j1], data[i1 + 1][j1 + 1], data[i1 + 1][j1 + 2], data[i1 + 1][j1 + 3],
@@ -73,14 +75,14 @@ public abstract class DCT {
     abstract public double[][] inverseTwoDDCT(double[][] dct);
 
     public void calculatePictureDataWithDCT(JPEGEncoderImage data) {
-        calculateDateOnArrays(data.getData1());
-        calculateDateOnArrays(data.getData2());
-        calculateDateOnArrays(data.getData3());
+        calculateDateOnArrays(data.getData1(), this::twoDDCT);
+        calculateDateOnArrays(data.getData2(), this::twoDDCT);
+        calculateDateOnArrays(data.getData3(), this::twoDDCT);
     }
 
     // Used In the performance test
     public void calculateOnePictureDataWithDCT(JPEGEncoderImage data) {
-        calculateDateOnArrays(data.getData1());
+        calculateDateOnArrays(data.getData1(), this::twoDDCT);
         while (EXECUTOR_SERVICE.getActiveCount() != 0) {
             try {
                 Thread.sleep(0, 10);
