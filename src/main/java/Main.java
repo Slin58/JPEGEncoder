@@ -1,7 +1,9 @@
-import dctImplementation.DCT;
+import dctImplementation.AraiDCT;
 import dctImplementation.DCT2;
+import image.ColorSpace;
 import image.JPEGEncoderImage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static utils.Utils.readImageFromPPM;
@@ -90,6 +92,8 @@ public class Main {
         //bitStream.setBytes(values);
         // int result = bitStream.getBits(11);
         // System.out.println(result);
+        System.out.println("Processors:" + Runtime.getRuntime().availableProcessors());
+        runAraiTest();
 
         JPEGEncoderImage image = readImageFromPPM("ppm\\testDCT.ppm");
 
@@ -97,7 +101,6 @@ public class Main {
         dct2.calculatePictureDataWithDCT(image);
 
         dct2.calculatePictureDataWithInverseDCT(image);
-        DCT.stop();
 
         //        AraiDCT araiDCT = new AraiDCT();
         //        araiDCT.calculatePictureDataWithDCT(image);
@@ -110,11 +113,38 @@ public class Main {
         writePPMFile("ppm\\dctoutput1.jpg", image);
         //writePPMFile("ppm\\writeppmTest.jpg", image);
 
+
     }
 
     static void addMultiple(List<Character> valueList, char c, int amount) {
         for (int i = 0; i < amount; i++) {
             valueList.add(c);
         }
+    }
+
+    static void runAraiTest() {
+        JPEGEncoderImage jpegEncoderImage =
+                new JPEGEncoderImage(3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
+                                     new double[][]{});
+        double[][] data1 = jpegEncoderImage.getData1();
+        for (int i = 0; i < 3840; i++) {
+            for (int j = 0; j < 2160; j++) {
+                data1[i][j] = (i + j * 8) % 256;
+            }
+        }
+        List<Long> results = new ArrayList<>();
+        AraiDCT araiDCT = new AraiDCT();
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < 10000) {
+            JPEGEncoderImage currentImage = new JPEGEncoderImage(jpegEncoderImage);
+            long t = System.currentTimeMillis();
+            araiDCT.calculateOnePictureDataWithDCT(currentImage);
+            results.add((System.currentTimeMillis() - t));
+        }
+        System.out.println("Time in ms with Arai DCT: ");
+        System.out.println("Runs: " + results.size());
+        System.out.println("Max: " + results.stream().max(Long::compareTo).get());
+        System.out.println("Min: " + results.stream().min(Long::compareTo).get());
+        System.out.println("Avarage: " + results.stream().mapToDouble(value -> value).average().getAsDouble());
     }
 }

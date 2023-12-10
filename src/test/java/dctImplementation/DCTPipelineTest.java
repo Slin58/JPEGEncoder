@@ -12,7 +12,6 @@ public class DCTPipelineTest {
         DCT1 dct1 = new DCT1();
         dct1.calculatePictureDataWithDCT(image);
         dct1.calculatePictureDataWithInverseDCT(image);
-        DCT.stop();
         Utils.writePPMFile("ppm\\dctoutputDCT1.jpg", image);
     }
 
@@ -22,7 +21,6 @@ public class DCTPipelineTest {
         DCT2 dct2 = new DCT2();
         dct2.calculatePictureDataWithDCT(image);
         dct2.calculatePictureDataWithInverseDCT(image);
-        DCT.stop();
         Utils.writePPMFile("ppm\\dctoutputDCT2.jpg", image);
     }
 
@@ -32,7 +30,6 @@ public class DCTPipelineTest {
         AraiDCT araiDCT = new AraiDCT();
         araiDCT.calculatePictureDataWithDCT(image);
         araiDCT.calculatePictureDataWithInverseDCT(image);
-        DCT.stop();
         Utils.writePPMFile("ppm\\dctoutputArayDCT.jpg", image);
     }
 

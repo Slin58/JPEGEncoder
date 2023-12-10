@@ -40,6 +40,15 @@ public class JPEGEncoderImage {
         this.data3 = data3;
     }
 
+    public JPEGEncoderImage(JPEGEncoderImage image) {
+        this.height = image.height;
+        this.width = image.width;
+        this.colorSpace = image.colorSpace;
+        this.data1 = image.data1;
+        this.data2 = image.data2;
+        this.data3 = image.data3;
+    }
+
     public int getHeight() {
         return height;
     }
@@ -279,5 +288,5 @@ public class JPEGEncoderImage {
         return "height = " + height + ", width = " + width + ", colorSpace = " + colorSpace + "\ndata1 = " + d1 +
                "\ndata2 = " + d2 + "\ndata3 = " + d3;
     }
-    
+
 }

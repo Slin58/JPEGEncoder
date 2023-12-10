@@ -2,14 +2,10 @@ package dctImplementation;
 
 import image.JPEGEncoderImage;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public abstract class DCT {
-
-    private final static ThreadPoolExecutor EXECUTOR_SERVICE =
-            (ThreadPoolExecutor) Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static int[][] toInt(double[][] array) {
         int[][] result = new int[array.length][array[0].length];
@@ -27,17 +23,13 @@ public abstract class DCT {
         return temp;
     }
 
-    public static void stop() {
-        EXECUTOR_SERVICE.shutdown();
-    }
-
     public void calculateDateOnArrays(double[][] data, Function<double[][], double[][]> method) {
         for (int i = 0; i < data.length; i += 8) {
             for (int j = 0; j < data[i].length; j += 8) {
                 final int i1 = i;
                 final int j1 = j;
-                EXECUTOR_SERVICE.execute(
-                        () -> saveNewValues(i1, j1, data, calculateTwoDDctFromDataArray(data, i1, j1, method)));
+                CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method))
+                        .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles));
             }
         }
     }
@@ -81,37 +73,16 @@ public abstract class DCT {
         calculateDateOnArrays(data.getData1(), this::twoDDCT);
         calculateDateOnArrays(data.getData2(), this::twoDDCT);
         calculateDateOnArrays(data.getData3(), this::twoDDCT);
-        while (EXECUTOR_SERVICE.getActiveCount() != 0) {
-            try {
-                Thread.sleep(0, 10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public void calculatePictureDataWithInverseDCT(JPEGEncoderImage data) {
         calculateDateOnArrays(data.getData1(), this::inverseTwoDDCT);
         calculateDateOnArrays(data.getData2(), this::inverseTwoDDCT);
         calculateDateOnArrays(data.getData3(), this::inverseTwoDDCT);
-        while (EXECUTOR_SERVICE.getActiveCount() != 0) {
-            try {
-                Thread.sleep(0, 10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     // Used In the performance test
     public void calculateOnePictureDataWithDCT(JPEGEncoderImage data) {
         calculateDateOnArrays(data.getData1(), this::twoDDCT);
-        while (EXECUTOR_SERVICE.getActiveCount() != 0) {
-            try {
-                Thread.sleep(0, 10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }
