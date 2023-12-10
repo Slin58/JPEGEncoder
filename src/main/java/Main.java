@@ -1,4 +1,5 @@
 import dctImplementation.AraiDCT;
+import dctImplementation.DCT1;
 import dctImplementation.DCT2;
 import image.ColorSpace;
 import image.JPEGEncoderImage;
@@ -94,6 +95,8 @@ public class Main {
         // System.out.println(result);
         System.out.println("Processors:" + Runtime.getRuntime().availableProcessors());
         runAraiTest();
+        runDCT1test();
+        runDCT2test();
 
         JPEGEncoderImage image = readImageFromPPM("ppm\\testDCT.ppm");
 
@@ -142,6 +145,59 @@ public class Main {
             results.add((System.currentTimeMillis() - t));
         }
         System.out.println("Time in ms with Arai DCT: ");
+        System.out.println("Runs: " + results.size());
+        System.out.println("Max: " + results.stream().max(Long::compareTo).get());
+        System.out.println("Min: " + results.stream().min(Long::compareTo).get());
+        System.out.println("Average: " + results.stream().mapToDouble(value -> value).average().getAsDouble());
+        //        System.out.println(results.stream().map(String::valueOf).collect(Collectors.joining("\n")));
+    }
+
+    static void runDCT2test() {
+        JPEGEncoderImage jpegEncoderImage =
+                new JPEGEncoderImage(3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
+                                     new double[][]{});
+        double[][] data1 = jpegEncoderImage.getData1();
+        for (int i = 0; i < 3840; i++) {
+            for (int j = 0; j < 2160; j++) {
+                data1[i][j] = (i + j * 8) % 256;
+            }
+        }
+        List<Long> results = new ArrayList<>();
+        DCT2 araiDCT = new DCT2();
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < 10000) {
+            JPEGEncoderImage currentImage = new JPEGEncoderImage(jpegEncoderImage);
+            long t = System.currentTimeMillis();
+            araiDCT.calculateOnePictureDataWithDCT(currentImage);
+            results.add((System.currentTimeMillis() - t));
+        }
+        System.out.println("Time in ms with DCT2: ");
+        System.out.println("Runs: " + results.size());
+        System.out.println("Max: " + results.stream().max(Long::compareTo).get());
+        System.out.println("Min: " + results.stream().min(Long::compareTo).get());
+        System.out.println("Average: " + results.stream().mapToDouble(value -> value).average().getAsDouble());
+    }
+
+    static void runDCT1test() {
+        JPEGEncoderImage jpegEncoderImage =
+                new JPEGEncoderImage(3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
+                                     new double[][]{});
+        double[][] data1 = jpegEncoderImage.getData1();
+        for (int i = 0; i < 3840; i++) {
+            for (int j = 0; j < 2160; j++) {
+                data1[i][j] = (i + j * 8) % 256;
+            }
+        }
+        List<Long> results = new ArrayList<>();
+        DCT1 araiDCT = new DCT1();
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < 10000) {
+            JPEGEncoderImage currentImage = new JPEGEncoderImage(jpegEncoderImage);
+            long t = System.currentTimeMillis();
+            araiDCT.calculateOnePictureDataWithDCT(currentImage);
+            results.add((System.currentTimeMillis() - t));
+        }
+        System.out.println("Time in ms with DCT1: ");
         System.out.println("Runs: " + results.size());
         System.out.println("Max: " + results.stream().max(Long::compareTo).get());
         System.out.println("Min: " + results.stream().min(Long::compareTo).get());
