@@ -2,8 +2,6 @@ package dctImplementation;
 
 import org.ejml.simple.SimpleMatrix;
 
-import java.util.Arrays;
-
 public class DCT2 extends DCT {
 
     private static final double sqrt = 1.0 / Math.sqrt(2);
@@ -16,13 +14,16 @@ public class DCT2 extends DCT {
     }
 
     @Override
-    public double[][] twoDDCT(double[][] original) {
-        SimpleMatrix aMatrix = new SimpleMatrix(buildAMatrix(original.length));
+    public double[][] twoDDCT(double[][] original) {    //todo: buggy
+        double[][] aMatrixArray = buildAMatrix(original.length);
+        SimpleMatrix aMatrix = new SimpleMatrix(aMatrixArray);
+        SimpleMatrix transposedAMatrix = new SimpleMatrix(transposeMatrix(aMatrixArray));
         SimpleMatrix originalMatrix = new SimpleMatrix(original);
 
-        return Arrays.stream(aMatrix.mult(originalMatrix.mult(aMatrix.transpose())).toArray2())
-                .map(row -> Arrays.stream(row).map(Math::round).toArray())
-                .toArray(double[][]::new);    //todo: rundungsfehler oder rechenfehler?
+        //        return Arrays.stream(aMatrix.mult(originalMatrix.mult(transposedAMatrix)).toArray2())
+        //                .map(row -> Arrays.stream(row).map(Math::round).toArray())
+        //                .toArray(double[][]::new);    //todo: rundungsfehler oder rechenfehler?
+        return aMatrix.mult(originalMatrix.mult(transposedAMatrix)).toArray2();
 
     }
 
@@ -39,15 +40,15 @@ public class DCT2 extends DCT {
     }
 
     @Override
-    public double[][] inverseTwoDDCT(double[][] dct) {
+    public double[][] inverseTwoDDCT(double[][] dct) {      //todo: buggy
         SimpleMatrix aMatrix = new SimpleMatrix(buildAMatrix(dct.length));
         SimpleMatrix originalMatrix = new SimpleMatrix(dct);
-
         SimpleMatrix aMatrixInverse = aMatrix.invert();
 
-        return Arrays.stream(aMatrixInverse.mult(originalMatrix.mult(aMatrixInverse.transpose())).toArray2())
-                .map(row -> Arrays.stream(row).map(Math::round).toArray())
-                .toArray(double[][]::new);    //todo: rundungsfehler oder rechenfehler?
+        //        return Arrays.stream(aMatrixInverse.mult(originalMatrix.mult(aMatrixInverse.transpose())).toArray2())
+        //                .map(row -> Arrays.stream(row).map(Math::round).toArray())
+        //                .toArray(double[][]::new);    //todo: rundungsfehler oder rechenfehler?
+        return aMatrixInverse.mult(originalMatrix.mult(aMatrixInverse.transpose())).toArray2();
     }
 
 

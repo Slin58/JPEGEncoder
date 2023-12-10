@@ -1,4 +1,3 @@
-import dctImplementation.AraiDCT;
 import dctImplementation.DCT;
 import dctImplementation.DCT2;
 import image.JPEGEncoderImage;
@@ -94,10 +93,9 @@ public class Main {
 
         JPEGEncoderImage image = readImageFromPPM("ppm\\testDCT.ppm");
 
-        AraiDCT araiDCT = new AraiDCT();
-        araiDCT.calculatePictureDataWithDCT(image);
-
         DCT2 dct2 = new DCT2();
+        dct2.calculatePictureDataWithDCT(image);
+
         dct2.calculatePictureDataWithInverseDCT(image);
         DCT.stop();
 
