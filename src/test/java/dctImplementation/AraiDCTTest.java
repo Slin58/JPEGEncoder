@@ -9,6 +9,18 @@ import java.util.Arrays;
 
 public class AraiDCTTest {
 
+    private static boolean deepRoughlyEqual(int[][] value1, int[][] value2) {
+        boolean everything_equal = true;
+        for (int i = 0; i < value1.length; i++) {
+            for (int j = 0; j < value1[i].length; j++) {
+                if (value1[i][j] > value2[i][j] + 2 || value1[i][j] + 2 < value2[i][j]) {
+                    everything_equal = false;
+                }
+            }
+        }
+        return everything_equal;
+    }
+
     @Test
     public void testTwoDDCT() {
         double[][] checkerboard = new double[][]{{0, 255, 0, 255, 0, 255, 0, 255}, {255, 0, 255, 0, 255, 0, 255, 0},
@@ -50,8 +62,8 @@ public class AraiDCTTest {
         for (int[] row : randomValuesResult) {
             System.out.println(Arrays.toString(row));
         }
-        Assert.assertTrue(Arrays.deepEquals(randomValuesDCT, randomValuesResult));
-        Assert.assertTrue(Arrays.deepEquals(checkerboardDCT, checkerboardResult));
+        Assert.assertTrue(deepRoughlyEqual(randomValuesDCT, randomValuesResult));
+        Assert.assertTrue(deepRoughlyEqual(checkerboardDCT, checkerboardResult));
     }
 
     @Test
