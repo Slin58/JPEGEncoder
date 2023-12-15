@@ -3,9 +3,15 @@ package dctImplementation;
 import image.JPEGEncoderImage;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public abstract class DCT {
+
+    private final static ExecutorService executorService =
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static int[][] toInt(double[][] array) {
         int[][] result = new int[array.length][array[0].length];
@@ -23,14 +29,37 @@ public abstract class DCT {
         return temp;
     }
 
+    private static boolean saveNewValues(int x, int y, double[][] data, double[][] newData) {
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(newData[i], 0, data[x + i], y, 8);
+        }
+        return true;
+    }
+
+    public static void close() {
+        System.out.println(executorService.shutdownNow().size());
+    }
+
     public void calculateDateOnArrays(double[][] data, Function<double[][], double[][]> method) {
+        CompletableFuture<?>[] futures = new CompletableFuture[data.length * data[0].length];
+        int counter = 0;
         for (int i = 0; i < data.length; i += 8) {
             for (int j = 0; j < data[i].length; j += 8) {
                 final int i1 = i;
                 final int j1 = j;
-                CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method))
-                        .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles));
+                futures[counter++] =
+                        CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method),
+                                                      executorService)
+                                .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles), executorService);
             }
+        }
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures);
+        try {
+            allOf.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,12 +82,6 @@ public abstract class DCT {
                  data[i1 + 6][j1 + 4], data[i1 + 6][j1 + 5], data[i1 + 6][j1 + 6], data[i1 + 6][j1 + 7]},
                 {data[i1 + 7][j1], data[i1 + 7][j1 + 1], data[i1 + 7][j1 + 2], data[i1 + 7][j1 + 3],
                  data[i1 + 7][j1 + 4], data[i1 + 7][j1 + 5], data[i1 + 7][j1 + 6], data[i1 + 7][j1 + 7]}});
-    }
-
-    private void saveNewValues(int x, int y, double[][] data, double[][] newData) {
-        for (int i = 0; i < 8; i++) {
-            System.arraycopy(newData[i], 0, data[x + i], y, 8);
-        }
     }
 
     /**

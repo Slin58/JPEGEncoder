@@ -1,4 +1,5 @@
 import dctImplementation.AraiDCT;
+import dctImplementation.DCT;
 import dctImplementation.DCT1;
 import dctImplementation.DCT2;
 import image.ColorSpace;
@@ -94,9 +95,13 @@ public class Main {
         // int result = bitStream.getBits(11);
         // System.out.println(result);
         System.out.println("Processors:" + Runtime.getRuntime().availableProcessors());
-        runAraiTest();
         runDCT1test();
+        runAraiTest();
         runDCT2test();
+
+        DCT.close();
+
+        if (true) return;
 
         JPEGEncoderImage image = readImageFromPPM("ppm\\testDCT.ppm");
 
@@ -143,13 +148,14 @@ public class Main {
             long t = System.currentTimeMillis();
             araiDCT.calculateOnePictureDataWithDCT(currentImage);
             results.add((System.currentTimeMillis() - t));
+            System.gc();
         }
         System.out.println("Time in ms with Arai DCT: ");
         System.out.println("Runs: " + results.size());
         System.out.println("Max: " + results.stream().max(Long::compareTo).get());
         System.out.println("Min: " + results.stream().min(Long::compareTo).get());
         System.out.println("Average: " + results.stream().mapToDouble(value -> value).average().getAsDouble());
-        //        System.out.println(results.stream().map(String::valueOf).collect(Collectors.joining("\n")));
+        //        System.out.println(results.stream().sorted().map(String::valueOf).collect(Collectors.joining("\n")));
     }
 
     static void runDCT2test() {
@@ -170,6 +176,7 @@ public class Main {
             long t = System.currentTimeMillis();
             araiDCT.calculateOnePictureDataWithDCT(currentImage);
             results.add((System.currentTimeMillis() - t));
+            System.gc();
         }
         System.out.println("Time in ms with DCT2: ");
         System.out.println("Runs: " + results.size());
@@ -196,6 +203,7 @@ public class Main {
             long t = System.currentTimeMillis();
             araiDCT.calculateOnePictureDataWithDCT(currentImage);
             results.add((System.currentTimeMillis() - t));
+            System.gc();
         }
         System.out.println("Time in ms with DCT1: ");
         System.out.println("Runs: " + results.size());
