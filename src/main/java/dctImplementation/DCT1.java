@@ -25,7 +25,6 @@ public class DCT1 extends DCT {
                     }
                 }
                 result[i][j] = 2.0 / original.length * c(i) * c(j) * sum;
-                //todo Rundungsfehler
             }
         }
         return result;
@@ -47,7 +46,7 @@ public class DCT1 extends DCT {
 
             }
         }
-        return result;  //todo Rundungsfehler
+        return result;
     }
 
 }

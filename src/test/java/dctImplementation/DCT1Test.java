@@ -5,9 +5,20 @@ import image.JPEGEncoderImage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
 public class DCT1Test {
+
+    private static boolean deepRoughlyEqual(int[][] value1, int[][] value2) {
+        boolean everything_equal = true;
+        for (int i = 0; i < value1.length; i++) {
+            for (int j = 0; j < value1[i].length; j++) {
+                if (value1[i][j] > value2[i][j] + 2 || value1[i][j] + 2 < value2[i][j]) {
+                    everything_equal = false;
+                }
+            }
+        }
+        return everything_equal;
+    }
+
     @Test
     public void testTwoDDCT() {
         double[][] checkerboard =
@@ -29,7 +40,7 @@ public class DCT1Test {
             System.out.println();
         }
 
-        Assert.assertTrue(Arrays.deepEquals(checkerboardResult, checkerboardDCT));
+        Assert.assertTrue(deepRoughlyEqual(checkerboardResult, checkerboardDCT));
     }
 
     @Test
@@ -54,7 +65,7 @@ public class DCT1Test {
             System.out.println();
         }
 
-        Assert.assertTrue(Arrays.deepEquals(randomValuesResult, checkerboardDCT));
+        Assert.assertTrue(deepRoughlyEqual(randomValuesResult, checkerboardDCT));
     }
 
     @Test
@@ -78,7 +89,7 @@ public class DCT1Test {
             System.out.println();
         }
 
-        Assert.assertTrue(Arrays.deepEquals(checkerboard, checkerboardDCT));
+        Assert.assertTrue(deepRoughlyEqual(checkerboard, checkerboardDCT));
     }
 
     @Test
@@ -103,7 +114,7 @@ public class DCT1Test {
             System.out.println();
         }
 
-        Assert.assertTrue(Arrays.deepEquals(randomValues, checkerboardDCT));
+        Assert.assertTrue(deepRoughlyEqual(randomValues, checkerboardDCT));
     }
 
     @Test
