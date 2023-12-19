@@ -3,15 +3,9 @@ package dctImplementation;
 import image.JPEGEncoderImage;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public abstract class DCT {
-
-    private final static ExecutorService executorService =
-            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static int[][] toInt(double[][] array) {
         int[][] result = new int[array.length][array[0].length];
@@ -25,7 +19,11 @@ public abstract class DCT {
 
     public static double[][] transposeMatrix(double[][] m) {
         double[][] temp = new double[m[0].length][m.length];
-        for (int i = 0; i < m.length; i++) {for (int j = 0; j < m[0].length; j++) {temp[j][i] = m[i][j];}}
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                temp[j][i] = m[i][j];
+            }
+        }
         return temp;
     }
 
@@ -36,31 +34,20 @@ public abstract class DCT {
         return true;
     }
 
-    public static void close() {
-        System.out.println(executorService.shutdownNow().size());
-    }
-
     public void calculateDateOnArrays(double[][] data, Function<double[][], double[][]> method) {
-        CompletableFuture<?>[] futures = new CompletableFuture[data.length * data[0].length];
+        CompletableFuture<?>[] futures = new CompletableFuture[data.length / 8 * data[0].length / 8];
         int counter = 0;
         for (int i = 0; i < data.length; i += 8) {
             for (int j = 0; j < data[i].length; j += 8) {
                 final int i1 = i;
                 final int j1 = j;
                 futures[counter++] =
-                        CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method),
-                                                      executorService)
-                                .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles), executorService);
+                        CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method))
+                                .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles));
             }
         }
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures);
-        try {
-            allOf.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        allOf.join();
     }
 
     private double[][] calculateTwoDDctFromDataArray(double[][] data, int i1, int j1,
