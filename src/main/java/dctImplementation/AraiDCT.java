@@ -30,11 +30,11 @@ public class AraiDCT extends DCT {
     @Override
     public double[][] twoDDCT(double[][] original) {
         for (int i = 0; i < original.length; i++) {
-            original[i] = oneDDCT(original[i]);
+            oneDDCT(original[i]);
         }
         double[][] transposedResult = transposeMatrix(original);
         for (int i = 0; i < transposedResult.length; i++) {
-            transposedResult[i] = oneDDCT(transposedResult[i]);
+            oneDDCT(transposedResult[i]);
         }
         return transposeMatrix(transposedResult);
     }
@@ -49,7 +49,7 @@ public class AraiDCT extends DCT {
      * @param original has to be lenth 8
      * @return a dct of the original
      */
-    public double[] oneDDCT(double[] original) {
+    public void oneDDCT(double[] original) {
         if (original.length != 8) {
             throw new RuntimeException("1-D DCT only works with 8 values when using Arai");
         }
@@ -106,16 +106,14 @@ public class AraiDCT extends DCT {
         double x7_6 = x7_5 - x4_4;
 
         // Final Step
-        double y0 = s0 * x0_3;
-        double y4 = s4 * x1_3;
-        double y2 = s2 * x2_5;
-        double y6 = s6 * x3_5;
-        double y5 = s5 * x4_6;
-        double y1 = s1 * x5_6;
-        double y7 = s7 * x6_6;
-        double y3 = s3 * x7_6;
-
-        return new double[]{y0, y1, y2, y3, y4, y5, y6, y7};
+        original[0] = s0 * x0_3;
+        original[4] = s4 * x1_3;
+        original[2] = s2 * x2_5;
+        original[6] = s6 * x3_5;
+        original[5] = s5 * x4_6;
+        original[1] = s1 * x5_6;
+        original[7] = s7 * x6_6;
+        original[3] = s3 * x7_6;
     }
 
 }
