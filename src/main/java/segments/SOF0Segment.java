@@ -1,6 +1,7 @@
 package segments;
 
 import bitstream.BitStream;
+
 import java.util.HexFormat;
 
 public class SOF0Segment {
@@ -39,7 +40,7 @@ public class SOF0Segment {
     public static class Component {
         int id;
         String samplingFactor;
-        int quantId;        //todo: Quantisierungstabelle?
+        int quantId;        // todo: Quantisierungstabelle?
 
         public Component(int id, String samplingFactor, int quantId) {
             this.id = id;
