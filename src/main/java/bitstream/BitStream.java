@@ -80,6 +80,16 @@ public class BitStream {
         }
     }
 
+    public void fillByteWithZeroes() {
+        if (currentSetBitIdx > 0) {
+            int currByteIdx = currentSetByteIdx;
+            while (currByteIdx == currentSetByteIdx) {
+                setBit(false);
+            }
+        }
+    }
+
+
     public int getCurrentSetBitIdx() {
         return currentSetBitIdx;
     }
