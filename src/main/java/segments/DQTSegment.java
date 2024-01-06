@@ -17,10 +17,8 @@ public class DQTSegment {
 
     public void writeSegmentToBitStream() {
         this.bitStream.writeHexString("ffdb");                 //marker
-        //todo: falls precision 16 bit muss hier mal 2 gerechnet werden
 
-        //        this.bitStream.setInt(quantizationTableList.size() * (64 + 1 + 2), 16);     //segment length; //alt
-        this.bitStream.setInt(quantizationTableList.size() * (64 + 1), 16);     //segment length;
+        this.bitStream.setInt(quantizationTableList.size() * (64 + 1) + 2, 16);     //segment length;
 
         if (quantizationTableList.size() > 4) {
             throw new RuntimeException("Amount of Quantizationtables shouldn't be greater than four");
