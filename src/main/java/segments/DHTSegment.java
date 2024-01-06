@@ -22,12 +22,12 @@ public class DHTSegment<T extends Serializable> {
                 List.copyOf(this.huffmanTree.getLookUpTable().values()).stream().sorted().collect(toList());
     }
 
-    public void writeSegmentToBitStream(int segmentNumber, boolean isDC) {
+    public void writeSegmentToBitStream(int segmentNumber, boolean isAc) {
         this.bitStream.writeHexString("ffc4");
         int length = getLength() + 19;
         this.bitStream.setInt(length, 16);
         this.bitStream.setInt(0, 3);
-        this.bitStream.setBit(isDC);
+        this.bitStream.setBit(isAc);
         this.bitStream.setInt(segmentNumber, 4);
         for (int i = 1; i <= 16; i++) {
             final int bitsize = i;

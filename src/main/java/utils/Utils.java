@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -45,7 +46,7 @@ public class Utils {
         }
 
         JPEGEncoderImage result = null;
-        double maxColor = -1.0;
+        double maxColor = 1;
         int height = -1;
         int width = -1;
         if (allLines.get(0).equals("P3")) {
@@ -55,14 +56,9 @@ public class Utils {
                     if (height == -1) {
                         height = Integer.parseInt(allLines.get(i).split("\\s+")[0]);
                         width = Integer.parseInt(allLines.get(i).split("\\s+")[1]);
-                    } else {
-                        maxColor = Double.parseDouble(allLines.get(i));
                     }
                 } else {
                     commentCounter++;
-                }
-                if (maxColor != -1.0) {
-                    break;
                 }
 
             }
@@ -125,24 +121,89 @@ public class Utils {
         }
     }
 
-    public static JPEGEncoderImage rgbToYCbCr(JPEGEncoderImage JPEGEncoderImage) {
+    public static JPEGEncoderImage rgbToYCbCr(JPEGEncoderImage jPEGEncoderImage) {
         //todo: Test
         SimpleMatrix transformMatrix = new SimpleMatrix(
                 new double[][]{{0.299, 0.587, 0.114}, {-0.1687, -0.3312, 0.5}, {0.5, -0.4186, -0.0813}});
         SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{{0.0}, {0.5}, {0.5}});
 
-        for (int i = 0; i < JPEGEncoderImage.getData1().length; i++) {
-            for (int j = 0; j < JPEGEncoderImage.getData1()[i].length; j++) {
+        for (int i = 0; i < jPEGEncoderImage.getData1().length; i++) {
+            for (int j = 0; j < jPEGEncoderImage.getData1()[i].length; j++) {
                 SimpleMatrix rgbVector = new SimpleMatrix(
-                        new double[][]{{JPEGEncoderImage.getData1(i, j)}, {JPEGEncoderImage.getData2(i, j)},
-                                       {JPEGEncoderImage.getData3(i, j)},});
+                        new double[][]{{jPEGEncoderImage.getData1(i, j)}, {jPEGEncoderImage.getData2(i, j)},
+                                       {jPEGEncoderImage.getData3(i, j)},});
                 rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector));
-                JPEGEncoderImage.getData1()[i][j] = rgbVector.get(0, 0);
-                JPEGEncoderImage.getData2()[i][j] = rgbVector.get(1, 0);
-                JPEGEncoderImage.getData3()[i][j] = rgbVector.get(2, 0);
+                jPEGEncoderImage.getData1()[i][j] = rgbVector.get(0, 0);
+                jPEGEncoderImage.getData2()[i][j] = rgbVector.get(1, 0);
+                jPEGEncoderImage.getData3()[i][j] = rgbVector.get(2, 0);
             }
         }
-        JPEGEncoderImage.setColorSpace(ColorSpace.YCbCr);
-        return JPEGEncoderImage;
+        jPEGEncoderImage.setColorSpace(ColorSpace.YCbCr);
+        return jPEGEncoderImage;
+    }
+
+    public static double[][] calculateMethodOnArray(double[][] data, int i1, int j1,
+                                                    Function<double[][], double[][]> method) {
+        return method.apply(get8x8Array(data, i1, j1));
+    }
+
+    public static double[] calculateOnArray(double[][] data, int i1, int j1, Function<double[][], double[]> method) {
+        return method.apply(get8x8Array(data, i1, j1));
+    }
+
+    public static double[][] get8x8Array(double[][] data, int i1, int j1) {
+        return new double[][]{
+                {data[i1][j1], data[i1][j1 + 1], data[i1][j1 + 2], data[i1][j1 + 3], data[i1][j1 + 4], data[i1][j1 + 5],
+                 data[i1][j1 + 6], data[i1][j1 + 7]},
+                {data[i1 + 1][j1], data[i1 + 1][j1 + 1], data[i1 + 1][j1 + 2], data[i1 + 1][j1 + 3],
+                 data[i1 + 1][j1 + 4], data[i1 + 1][j1 + 5], data[i1 + 1][j1 + 6], data[i1 + 1][j1 + 7]},
+                {data[i1 + 2][j1], data[i1 + 2][j1 + 1], data[i1 + 2][j1 + 2], data[i1 + 2][j1 + 3],
+                 data[i1 + 2][j1 + 4], data[i1 + 2][j1 + 5], data[i1 + 2][j1 + 6], data[i1 + 2][j1 + 7]},
+                {data[i1 + 3][j1], data[i1 + 3][j1 + 1], data[i1 + 3][j1 + 2], data[i1 + 3][j1 + 3],
+                 data[i1 + 3][j1 + 4], data[i1 + 3][j1 + 5], data[i1 + 3][j1 + 6], data[i1 + 3][j1 + 7]},
+                {data[i1 + 4][j1], data[i1 + 4][j1 + 1], data[i1 + 4][j1 + 2], data[i1 + 4][j1 + 3],
+                 data[i1 + 4][j1 + 4], data[i1 + 4][j1 + 5], data[i1 + 4][j1 + 6], data[i1 + 4][j1 + 7]},
+                {data[i1 + 5][j1], data[i1 + 5][j1 + 1], data[i1 + 5][j1 + 2], data[i1 + 5][j1 + 3],
+                 data[i1 + 5][j1 + 4], data[i1 + 5][j1 + 5], data[i1 + 5][j1 + 6], data[i1 + 5][j1 + 7]},
+                {data[i1 + 6][j1], data[i1 + 6][j1 + 1], data[i1 + 6][j1 + 2], data[i1 + 6][j1 + 3],
+                 data[i1 + 6][j1 + 4], data[i1 + 6][j1 + 5], data[i1 + 6][j1 + 6], data[i1 + 6][j1 + 7]},
+                {data[i1 + 7][j1], data[i1 + 7][j1 + 1], data[i1 + 7][j1 + 2], data[i1 + 7][j1 + 3],
+                 data[i1 + 7][j1 + 4], data[i1 + 7][j1 + 5], data[i1 + 7][j1 + 6], data[i1 + 7][j1 + 7]}};
+    }
+
+    public static void calculateOnArraysWithoutModification(double[][] data, Function<double[][], double[][]> method) {
+        for (int i = 0; i < data.length; i += 8) {
+            for (int j = 0; j < data[i].length; j += 8) {
+                calculateMethodOnArray(data, i, j, method);
+            }
+        }
+    }
+
+    public static double[] getValuesInZigzag(double[][] values) {
+        return new double[]{values[0][0], values[0][1], values[1][0], values[2][0], values[1][1], values[0][2],
+                            values[0][3], values[1][2], values[2][1], values[3][0], values[4][0], values[3][1],
+                            values[2][2], values[1][3], values[0][4], values[0][5], values[1][4], values[2][3],
+                            values[3][2], values[4][1], values[5][0], values[6][0], values[5][1], values[4][2],
+                            values[3][3], values[2][4], values[1][5], values[0][6], values[0][7], values[1][6],
+                            values[2][5], values[3][4], values[4][3], values[5][2], values[6][1], values[7][0],
+                            values[7][1], values[6][2], values[5][3], values[4][4], values[3][5], values[2][6],
+                            values[1][7], values[2][7], values[3][6], values[4][5], values[5][4], values[6][3],
+                            values[7][2], values[7][3], values[6][4], values[5][5], values[4][6], values[3][7],
+                            values[4][7], values[5][6], values[6][5], values[7][4], values[7][5], values[6][6],
+                            values[5][7], values[6][7], values[7][6], values[7][7]};
+    }
+
+    public static int[] getValuesInZigzag(int[][] values) {
+        return new int[]{values[0][0], values[0][1], values[1][0], values[2][0], values[1][1], values[0][2],
+                         values[0][3], values[1][2], values[2][1], values[3][0], values[4][0], values[3][1],
+                         values[2][2], values[1][3], values[0][4], values[0][5], values[1][4], values[2][3],
+                         values[3][2], values[4][1], values[5][0], values[6][0], values[5][1], values[4][2],
+                         values[3][3], values[2][4], values[1][5], values[0][6], values[0][7], values[1][6],
+                         values[2][5], values[3][4], values[4][3], values[5][2], values[6][1], values[7][0],
+                         values[7][1], values[6][2], values[5][3], values[4][4], values[3][5], values[2][6],
+                         values[1][7], values[2][7], values[3][6], values[4][5], values[5][4], values[6][3],
+                         values[7][2], values[7][3], values[6][4], values[5][5], values[4][6], values[3][7],
+                         values[4][7], values[5][6], values[6][5], values[7][4], values[7][5], values[6][6],
+                         values[5][7], values[6][7], values[7][6], values[7][7]};
     }
 }

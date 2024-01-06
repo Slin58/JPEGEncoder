@@ -1,31 +1,29 @@
-package utils;
+package encoding;
 
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class RunLenghEncoding {
-    private final short bits;
-    private final short category;
 
-    public RunLenghEncoding(short bits, short category) {
+    private final short bits;
+    private final byte category;
+
+    public RunLenghEncoding(short bits, byte category) {
         this.bits = bits;
         this.category = category;
     }
 
     public static <T extends Serializable> RunLenghEncoding runLenghtEncoding(T number) {
         byte[] serialize = SerializationUtils.serialize(number);
-        System.out.println(Arrays.toString(serialize));
         short bits = (short) ((serialize[serialize.length - 2] << 8) | (serialize[serialize.length - 1] & 0xff));
-        System.out.println(bits);
 
         short abs = (short) Math.abs(bits);
         if (bits == 0) {
-            return new RunLenghEncoding((short) 0, (short) 0);
+            return new RunLenghEncoding((short) 0, (byte) 0);
         }
 
-        short category = 0;
+        byte category = 0;
         while (abs > 0) {
             abs = (short) (abs >> 1);
             category++;
@@ -42,7 +40,7 @@ public class RunLenghEncoding {
         return bits;
     }
 
-    public short getCategory() {
+    public byte getCategory() {
         return category;
     }
 }

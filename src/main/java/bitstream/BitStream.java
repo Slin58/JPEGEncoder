@@ -15,11 +15,20 @@ public class BitStream {
     private int currentSetBitIdx;
     private int currentSetByteIdx;
     private byte[] byteArray;
+    private boolean sos = false;
 
     public BitStream() {
         this.byteArray = new byte[256];
         this.currentSetBitIdx = BYTE_START_INDEX;
         this.currentSetByteIdx = 0;
+    }
+
+    public boolean isSos() {
+        return sos;
+    }
+
+    public void setSos(boolean sos) {
+        this.sos = sos;
     }
 
     public void setBit(boolean bit) {
@@ -29,6 +38,9 @@ public class BitStream {
             if (currentSetByteIdx == byteArray.length - 1) {
                 this.byteArray = Arrays.copyOf(this.byteArray, this.byteArray.length * 2);
             }
+            //            if (isSos() && (this.byteArray[currentSetByteIdx - 1] & 0xff) == 0) {
+            //                this.currentSetByteIdx++;
+            //            }
         }
         this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
         this.currentSetBitIdx--;

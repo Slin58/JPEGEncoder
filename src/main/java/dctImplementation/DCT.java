@@ -5,6 +5,8 @@ import image.JPEGEncoderImage;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+import static utils.Utils.calculateMethodOnArray;
+
 public abstract class DCT {
 
     public static int[][] toInt(double[][] array) {
@@ -41,34 +43,12 @@ public abstract class DCT {
             for (int j = 0; j < data[i].length; j += 8) {
                 final int i1 = i;
                 final int j1 = j;
-                futures[counter++] =
-                        CompletableFuture.supplyAsync(() -> calculateTwoDDctFromDataArray(data, i1, j1, method))
-                                .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles));
+                futures[counter++] = CompletableFuture.supplyAsync(() -> calculateMethodOnArray(data, i1, j1, method))
+                        .thenAcceptAsync(doubles -> saveNewValues(i1, j1, data, doubles));
             }
         }
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures);
         allOf.join();
-    }
-
-    private double[][] calculateTwoDDctFromDataArray(double[][] data, int i1, int j1,
-                                                     Function<double[][], double[][]> method) {
-        return method.apply(new double[][]{
-                {data[i1][j1], data[i1][j1 + 1], data[i1][j1 + 2], data[i1][j1 + 3], data[i1][j1 + 4], data[i1][j1 + 5],
-                 data[i1][j1 + 6], data[i1][j1 + 7]},
-                {data[i1 + 1][j1], data[i1 + 1][j1 + 1], data[i1 + 1][j1 + 2], data[i1 + 1][j1 + 3],
-                 data[i1 + 1][j1 + 4], data[i1 + 1][j1 + 5], data[i1 + 1][j1 + 6], data[i1 + 1][j1 + 7]},
-                {data[i1 + 2][j1], data[i1 + 2][j1 + 1], data[i1 + 2][j1 + 2], data[i1 + 2][j1 + 3],
-                 data[i1 + 2][j1 + 4], data[i1 + 2][j1 + 5], data[i1 + 2][j1 + 6], data[i1 + 2][j1 + 7]},
-                {data[i1 + 3][j1], data[i1 + 3][j1 + 1], data[i1 + 3][j1 + 2], data[i1 + 3][j1 + 3],
-                 data[i1 + 3][j1 + 4], data[i1 + 3][j1 + 5], data[i1 + 3][j1 + 6], data[i1 + 3][j1 + 7]},
-                {data[i1 + 4][j1], data[i1 + 4][j1 + 1], data[i1 + 4][j1 + 2], data[i1 + 4][j1 + 3],
-                 data[i1 + 4][j1 + 4], data[i1 + 4][j1 + 5], data[i1 + 4][j1 + 6], data[i1 + 4][j1 + 7]},
-                {data[i1 + 5][j1], data[i1 + 5][j1 + 1], data[i1 + 5][j1 + 2], data[i1 + 5][j1 + 3],
-                 data[i1 + 5][j1 + 4], data[i1 + 5][j1 + 5], data[i1 + 5][j1 + 6], data[i1 + 5][j1 + 7]},
-                {data[i1 + 6][j1], data[i1 + 6][j1 + 1], data[i1 + 6][j1 + 2], data[i1 + 6][j1 + 3],
-                 data[i1 + 6][j1 + 4], data[i1 + 6][j1 + 5], data[i1 + 6][j1 + 6], data[i1 + 6][j1 + 7]},
-                {data[i1 + 7][j1], data[i1 + 7][j1 + 1], data[i1 + 7][j1 + 2], data[i1 + 7][j1 + 3],
-                 data[i1 + 7][j1 + 4], data[i1 + 7][j1 + 5], data[i1 + 7][j1 + 6], data[i1 + 7][j1 + 7]}});
     }
 
     /**

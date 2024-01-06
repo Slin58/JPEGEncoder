@@ -1,8 +1,8 @@
 package segments;
 
 import bitstream.BitStream;
+import utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DQTSegment {
@@ -70,26 +70,28 @@ public class DQTSegment {
             //            }
 
             //alternativ fuer zigzag:
-            List<Integer> result = new ArrayList<>();
-            int rows =
-                    quantizationTable.length;    //will not work if array is larger than 64, even if the rest is empty
-            int cols = quantizationTable[0].length;
-            boolean goingUp = true;
-
-            for (int sum = 0; sum < rows + cols - 1; sum++) {
-                if (goingUp) {
-                    for (int row = Math.min(sum, rows - 1); row >= 0 && sum - row < cols; row--) {
-                        result.add(quantizationTable[row][sum - row]);
-                    }
-                } else {
-                    for (int col = Math.min(sum, cols - 1); col >= 0 && sum - col < rows; col--) {
-                        result.add(quantizationTable[sum - col][col]);
-                    }
-                }
-                goingUp = !goingUp;
+            //            List<Integer> result = new ArrayList<>();
+            //            int rows =
+            //                    quantizationTable.length;    //will not work if array is larger than 64, even if
+            //                    the rest is empty
+            //            int cols = quantizationTable[0].length;
+            //            boolean goingUp = true;
+            //
+            //            for (int sum = 0; sum < rows + cols - 1; sum++) {
+            //                if (goingUp) {
+            //                    for (int row = Math.min(sum, rows - 1); row >= 0 && sum - row < cols; row--) {
+            //                        result.add(quantizationTable[row][sum - row]);
+            //                    }
+            //                } else {
+            //                    for (int col = Math.min(sum, cols - 1); col >= 0 && sum - col < rows; col--) {
+            //                        result.add(quantizationTable[sum - col][col]);
+            //                    }
+            //                }
+            //                goingUp = !goingUp;
+            //            }
+            for (int num : Utils.getValuesInZigzag(quantizationTable)) {
+                this.bitStream.setInt(num, 8);
             }
-
-            for (Integer num : result) this.bitStream.setInt(num, 8);
 
         }
     }

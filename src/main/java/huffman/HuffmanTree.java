@@ -36,6 +36,11 @@ public class HuffmanTree<T extends Serializable> {
         }
     }
 
+    public void encodeSingle(T input, BitStream bitStream) {
+        HuffmanLookUpRow<T> huffmanLookUpRow = lookUpTable.get(input);
+        bitStream.setInt(huffmanLookUpRow.getPath(), huffmanLookUpRow.getBitSize());
+    }
+
     public HuffmanNode<T> getRoot() {
         return root;
     }
@@ -102,6 +107,11 @@ public class HuffmanTree<T extends Serializable> {
                 this.probabilities.put(currentNode, currentProbability);
             }
             HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
+            if (root.getValue() != null) {
+                HuffmanNode<T> tHuffmanNode = new HuffmanNode<>();
+                tHuffmanNode.setLeft(root);
+                root = tHuffmanNode;
+            }
 
 
             while (HuffmanNode.getMaxDepth(root) > this.limit) {
@@ -119,8 +129,10 @@ public class HuffmanTree<T extends Serializable> {
             }
             if (node.getParent() != null) {
                 HuffmanNode<T> parent = node.getParent();
-                while (!(HuffmanNode.getMinDepth(parent.getLeft()) < HuffmanNode.getMinDepth(
-                        parent.getRight()))) { //find node where leftsubtree is smaller than rightsubtree
+                while (parent.getParent() != null && !(HuffmanNode.getMinDepth(parent.getLeft()) <
+                                                       HuffmanNode.getMinDepth(
+                                                               parent.getRight()))) { //find node where leftsubtree
+                    // is smaller than rightsubtree
                     parent = parent.getParent();
                 }
 
