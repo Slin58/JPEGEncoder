@@ -73,7 +73,6 @@ public class SegmentTest {
         quantizationTableList.add(chrominanceQuantizationTable);
         quantizationTableList.add(exerciseQuantizationTable);
 
-
         BitStream bitStream = new BitStream();
         bitStream.writeHexString("ffd8");
 
