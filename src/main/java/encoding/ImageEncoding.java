@@ -43,9 +43,11 @@ public class ImageEncoding {
         for (int i = 0; i < y.length; i += 16) {
             for (int j = 0; j < y[i].length; j += 16) {
                 calculateOnArray(y, i, j, yValues::getAllEncodedValues);
-                calculateOnArray(y, i + 8, j, yValues::getAllEncodedValues);
                 calculateOnArray(y, i, j + 8, yValues::getAllEncodedValues);
+                calculateOnArray(y, i + 8, j, yValues::getAllEncodedValues);
                 calculateOnArray(y, i + 8, j + 8, yValues::getAllEncodedValues);
+                //                calculateOnArray(cb, i, j, cbValues::getAllEncodedValues);
+                //                calculateOnArray(cr, i, j, crValues::getAllEncodedValues);
                 calculateOnArray(cb, i / 2, j / 2, cbValues::getAllEncodedValues);
                 calculateOnArray(cr, i / 2, j / 2, crValues::getAllEncodedValues);
             }
