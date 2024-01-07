@@ -15,6 +15,7 @@ public class BitStream {
     private int currentSetBitIdx;
     private int currentSetByteIdx;
     private byte[] byteArray;
+    private int ones = 0;
     private boolean sos = false;
 
     public BitStream() {
@@ -35,14 +36,22 @@ public class BitStream {
         if (this.currentSetBitIdx < 0) {
             this.currentSetByteIdx++;
             this.currentSetBitIdx = BYTE_START_INDEX;
-            if (currentSetByteIdx == byteArray.length - 1) {
+            if (currentSetByteIdx >= byteArray.length - 1) {
                 this.byteArray = Arrays.copyOf(this.byteArray, this.byteArray.length * 2);
             }
-            //            if (isSos() && (this.byteArray[currentSetByteIdx - 1] & 0xff) == 0) {
-            //                this.currentSetByteIdx++;
-            //            }
         }
         this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
+        if (isSos()) {
+            if (bit) {
+                ones++;
+            } else {
+                ones = 0;
+            }
+            if (this.ones > 7) {
+                this.currentSetByteIdx++;
+                ones = 0;
+            }
+        }
         this.currentSetBitIdx--;
     }
 
@@ -93,11 +102,9 @@ public class BitStream {
     }
 
     public void fillByteWithZeroes() {
-        if (currentSetBitIdx > 0) {
-            int currByteIdx = currentSetByteIdx;
-            while (currByteIdx == currentSetByteIdx) {
-                setBit(false);
-            }
+        if (currentSetBitIdx >= 0) {
+            this.currentSetByteIdx++;
+            this.currentSetBitIdx = BYTE_START_INDEX;
         }
     }
 

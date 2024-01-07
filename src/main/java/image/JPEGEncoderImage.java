@@ -278,7 +278,7 @@ public class JPEGEncoderImage {
             }
             d2 += "\n";
         }
-        for (double[] a : data2) {
+        for (double[] a : data3) {
             for (double b : a) {
                 d3 += b + ", ";
             }

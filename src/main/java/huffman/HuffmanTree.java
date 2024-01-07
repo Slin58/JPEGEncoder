@@ -146,8 +146,10 @@ public class HuffmanTree<T extends Serializable> {
                 node.getParent().setRight(null);    //remove Node with ones
                 HuffmanNode<T> newParent = parent.getParent();
                 HuffmanNode<T> tmp = new HuffmanNode<>();
+                if (parent != node) {
+                    tmp.setRight(node);
+                }
                 tmp.setLeft(parent);
-                tmp.setRight(node);
                 if (newParent.getLeft().equals(parent)) {
                     newParent.setLeft(tmp);
                 } else {

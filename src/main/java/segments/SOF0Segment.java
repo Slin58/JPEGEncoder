@@ -29,8 +29,8 @@ public class SOF0Segment {
         int length = 8 + this.components.length * 3;
         this.bitStream.setBytes(new byte[]{(byte) (length >> 8), (byte) length});
         this.bitStream.setByte((byte) this.accuracy);
-        this.bitStream.setBytes(new byte[]{(byte) (this.yMax >> 8), (byte) this.yMax});
         this.bitStream.setBytes(new byte[]{(byte) (this.xMax >> 8), (byte) this.xMax});
+        this.bitStream.setBytes(new byte[]{(byte) (this.yMax >> 8), (byte) this.yMax});
         this.bitStream.setByte((byte) this.components.length);
         for (Component component : this.components) {
             this.bitStream.setBytes(component.getComponentAsBytes());

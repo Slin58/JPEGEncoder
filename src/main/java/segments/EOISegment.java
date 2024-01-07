@@ -10,6 +10,7 @@ public class EOISegment {
     }
 
     public void writeSegmentToBitStream() {
-        this.bitStream.writeHexString("ffd9");          //marker
+        this.bitStream.writeHexString("ffd9");          //marker 1111111110110010
+        //1111111111011001
     }
 }

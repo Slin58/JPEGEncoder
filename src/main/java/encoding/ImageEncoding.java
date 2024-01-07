@@ -1,8 +1,8 @@
 package encoding;
 
 import bitstream.BitStream;
+import dctImplementation.AraiDCT;
 import dctImplementation.DCT;
-import dctImplementation.DCT2;
 import huffman.HuffmanTree;
 import image.JPEGEncoderImage;
 import quantization.Quantization;
@@ -15,7 +15,7 @@ import static utils.Utils.*;
 
 public class ImageEncoding {
 
-    DCT dct = new DCT2();
+    DCT dct = new AraiDCT();
     HuffmanTree<Byte> acYHuffmantree;
     HuffmanTree<Byte> dcYHuffmantree;
     HuffmanTree<Byte> acCbCrHuffmantree;

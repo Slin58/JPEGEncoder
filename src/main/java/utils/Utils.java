@@ -46,7 +46,6 @@ public class Utils {
         }
 
         JPEGEncoderImage result = null;
-        double maxColor = 1;
         int height = -1;
         int width = -1;
         if (allLines.get(0).equals("P3")) {
@@ -62,7 +61,10 @@ public class Utils {
                 }
 
             }
-
+            int originalwidth = width;
+            int originalheight = height;
+            if (width % 16 != 0) {width = 16 - (width % 16) + width;}
+            if (height % 16 != 0) {height = 16 - (height % 16) + height;}
             double[][] data1 = new double[height][width];
             double[][] data2 = new double[height][width];
             double[][] data3 = new double[height][width];
@@ -78,20 +80,35 @@ public class Utils {
                     if (j >= width) {
                         i++;
                         j = 0;
+                        if (i > originalheight) {
+                            while (i < height) {
+                                data1[i] = data1[originalheight - 1];
+                                data2[i] = data2[originalheight - 1];
+                                data3[i] = data3[originalheight - 1];
+                                i++;
+                            }
+                            continue;
+                        }
                     }
-                    data1[i][j] = Double.parseDouble(rowFile[valueInRow]) /
-                                  maxColor;       //checkForValidRange(Double.parseDouble(rowFile[valueInRow]) /
-                    // maxColor);
-                    data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]) /
-                                  maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 1]) /
-                    // maxColor);
-                    data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]) /
-                                  maxColor;   //checkForValidRange(Double.parseDouble(rowFile[valueInRow + 2]) /
-                    // maxColor);
+                    if (j < originalwidth) {
+                        data1[i][j] = Double.parseDouble(rowFile[valueInRow]);
+
+                        data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]);
+
+                        data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]);
+
+                    } else {
+                        data1[i][j] = data1[i][originalwidth - 1];
+
+                        data2[i][j] = data2[i][originalwidth - 1];
+
+                        data3[i][j] = data3[i][originalwidth - 1];
+                    }
                     j++;
                 }
 
             }
+
             result = new JPEGEncoderImage(height, width, ColorSpace.RGB, data1, data2, data3);
         }
         return result;
@@ -107,9 +124,9 @@ public class Utils {
             for (int i = 0; i < JPEGEncoderImage.getData1().length; i++) {
                 for (int j = 0; j < JPEGEncoderImage.getData1()[i].length; j++) {
                     //for RGB here
-                    int r = (int) Math.round(JPEGEncoderImage.getData1()[i][j] * 255);
-                    int g = (int) Math.round(JPEGEncoderImage.getData2()[i][j] * 255);
-                    int b = (int) Math.round(JPEGEncoderImage.getData3()[i][j] * 255);
+                    int r = (int) Math.round(JPEGEncoderImage.getData1()[i][j]);
+                    int g = (int) Math.round(JPEGEncoderImage.getData2()[i][j]);
+                    int b = (int) Math.round(JPEGEncoderImage.getData3()[i][j]);
                     //  System.out.println("r,g,b: " + r + "," + g + "," + b );
 
                     writer.write(r + " " + g + " " + b + " ");
@@ -125,17 +142,19 @@ public class Utils {
         //todo: Test
         SimpleMatrix transformMatrix = new SimpleMatrix(
                 new double[][]{{0.299, 0.587, 0.114}, {-0.1687, -0.3312, 0.5}, {0.5, -0.4186, -0.0813}});
-        SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{{0.0}, {0.5}, {0.5}});
+        SimpleMatrix prefixVector = new SimpleMatrix(new double[][]{{0.0}, {128}, {128}});
+        SimpleMatrix subVector = new SimpleMatrix(new double[][]{{128}, {128}, {128}});
 
         for (int i = 0; i < jPEGEncoderImage.getData1().length; i++) {
             for (int j = 0; j < jPEGEncoderImage.getData1()[i].length; j++) {
                 SimpleMatrix rgbVector = new SimpleMatrix(
                         new double[][]{{jPEGEncoderImage.getData1(i, j)}, {jPEGEncoderImage.getData2(i, j)},
                                        {jPEGEncoderImage.getData3(i, j)},});
-                rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector));
+                rgbVector = prefixVector.plus(transformMatrix.mult(rgbVector)).minus(subVector);
                 jPEGEncoderImage.getData1()[i][j] = rgbVector.get(0, 0);
                 jPEGEncoderImage.getData2()[i][j] = rgbVector.get(1, 0);
-                jPEGEncoderImage.getData3()[i][j] = rgbVector.get(2, 0);
+                double cr = rgbVector.get(2, 0);
+                jPEGEncoderImage.getData3()[i][j] = cr;
             }
         }
         jPEGEncoderImage.setColorSpace(ColorSpace.YCbCr);

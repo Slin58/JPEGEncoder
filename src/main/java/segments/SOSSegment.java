@@ -19,9 +19,9 @@ public class SOSSegment {
         this.bitStream.setByte((byte) 0);
         this.bitStream.setByte((byte) 12);
         this.bitStream.setByte((byte) 3);
-        this.bitStream.writeHexString("0110");
-        this.bitStream.writeHexString("0232");
-        this.bitStream.writeHexString("0332");
+        this.bitStream.writeHexString("0100");
+        this.bitStream.writeHexString("0211");
+        this.bitStream.writeHexString("0311");
         this.bitStream.writeHexString("003f00");
 
         this.bitStream.setSos(true);
