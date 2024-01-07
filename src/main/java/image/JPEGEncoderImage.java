@@ -6,22 +6,18 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class JPEGEncoderImage {
+    int originalHeight;
+    int originalWith;
     int height;
     int width;
     ColorSpace colorSpace;
-
-    //TODO: Schrittweiten nachdefinieren; Abfrage nicht per Pixel (s. getData)
-    // max color immer auf 255 (? raff ich nicht tbh)
-    // tests fuer riesige bilder
-    // ppm reader Zeilenaufteilung mit Width,
-
     //Farbwerte zwischen 0 und 1
     double[][] data1;
     double[][] data2;
     double[][] data3;
 
-    public JPEGEncoderImage(int height, int width, ColorSpace colorSpace, double[][] data1, double[][] data2,
-                            double[][] data3) {
+    public JPEGEncoderImage(int height, int width, int originalHeight, int originalWidth, ColorSpace colorSpace,
+                            double[][] data1, double[][] data2, double[][] data3) {
         if (data2.length != data3.length) {
             throw new RuntimeException("Unequal channel size. Something may be wrong with the image");
         }
@@ -35,10 +31,17 @@ public class JPEGEncoderImage {
         this.height = height;
         this.width = width;
         this.colorSpace = colorSpace;
+        this.originalHeight = originalHeight;
+        this.originalWith = originalWidth;
         this.data1 = data1;
         this.data2 = data2;
         this.data3 = data3;
     }
+
+    //TODO: Schrittweiten nachdefinieren; Abfrage nicht per Pixel (s. getData)
+    // max color immer auf 255 (? raff ich nicht tbh)
+    // tests fuer riesige bilder
+    // ppm reader Zeilenaufteilung mit Width,
 
     public JPEGEncoderImage(JPEGEncoderImage image) {
         this.height = image.height;
@@ -47,6 +50,22 @@ public class JPEGEncoderImage {
         this.data1 = image.data1;
         this.data2 = image.data2;
         this.data3 = image.data3;
+    }
+
+    public int getOriginalHeight() {
+        return originalHeight;
+    }
+
+    public void setOriginalHeight(int originalHeight) {
+        this.originalHeight = originalHeight;
+    }
+
+    public int getOriginalWith() {
+        return originalWith;
+    }
+
+    public void setOriginalWith(int originalWith) {
+        this.originalWith = originalWith;
     }
 
     public int getHeight() {

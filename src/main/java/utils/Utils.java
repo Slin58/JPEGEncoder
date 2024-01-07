@@ -109,7 +109,8 @@ public class Utils {
 
             }
 
-            result = new JPEGEncoderImage(height, width, ColorSpace.RGB, data1, data2, data3);
+            result = new JPEGEncoderImage(height, width, originalheight, originalwidth, ColorSpace.RGB, data1, data2,
+                                          data3);
         }
         return result;
     }

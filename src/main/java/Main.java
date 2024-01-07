@@ -21,7 +21,7 @@ public class Main {
         quantizationTableList.add(luminanceQuantizationTable);
         quantizationTableList.add(chrominanceQuantizationTable);
 
-        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\test2.ppm");
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\32x16.ppm");
         Utils.rgbToYCbCr(image);
         image.changeResolution(4, 2, 0, List.of(2, 3));
 
@@ -36,7 +36,8 @@ public class Main {
         SOF0Segment.Component[] components =
                 {new SOF0Segment.Component(1, "22", 0), new SOF0Segment.Component(2, "11", 1),
                  new SOF0Segment.Component(3, "11", 1)};
-        new SOF0Segment(bitStream, image.getWidth(), image.getHeight(), components).writeSegmentToBitStream();
+        new SOF0Segment(bitStream, image.getOriginalWith(), image.getOriginalHeight(),
+                        components).writeSegmentToBitStream();
         new DHTSegment<>(bitStream, imageEncoding.getDcYHuffmantree()).writeSegmentToBitStream(0, false);
         new DHTSegment<>(bitStream, imageEncoding.getAcYHuffmantree()).writeSegmentToBitStream(0, true);
         new DHTSegment<>(bitStream, imageEncoding.getDcCbCrHuffmantree()).writeSegmentToBitStream(1, false);
