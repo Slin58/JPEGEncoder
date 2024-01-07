@@ -61,15 +61,19 @@ public class ImageEncoding {
         acYHuffmantree = new HuffmanTree.Builder<Byte>().add(yHuffmanValues.acValues).build();
         dcYHuffmantree = new HuffmanTree.Builder<Byte>().add(
                 yHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory).toList()).build();
+
         HuffmanValues cbHuffmanValues = new HuffmanValues();
         HuffmanValues crHuffmanValues = new HuffmanValues();
+
         calculateOnArraysWithoutModification(image.getData2(), cbHuffmanValues::getAllEncodedValues);
         calculateOnArraysWithoutModification(image.getData3(), crHuffmanValues::getAllEncodedValues);
+
         acCbCrHuffmantree = new HuffmanTree.Builder<Byte>().add(
                 Stream.concat(crHuffmanValues.acValues.stream(), cbHuffmanValues.acValues.stream()).toList()).build();
+
         dcCbCrHuffmantree = new HuffmanTree.Builder<Byte>().add(
-                        Stream.concat(crHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory),
-                                      cbHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory)).toList())
+                        Stream.concat(cbHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory),
+                                      crHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory)).toList())
                 .build();
 
         acYHuffmantree.createLookUpTable();

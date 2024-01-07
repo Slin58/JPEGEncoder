@@ -69,7 +69,7 @@ public class AraiDCTTest {
     @Test
     void performanceDctTestWithMultithreading() {
         JPEGEncoderImage jpegEncoderImage =
-                new JPEGEncoderImage(3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
+                new JPEGEncoderImage(3840, 2160, 3840, 2160, ColorSpace.YCbCr, new double[3840][2160], new double[][]{},
                                      new double[][]{});
         double[][] data1 = jpegEncoderImage.getData1();
         for (int i = 0; i < 3840; i++) {
