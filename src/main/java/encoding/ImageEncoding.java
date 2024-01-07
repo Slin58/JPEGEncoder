@@ -59,7 +59,6 @@ public class ImageEncoding {
         HuffmanValues yHuffmanValues = new HuffmanValues();
         calculateOnArraysWithoutModification(image.getData1(), yHuffmanValues::getAllEncodedValues);
         acYHuffmantree = new HuffmanTree.Builder<Byte>().add(yHuffmanValues.acValues).build();
-        List<Byte> list = yHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory).toList();
         dcYHuffmantree = new HuffmanTree.Builder<Byte>().add(
                 yHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory).toList()).build();
         HuffmanValues cbHuffmanValues = new HuffmanValues();
