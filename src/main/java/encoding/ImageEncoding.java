@@ -55,7 +55,7 @@ public class ImageEncoding {
     }
 
 
-    private void buildHuffmanTrees(JPEGEncoderImage image) {
+    private void buildHuffmanTrees(JPEGEncoderImage image) {    //todo in zigzag Reihenfolge, wie bei Quantisierung
         HuffmanValues yHuffmanValues = new HuffmanValues();
         calculateOnArraysWithoutModification(image.getData1(), yHuffmanValues::getAllEncodedValues);
         acYHuffmantree = new HuffmanTree.Builder<Byte>().add(yHuffmanValues.acValues).build();

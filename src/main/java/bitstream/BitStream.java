@@ -42,6 +42,7 @@ public class BitStream {
         }
         this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
         if (isSos()) {
+            /*
             if (bit) {
                 ones++;
             } else {
@@ -50,6 +51,12 @@ public class BitStream {
             if (this.ones > 7) {
                 this.currentSetByteIdx++;
                 ones = 0;
+            }
+             */
+            if (this.currentSetBitIdx == BYTE_START_INDEX) {
+                if (this.byteArray[this.currentSetByteIdx - 1] == (byte) 0b11111111) {
+                    this.currentSetByteIdx++;
+                }
             }
         }
         this.currentSetBitIdx--;

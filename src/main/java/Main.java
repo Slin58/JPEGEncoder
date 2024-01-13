@@ -5,23 +5,22 @@ import quantization.Quantization;
 import segments.*;
 import utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        List<int[][]> quantizationTableList = new ArrayList<>();
+        //List<int[][]> quantizationTableList = new ArrayList<>();
 
-        int[][] luminanceQuantizationTable = Quantization.luminanceQuantizationTable;
-        int[][] chrominanceQuantizationTable = Quantization.chrominanceQuantizationTable;
+        //int[][] luminanceQuantizationTable = Quantization.luminanceQuantizationTable;
+        //int[][] chrominanceQuantizationTable = Quantization.chrominanceQuantizationTable;
 
 
-        quantizationTableList.add(luminanceQuantizationTable);
-        quantizationTableList.add(chrominanceQuantizationTable);
+        //quantizationTableList.add(luminanceQuantizationTable);
+        //quantizationTableList.add(chrominanceQuantizationTable);
 
-        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\16x16.ppm");
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\64x64.ppm");
         Utils.rgbToYCbCr(image);
         image.changeResolution(4, 2, 0, List.of(2, 3));
 
@@ -32,7 +31,8 @@ public class Main {
 
         new SOISegment(bitStream).writeSegmentToBitStream();
         new APP0JFIFSegment(bitStream).writeSegmentToBitStream();
-        new DQTSegment(bitStream, quantizationTableList).writeSegmentToBitStream();
+        new DQTSegment(bitStream, Quantization.luminanceQuantizationTable).writeSegmentToBitStream(0);
+        new DQTSegment(bitStream, Quantization.chrominanceQuantizationTable).writeSegmentToBitStream(1);
         SOF0Segment.Component[] components =
                 {new SOF0Segment.Component(1, "22", 0), new SOF0Segment.Component(2, "11", 1),
                  new SOF0Segment.Component(3, "11", 1)};
@@ -49,6 +49,19 @@ public class Main {
         bitStream.fillByteWithZeroes();
         bitStream.writeHexString("0000");
         new EOISegment(bitStream).writeSegmentToBitStream();
+
+        byte[] bytes = bitStream.getBytes();
+        System.out.println("Anzahl Hex: " + bytes.length);
+
+        String ff = "FF";
+        for (byte b : bytes) {
+            String hex = String.format("%02X", b);
+            if (ff.equals(hex)) {
+                System.out.println();
+            }
+            System.out.print(hex);
+        }
+
         bitStream.writeBitStreamToFile();
 
     }

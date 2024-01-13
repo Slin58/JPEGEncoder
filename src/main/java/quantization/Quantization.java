@@ -14,7 +14,7 @@ public class Quantization {
              {16, 16, 16, 16, 16, 16, 16, 16}, {16, 16, 16, 16, 16, 16, 16, 16}};
 
     public static double[][] quantization(double[][] original, int[][] quantizationTable) {
-        // todo be careful if input is normalized to 0-1 everything will be rounded to zero
+        // todo be careful if input is normalized to 0-1 everything will be rounded to 0/1
 
         for (int i = 0; i < original.length; i++) {
             for (int j = 0; j < original[i].length; j++) {
