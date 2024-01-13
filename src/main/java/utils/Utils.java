@@ -53,8 +53,8 @@ public class Utils {
             for (int i = 1; i <= allLines.size() - 1; i++) {
                 if (isNumeric(allLines.get(i).charAt(0))) {
                     if (height == -1) {
-                        height = Integer.parseInt(allLines.get(i).split("\\s+")[0]);
-                        width = Integer.parseInt(allLines.get(i).split("\\s+")[1]);
+                        width = Integer.parseInt(allLines.get(i).split("\\s+")[0]);
+                        height = Integer.parseInt(allLines.get(i).split("\\s+")[1]);
                     }
                 } else {
                     commentCounter++;
@@ -167,8 +167,8 @@ public class Utils {
         return method.apply(get8x8Array(data, i1, j1));
     }
 
-    public static double[] calculateOnArray(double[][] data, int i1, int j1, Function<double[][], double[]> method) {
-        return method.apply(get8x8Array(data, i1, j1));
+    public static void calculateOnArray(double[][] data, int i1, int j1, Function<double[][], double[]> method) {
+        method.apply(get8x8Array(data, i1, j1));
     }
 
     public static double[][] get8x8Array(double[][] data, int i1, int j1) {

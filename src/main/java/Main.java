@@ -20,7 +20,7 @@ public class Main {
         //quantizationTableList.add(luminanceQuantizationTable);
         //quantizationTableList.add(chrominanceQuantizationTable);
 
-        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\64x64.ppm");
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\16x16.ppm");
         Utils.rgbToYCbCr(image);
         image.changeResolution(4, 2, 0, List.of(2, 3));
 

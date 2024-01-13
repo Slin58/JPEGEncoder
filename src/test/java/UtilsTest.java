@@ -11,7 +11,7 @@ public class UtilsTest {
         double[][] data2 = {{0.0, 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}, {0.0, 0.0, 0.0, 0.0}};
         double[][] data3 =
                 {{0.0, 0.0, 0.0, 1.0}, {0.0, 7.0 / 15.0, 0.0, 0.0}, {0.0, 0.0, 7.0 / 15.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     @Test
