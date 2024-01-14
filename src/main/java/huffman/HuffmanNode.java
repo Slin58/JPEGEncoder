@@ -24,7 +24,7 @@ public class HuffmanNode<T extends Serializable> {
 
     public static <T extends Serializable> int getMinDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 1;
+        if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMinDepth(node.getLeft());
         if (node.getRight() == null) return getMinDepth(node.getRight());
         return Math.min(getMinDepth(node.getLeft()), getMinDepth(node.getRight())) + 1;
@@ -32,7 +32,7 @@ public class HuffmanNode<T extends Serializable> {
 
     public static <T extends Serializable> int getMaxDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 1;
+        if (node.getLeft() == null && node.getRight() == null) return 0;
         if (node.getLeft() == null) return getMaxDepth(node.getLeft());
         if (node.getRight() == null) return getMaxDepth(node.getRight());
         return Math.max(getMaxDepth(node.getLeft()), getMaxDepth(node.getRight())) + 1;
