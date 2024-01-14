@@ -39,26 +39,16 @@ public class BitStream {
             if (currentSetByteIdx >= byteArray.length - 1) {
                 this.byteArray = Arrays.copyOf(this.byteArray, this.byteArray.length * 2);
             }
-        }
-        this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
-        if (isSos()) {
-            /*
-            if (bit) {
-                ones++;
-            } else {
-                ones = 0;
-            }
-            if (this.ones > 7) {
-                this.currentSetByteIdx++;
-                ones = 0;
-            }
-             */
-            if (this.currentSetBitIdx == BYTE_START_INDEX) {
-                if (this.byteArray[this.currentSetByteIdx - 1] == (byte) 0b11111111) {
-                    this.currentSetByteIdx++;
+            if (isSos()) {
+                if (this.currentSetBitIdx == BYTE_START_INDEX) {
+                    if (this.byteArray[this.currentSetByteIdx - 1] == (byte) 0b11111111) {
+                        this.currentSetByteIdx++;
+                    }
                 }
             }
         }
+        this.byteArray[this.currentSetByteIdx] |= (bit ? 1 : 0) << this.currentSetBitIdx;
+
         this.currentSetBitIdx--;
     }
 
@@ -112,6 +102,12 @@ public class BitStream {
         if (currentSetBitIdx >= 0) {
             this.currentSetByteIdx++;
             this.currentSetBitIdx = BYTE_START_INDEX;
+        }
+    }
+
+    public void fillByteWithOnes() {
+        while (currentSetBitIdx >= 0) {
+            setBit(true);
         }
     }
 

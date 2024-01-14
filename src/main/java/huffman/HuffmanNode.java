@@ -24,7 +24,7 @@ public class HuffmanNode<T extends Serializable> {
 
     public static <T extends Serializable> int getMinDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 0;
+        if (node.getLeft() == null && node.getRight() == null) return 1;
         if (node.getLeft() == null) return getMinDepth(node.getLeft());
         if (node.getRight() == null) return getMinDepth(node.getRight());
         return Math.min(getMinDepth(node.getLeft()), getMinDepth(node.getRight())) + 1;
@@ -32,7 +32,7 @@ public class HuffmanNode<T extends Serializable> {
 
     public static <T extends Serializable> int getMaxDepth(HuffmanNode<T> node) {
         if (node == null) return 0;
-        if (node.getLeft() == null && node.getRight() == null) return 0;
+        if (node.getLeft() == null && node.getRight() == null) return 1;
         if (node.getLeft() == null) return getMaxDepth(node.getLeft());
         if (node.getRight() == null) return getMaxDepth(node.getRight());
         return Math.max(getMaxDepth(node.getLeft()), getMaxDepth(node.getRight())) + 1;
@@ -98,24 +98,36 @@ public class HuffmanNode<T extends Serializable> {
         }
         node.setParent(this);
         addWeight(node.getWeight());
-        if (this.getLeft() != null && this.getRight() != null) {
-            if (getMinDepth(this.getRight()) == 1 && getMaxDepth(this.getLeft()) > 1) {
-                HuffmanNode<T> tmp = this.getLeft();
-                this.setLeft(this.getRight());
-                this.setRight(tmp);
+        swap(this);
+    }
+
+    private void swap(HuffmanNode<T> tHuffmanNode) {
+        if (tHuffmanNode.getLeft() != null && tHuffmanNode.getRight() != null) {
+            if (getMinDepth(tHuffmanNode.getRight()) == 1 && getMaxDepth(tHuffmanNode.getLeft()) > 1) {
+                HuffmanNode<T> tmp = tHuffmanNode.getLeft();
+                tHuffmanNode.setLeft(tHuffmanNode.getRight());
+                tHuffmanNode.setRight(tmp);
             }
-            if (getMaxDepth(this.getLeft()) > getMaxDepth(this.getRight())) {
-                final HuffmanNode<T> tmp = this.getLeft();
-                this.setLeft(this.getRight());
-                this.setRight(tmp);
+            if (getMaxDepth(tHuffmanNode.getLeft()) > getMaxDepth(tHuffmanNode.getRight())) {
+                final HuffmanNode<T> tmp = tHuffmanNode.getLeft();
+                tHuffmanNode.setLeft(tHuffmanNode.getRight());
+                tHuffmanNode.setRight(tmp);
+            }
+            if (getMaxDepth(tHuffmanNode.getLeft()) > getMinDepth(tHuffmanNode.getRight())) {
+                final HuffmanNode<T> rightLeft = tHuffmanNode.getRight().getLeft();
+                tHuffmanNode.getRight().setLeft(tHuffmanNode.getLeft().getRight());
+                tHuffmanNode.getLeft().setRight(rightLeft);
             }
 
-            if (getMaxDepth(this.getLeft()) > getMinDepth(this.getRight())) {
-                final HuffmanNode<T> rightLeft = this.getRight().getLeft();
-                this.getRight().setLeft(this.getLeft().getRight());
-                this.getLeft().setRight(rightLeft);
+            if (getMaxDepth(tHuffmanNode.getLeft().getRight()) > getMinDepth(tHuffmanNode.getRight().getLeft())) {
+                final HuffmanNode<T> rightLeft = tHuffmanNode.getRight().getLeft().getLeft();
+                tHuffmanNode.getRight().getLeft().setLeft(tHuffmanNode.getLeft().getRight().getRight());
+                tHuffmanNode.getLeft().getRight().setRight(rightLeft);
             }
+
         }
+        if (tHuffmanNode.getRight() != null) swap(tHuffmanNode.getRight());
+        if (tHuffmanNode.getLeft() != null) swap(tHuffmanNode.getLeft());
     }
 
     @Override

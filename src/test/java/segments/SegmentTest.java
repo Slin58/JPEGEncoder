@@ -79,12 +79,13 @@ public class SegmentTest {
         SOF0Segment.Component[] components =
                 {new SOF0Segment.Component(1, "22", 1), new SOF0Segment.Component(2, "11", 2),
                  new SOF0Segment.Component(3, "11", 3)};
-        new APP0JFIFSegment(bitStream).writeSegmentToBitStream();
-        new DQTSegment(bitStream, quantizationTableList).writeSegmentToBitStream();
+        new APP0JFIFSegment(bitStream).writeSegmentToBitStream(1, 1);
+        new DQTSegment(bitStream, quantizationTableList.get(0)).writeSegmentToBitStream(0);
+        new DQTSegment(bitStream, quantizationTableList.get(1)).writeSegmentToBitStream(1);
         new SOF0Segment(bitStream, 300, 168, components).writeSegmentToBitStream();
         new DHTSegment<>(bitStream, huffmanTree).writeSegmentToBitStream(1, false);
 
-        bitStream.fillByteWithZeroes();
+        bitStream.fillByteWithOnes();
 
         bitStream.writeHexString("ffd9");
         bitStream.writeBitStreamToFile();

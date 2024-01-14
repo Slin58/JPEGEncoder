@@ -53,6 +53,7 @@ public class HuffmanTree<T extends Serializable> {
     public String toString() {
         String[] result = getNodeAsString(root, new String[]{"", ""}, "");
         return result[1];
+        //        return display();
     }
 
     private String[] getNodeAsString(HuffmanNode<T> node, String[] result, String depth) {
@@ -83,6 +84,31 @@ public class HuffmanTree<T extends Serializable> {
         return Objects.hash(root, lookUpTable);
     }
 
+    public String display() {
+        final int height = 64, width = 1024;
+
+        int len = width * height * 2 + 2;
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 1; i <= len; i++) {sb.append(i < len - 2 && i % width == 0 ? "\n" : ' ');}
+
+        displayR(sb, width / 2, 1, width / 4, width, root, " ");
+        return sb.toString();
+    }
+
+    private void displayR(StringBuilder sb, int c, int r, int d, int w, HuffmanNode<T> n, String edge) {
+        if (n != null) {
+            displayR(sb, c - d, r + 2, d / 2, w, n.getLeft(), " /");
+
+            String s = String.valueOf(n.getValue());
+            int idx1 = r * w + c - (s.length() + 1) / 2;
+            int idx2 = idx1 + s.length();
+            int idx3 = idx1 - w;
+            if (idx2 < sb.length()) sb.replace(idx1, idx2, s).replace(idx3, idx3 + 2, edge);
+
+            displayR(sb, c + d, r + 2, d / 2, w, n.getRight(), "\\ ");
+        }
+    }
+
     public static class Builder<T extends Serializable> {
 
         private final Map<HuffmanNode<T>, Long> probabilities = new HashMap<>();
@@ -107,12 +133,13 @@ public class HuffmanTree<T extends Serializable> {
                 this.probabilities.put(currentNode, currentProbability);
             }
             HuffmanNode<T> root = this.probabilities.keySet().iterator().next();
+
+            // If we have only one value
             if (root.getValue() != null) {
                 HuffmanNode<T> tHuffmanNode = new HuffmanNode<>();
                 tHuffmanNode.setLeft(root);
                 root = tHuffmanNode;
             }
-
 
             while (HuffmanNode.getMaxDepth(root) > this.limit) {
                 root = BRCI(root);

@@ -31,7 +31,8 @@ public abstract class DCT {
 
     private static boolean saveNewValues(int x, int y, double[][] data, double[][] newData) {
         for (int i = 0; i < 8; i++) {
-            System.arraycopy(newData[i], 0, data[x + i], y, 8);
+            double[] current = data[x + i];
+            System.arraycopy(newData[i], 0, current, y, 8);
         }
         return true;
     }

@@ -14,7 +14,7 @@ public class JPEGEncoderImageTest {
         double[][] data2 = {{0.0, 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}, {0.0, 0.0, 0.0, 0.0}};
         double[][] data3 =
                 {{0.0, 0.0, 0.0, 1.0}, {0.0, 7.0 / 15.0, 0.0, 0.0}, {0.0, 0.0, 7.0 / 15.0, 0.0}, {1.0, 0.0, 0.0, 0.0}};
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     private JPEGEncoderImage getImage422() {
@@ -24,7 +24,7 @@ public class JPEGEncoderImageTest {
 
         double[][] data3 = {{0.0, 0.5}, {7.0 / 30.0, 0.0}, {0.0, 7.0 / 30.0}, {0.5, 0.0}};
 
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     private JPEGEncoderImage getImage420() {
@@ -34,7 +34,7 @@ public class JPEGEncoderImageTest {
 
         double[][] data3 = {{7.0 / 60.0, 0.25}, {0.25, 7.0 / 60.0}};
 
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     private JPEGEncoderImage getImage411() {
@@ -44,7 +44,7 @@ public class JPEGEncoderImageTest {
 
         double[][] data3 = {{0.25}, {7.0 / 60.0}, {7.0 / 60.0}, {0.25}};
 
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     private JPEGEncoderImage getImage410() {
@@ -54,7 +54,7 @@ public class JPEGEncoderImageTest {
 
         double[][] data3 = {{11.0 / 60.0}, {11.0 / 60.0}};
 
-        return new JPEGEncoderImage(4, 4, ColorSpace.RGB, data1, data2, data3);
+        return new JPEGEncoderImage(4, 4, 4, 4, ColorSpace.RGB, data1, data2, data3);
     }
 
     @Test

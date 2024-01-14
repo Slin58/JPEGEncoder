@@ -57,7 +57,7 @@ public class ImageEncoding {
 
     private void buildHuffmanTrees(JPEGEncoderImage image) {    //todo in zigzag Reihenfolge, wie bei Quantisierung
         HuffmanValues yHuffmanValues = new HuffmanValues();
-        calculateOnArraysWithoutModification(image.getData1(), yHuffmanValues::getAllEncodedValues);
+        calculateOnArraysInBlocksWithoutModification(image.getData1(), yHuffmanValues::getAllEncodedValues);
         acYHuffmantree = new HuffmanTree.Builder<Byte>().add(yHuffmanValues.acValues).build();
         dcYHuffmantree = new HuffmanTree.Builder<Byte>().add(
                 yHuffmanValues.encodedDcValues.stream().map(RunLenghEncoding::getCategory).toList()).build();
@@ -122,6 +122,7 @@ public class ImageEncoding {
                         for (int z = 0; z < zeroblocks; z++) {
                             acValues.add((byte) 0xf0);
                         }
+                        zeroblocks = 0;
                     }
                     byte huffmanValues = (byte) (zeroes << 4 |
                                                  RunLenghEncoding.runLenghtEncoding((int) valuesInZigzag[i])
@@ -130,7 +131,7 @@ public class ImageEncoding {
                     zeroes = 0;
                 }
             }
-            acValues.add((byte) 0x0);
+            if ((int) valuesInZigzag[valuesInZigzag.length - 1] == 0) acValues.add((byte) 0x0);
             return new double[0][0];
         }
     }
@@ -168,6 +169,7 @@ public class ImageEncoding {
                         for (int z = 0; z < zeroblocks; z++) {
                             acHuffmantree.encodeSingle((byte) 0xF0, bitStream);
                         }
+                        zeroblocks = 0;
                     }
                     RunLenghEncoding acEncoding = RunLenghEncoding.runLenghtEncoding((int) valuesInZigzag[i]);
                     byte huffmanValues = (byte) (zeroes << 4 | acEncoding.getCategory() & 0x0f);
@@ -176,7 +178,7 @@ public class ImageEncoding {
                     zeroes = 0;
                 }
             }
-            acHuffmantree.encodeSingle((byte) 0x0, bitStream);
+            if ((int) valuesInZigzag[valuesInZigzag.length - 1] == 0) acHuffmantree.encodeSingle((byte) 0x0, bitStream);
             return new double[0];
         }
     }

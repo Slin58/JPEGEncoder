@@ -71,40 +71,59 @@ public class Utils {
             int i = 0;
             int j = 0;
 
+            int v = 0;
             for (int rowInFile = 3 + commentCounter; rowInFile <= allLines.size() - 1; rowInFile++) {
                 String[] rowFile = allLines.get(rowInFile).trim().split("\\s+");
                 if (rowFile[0] == "#") {
                     continue;
                 }
-                for (int valueInRow = 0; valueInRow <= rowFile.length - 1; valueInRow += 3) {
+                for (int valueInRow = 0; valueInRow < rowFile.length; valueInRow++) {
                     if (j >= width) {
                         i++;
+                        if (i >= height) break;
                         j = 0;
                         if (i > originalheight) {
                             while (i < height) {
-                                data1[i] = data1[originalheight - 1];
-                                data2[i] = data2[originalheight - 1];
-                                data3[i] = data3[originalheight - 1];
+                                switch (v % 3) {
+                                    case 0:
+                                        data1[i] = data1[originalheight - 1];
+                                        break;
+                                    case 1:
+                                        data2[i] = data2[originalheight - 1];
+                                        break;
+                                    case 2:
+                                        data3[i] = data3[originalheight - 1];
+                                }
                                 i++;
                             }
                             continue;
                         }
                     }
                     if (j < originalwidth) {
-                        data1[i][j] = Double.parseDouble(rowFile[valueInRow]);
-
-                        data2[i][j] = Double.parseDouble(rowFile[valueInRow + 1]);
-
-                        data3[i][j] = Double.parseDouble(rowFile[valueInRow + 2]);
-
+                        switch (v % 3) {
+                            case 0:
+                                data1[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                                break;
+                            case 1:
+                                data2[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                                break;
+                            case 2:
+                                data3[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                        }
                     } else {
-                        data1[i][j] = data1[i][originalwidth - 1];
-
-                        data2[i][j] = data2[i][originalwidth - 1];
-
-                        data3[i][j] = data3[i][originalwidth - 1];
+                        switch (v % 3) {
+                            case 0:
+                                data1[i][j] = data1[i][originalwidth - 1];
+                                break;
+                            case 1:
+                                data2[i][j] = data2[i][originalwidth - 1];
+                                break;
+                            case 2:
+                                data3[i][j] = data3[i][originalwidth - 1];
+                        }
                     }
-                    j++;
+                    v++;
+                    if (v % 3 == 0) j++;
                 }
 
             }
@@ -195,6 +214,18 @@ public class Utils {
         for (int i = 0; i < data.length; i += 8) {
             for (int j = 0; j < data[i].length; j += 8) {
                 calculateMethodOnArray(data, i, j, method);
+            }
+        }
+    }
+
+    public static void calculateOnArraysInBlocksWithoutModification(double[][] data,
+                                                                    Function<double[][], double[][]> method) {
+        for (int i = 0; i < data.length; i += 16) {
+            for (int j = 0; j < data[i].length; j += 16) {
+                calculateMethodOnArray(data, i, j, method);
+                calculateMethodOnArray(data, i, j + 8, method);
+                calculateMethodOnArray(data, i + 8, j, method);
+                calculateMethodOnArray(data, i + 8, j + 8, method);
             }
         }
     }
