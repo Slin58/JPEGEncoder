@@ -61,15 +61,15 @@ public class Utils {
                 }
 
             }
-            int originalwidth = width;
-            int originalheight = height;
+            int originalWidth = width;
+            int originalHeight = height;
             if (width % 16 != 0) {width = 16 - (width % 16) + width;}
             if (height % 16 != 0) {height = 16 - (height % 16) + height;}
             double[][] data1 = new double[height][width];
             double[][] data2 = new double[height][width];
             double[][] data3 = new double[height][width];
-            int i = 0;
-            int j = 0;
+            int y = 0;
+            int x = 0;
 
             int v = 0;
             for (int rowInFile = 3 + commentCounter; rowInFile <= allLines.size() - 1; rowInFile++) {
@@ -78,57 +78,57 @@ public class Utils {
                     continue;
                 }
                 for (int valueInRow = 0; valueInRow < rowFile.length; valueInRow++) {
-                    if (j >= width) {
-                        i++;
-                        if (i >= height) break;
-                        j = 0;
-                        if (i > originalheight) {
-                            while (i < height) {
+                    if (x >= width) {
+                        y++;
+                        if (y >= height) break;
+                        x = 0;
+                        if (y > originalHeight) {
+                            while (y < height) {
                                 switch (v % 3) {
                                     case 0:
-                                        data1[i] = data1[originalheight - 1];
+                                        data1[y] = data1[originalHeight - 1];
                                         break;
                                     case 1:
-                                        data2[i] = data2[originalheight - 1];
+                                        data2[y] = data2[originalHeight - 1];
                                         break;
                                     case 2:
-                                        data3[i] = data3[originalheight - 1];
+                                        data3[y] = data3[originalHeight - 1];
                                 }
-                                i++;
+                                y++;
                             }
                             continue;
                         }
                     }
-                    if (j < originalwidth) {
+                    if (x < originalWidth) {
                         switch (v % 3) {
                             case 0:
-                                data1[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                                data1[y][x] = Double.parseDouble(rowFile[valueInRow]);
                                 break;
                             case 1:
-                                data2[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                                data2[y][x] = Double.parseDouble(rowFile[valueInRow]);
                                 break;
                             case 2:
-                                data3[i][j] = Double.parseDouble(rowFile[valueInRow]);
+                                data3[y][x] = Double.parseDouble(rowFile[valueInRow]);
                         }
                     } else {
                         switch (v % 3) {
                             case 0:
-                                data1[i][j] = data1[i][originalwidth - 1];
+                                data1[y][x] = data1[y][originalWidth - 1];
                                 break;
                             case 1:
-                                data2[i][j] = data2[i][originalwidth - 1];
+                                data2[y][x] = data2[y][originalWidth - 1];
                                 break;
                             case 2:
-                                data3[i][j] = data3[i][originalwidth - 1];
+                                data3[y][x] = data3[y][originalWidth - 1];
                         }
                     }
                     v++;
-                    if (v % 3 == 0) j++;
+                    if (v % 3 == 0) x++;
                 }
 
             }
 
-            result = new JPEGEncoderImage(height, width, originalheight, originalwidth, ColorSpace.RGB, data1, data2,
+            result = new JPEGEncoderImage(height, width, originalHeight, originalWidth, ColorSpace.RGB, data1, data2,
                                           data3);
         }
         return result;
