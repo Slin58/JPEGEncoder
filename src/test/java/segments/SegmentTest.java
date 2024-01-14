@@ -88,7 +88,7 @@ public class SegmentTest {
         bitStream.fillByteWithOnes();
 
         bitStream.writeHexString("ffd9");
-        bitStream.writeBitStreamToFile();
+        bitStream.writeBitStreamToFile("segmentTest.jpeg");
 
         Assert.assertTrue(true);
 

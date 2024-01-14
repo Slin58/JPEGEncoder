@@ -84,7 +84,7 @@ public class BitStreamTest {
         long executionTime = endTimeSetBits - startTimeSetBits;
         System.out.println("endTimeToSetBits: " + executionTime + " milliseconds");
         long startTimeReadAndWriteBits = System.currentTimeMillis();
-        bitStream.writeBitStreamToFile();
+        bitStream.writeBitStreamToFile("filetest.jpeg");
         long endTimeToReadAndWriteBits = System.currentTimeMillis();
         executionTime = endTimeToReadAndWriteBits - startTimeReadAndWriteBits;
         System.out.println("Execution Time: " + executionTime + " milliseconds");

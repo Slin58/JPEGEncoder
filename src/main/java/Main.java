@@ -20,7 +20,8 @@ public class Main {
         //quantizationTableList.add(luminanceQuantizationTable);
         //quantizationTableList.add(chrominanceQuantizationTable);
 
-        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\SquareImage.ppm");
+        JPEGEncoderImage image = Utils.readImageFromPPM("ppm\\notSquareImage.ppm");
+        Utils.writePPMFile("ppm.txt", image);
         //        System.out.println(image);
         Utils.rgbToYCbCr(image);
         image.changeResolution(4, 2, 0, List.of(2, 3));
@@ -68,7 +69,7 @@ public class Main {
         //            System.out.print(hex);
         //        }
 
-        bitStream.writeBitStreamToFile();
+        bitStream.writeBitStreamToFile("bitstreamOutput.jpeg");
 
     }
 }

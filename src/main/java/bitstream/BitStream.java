@@ -64,8 +64,7 @@ public class BitStream {
         }
     }
 
-    public void writeBitStreamToFile() {
-        String fName = "bitstreamOutput.jpeg";
+    public void writeBitStreamToFile(String fName) {
         try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fName))) {
             byte[] bytes = this.byteArray;
             bufferedOutputStream.write(bytes, 0, currentSetByteIdx + 1);
